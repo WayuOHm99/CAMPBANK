@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --canvas: oklch(0.977 0.003 240); --sunk: oklch(0.966 0.005 240); --surface: #ffffff; --line: oklch(0.905 0.008 240); --line-strong: #638eb2;
+      --ink: #212121; --dim: #5c5c5c; --deep: #205e91; --pressed: #18476d;
+      --sky: #36b8f2; --soft: #e7f6fd; --ok: #407400; --warn: #a64800;
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+    }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgb(16 32 48 / 0.05); }
+    .ec .lab { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .ec .pin {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 62px; border: 1px solid var(--line-strong);
+      border-radius: 11px; background: var(--surface); font-size: 24px; font-weight: 700;
+    }
+    .ec .pin-active { border: 2px solid var(--deep); box-shadow: 0 0 0 3px rgb(32 94 145 / 14%); }
+  </style>
+</helmet>
+
+<div class="ec" style="width: 390px; height: 844px; overflow: hidden; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: center; padding: 6px 8px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <span style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 10px; font-size: 14px; font-weight: 600; color: var(--deep)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 6l-6 6 6 6"></path></svg>
+      กลับหน้าแรก
+    </span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 18px; padding: 40px 20px 0; flex-grow: 1; min-height: 0; overflow: hidden">
+
+    <div style="display: flex; flex-direction: column; gap: 7px">
+      <span class="eyebrow">EQ-BANK</span>
+      <span style="font-size: 27px; font-weight: 700; line-height: 1.25; letter-spacing: -0.005em">เข้าสู่ระบบผู้ดูแล</span>
+      <span style="font-size: 14px; font-weight: 400; color: var(--dim); line-height: 1.6">เลือกชื่อผู้ดูแลแล้วกรอกรหัส PIN 4 หลักของคุณ</span>
+    </div>
+
+    <div class="card" style="display: flex; flex-direction: column; gap: 18px; padding: 20px 18px">
+
+      <label style="display: flex; flex-direction: column; gap: 7px">
+        <span class="lab">ผู้ดูแล</span>
+        <span style="display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--surface); font-size: 16px; font-weight: 600">
+          <span style="flex-grow: 1">Admin Demo</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--dim)" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+        </span>
+      </label>
+
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <div style="display: flex; align-items: baseline; gap: 8px">
+          <span class="lab" style="flex-grow: 1">รหัส PIN 4 หลัก</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--deep)">หลักที่ 3 จาก 4</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+          <span class="pin">
+            <svg width="13" height="13" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="currentColor"></circle></svg>
+          </span>
+          <span class="pin">
+            <svg width="13" height="13" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="currentColor"></circle></svg>
+          </span>
+          <span class="pin pin-active">
+            <span style="width: 2px; height: 26px; background: var(--deep); border-radius: 2px"></span>
+          </span>
+          <span class="pin"></span>
+        </div>
+        <span style="font-size: 12px; font-weight: 400; color: var(--dim); line-height: 1.55">ช่องรหัสซ่อนตัวเลขเสมอ และเปิดแป้นตัวเลขบนมือถือ</span>
+      </div>
+
+      <span style="display: inline-flex; align-items: center; justify-content: center; height: 54px; border-radius: 11px; background: var(--deep); color: #ffffff; font-size: 16px; font-weight: 700; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(16 32 48 / 0.18)">เข้าสู่ระบบ</span>
+    </div>
+
+    <div style="display: flex; gap: 11px; align-items: flex-start; padding: 13px 15px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 11px">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color: var(--warn); flex-shrink: 0; margin-top: 1px" aria-hidden="true"><path d="M12 8v5"></path><circle cx="12" cy="16.6" r="1.1" fill="currentColor" stroke="none"></circle><circle cx="12" cy="12" r="9"></circle></svg>
+      <span style="font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--ink)">กรอกผิด 5 ครั้งจะล็อกบัญชี 15 นาที หากลืม PIN ให้ผู้ดูแลอีกคนรีเซ็ตให้พร้อมระบุเหตุผล</span>
+    </div>
+
+  </div>
+
+  <div style="padding: 0 20px 26px">
+    <span style="font-size: 12px; color: var(--dim); line-height: 1.6">Staff ไม่ต้องเข้าหน้านี้ — ใช้ลิงก์เฉพาะค่ายที่ผู้ดูแลส่งให้</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

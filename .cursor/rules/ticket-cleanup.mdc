@@ -1,0 +1,14 @@
+---
+description: Preserve the main EQCAMP specification while cleaning up completed implementation tickets
+alwaysApply: true
+---
+
+# Ticket cleanup
+
+- Keep implementation ticket files while any ticket is unfinished or any required check is failing.
+- Mark completed acceptance criteria and ticket status during implementation so progress remains reviewable.
+- After every EQCAMP V1 ticket is complete and all required lint, typecheck, unit, integration, E2E, concurrency, and build checks pass, delete `.scratch/eqcamp-v1/issues/*.md` without requesting further approval.
+- Before deletion, verify the resolved target is exactly the EQCAMP V1 `issues` directory and that no unfinished ticket remains.
+- Never delete `.scratch/eqcamp-v1/spec.md`; it remains the main product specification and Source of Truth.
+- Keep `CONTEXT.md`, `AGENTS.md`, ADRs, README, and maintained project documentation.
+

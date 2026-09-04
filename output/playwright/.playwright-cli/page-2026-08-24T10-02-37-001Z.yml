@@ -1,0 +1,149 @@
+- generic [active] [ref=f5e1]:
+  - button "Open Next.js Dev Tools" [ref=f5e15] [cursor=pointer]
+  - alert [ref=f5e19]
+  - main [ref=f5e38]:
+    - generic [ref=f5e40]:
+      - generic [ref=f5e41]:
+        - generic [ref=f5e42]:
+          - paragraph [ref=f5e43]: EQ BANK
+          - heading "EQCAMP Demo" [level=1] [ref=f5e44]
+        - generic [ref=f5e45]:
+          - 'generic "สถานะ Camp: กำลังใช้งาน" [ref=f5e46]':
+            - generic [ref=f5e47]: ●
+            - generic [ref=f5e48]: กำลังใช้งาน
+          - 'generic "การเชื่อมต่อ: ข้อมูลสด" [ref=f5e49]':
+            - generic [ref=f5e50]: ●
+            - generic [ref=f5e51]: ข้อมูลสด
+      - generic [ref=f5e52]:
+        - generic [ref=f5e53]:
+          - text: ผู้ใช้งาน
+          - strong [ref=f5e54]: Staff A
+        - generic [ref=f5e55]: ยังไม่ระบุกิจกรรม
+        - generic [ref=f5e56]: ยังไม่ระบุรอบ
+        - generic [ref=f5e57]: อัปเดตล่าสุด 17:02:36
+        - button "รีเฟรชข้อมูล" [ref=f5e58]
+    - generic [ref=f5e61]:
+      - region "ทางลัดและงบค่าย" [ref=f5e62]:
+        - generic [ref=f5e63]:
+          - paragraph [ref=f5e64]: งบคงเหลือ
+          - paragraph [ref=f5e65]: 53,000 / 100,000
+        - navigation [ref=f5e66]:
+          - link "ดูประวัติ →" [ref=f5e67] [cursor=pointer]:
+            - /url: /camp/10000000-0000-4000-8000-000000000001/history
+          - link "← กลับหน้าเลือก Staff" [ref=f5e68] [cursor=pointer]:
+            - /url: /join/DEMO-STAFF-2026
+      - generic [ref=f5e69]:
+        - generic [ref=f5e70]:
+          - generic [ref=f5e71]:
+            - generic [ref=f5e72]: กิจกรรม
+            - combobox "กิจกรรม" [ref=f5e73]:
+              - option "ไม่ระบุ" [selected]
+              - option "เต้น"
+              - option "ตอบคำถาม"
+              - option "การแสดง"
+          - generic [ref=f5e74]:
+            - generic [ref=f5e75]: ค้นหากลุ่ม
+            - searchbox "ค้นหากลุ่ม" [ref=f5e76]
+          - group "รูปแบบการแสดงกลุ่ม" [ref=f5e77]:
+            - generic [ref=f5e79]:
+              - button "อัตโนมัติ" [pressed] [ref=f5e80]
+              - button "1 คอลัมน์" [ref=f5e86]
+              - button "2 คอลัมน์" [ref=f5e89]
+              - button "แถวเลื่อน" [ref=f5e93]
+        - list "กลุ่มคะแนน" [ref=f5e98]:
+          - listitem "เหลือง — Banana" [ref=f5e99]:
+            - generic [ref=f5e101]:
+              - paragraph [ref=f5e102]: เหลือง
+              - generic [ref=f5e103]:
+                - heading "Banana" [level=2] [ref=f5e104]
+                - button "เปลี่ยนชื่อกลุ่ม Banana" [ref=f5e105]
+              - paragraph [ref=f5e109]: 12,500 คะแนน
+            - generic [ref=f5e110]:
+              - button "ลด 1,000" [ref=f5e111]: "-1,000"
+              - button "ลด 500" [ref=f5e112]: "-500"
+              - button "เพิ่ม 500" [ref=f5e113]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e114]: +1,000
+          - listitem "น้ำเงิน — Shark" [ref=f5e115]:
+            - generic [ref=f5e117]:
+              - paragraph [ref=f5e118]: น้ำเงิน
+              - generic [ref=f5e119]:
+                - heading "Shark" [level=2] [ref=f5e120]
+                - button "เปลี่ยนชื่อกลุ่ม Shark" [ref=f5e121]
+              - paragraph [ref=f5e125]: 10,500 คะแนน
+            - generic [ref=f5e126]:
+              - button "ลด 1,000" [ref=f5e127]: "-1,000"
+              - button "ลด 500" [ref=f5e128]: "-500"
+              - button "เพิ่ม 500" [ref=f5e129]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e130]: +1,000
+          - listitem "แดง — Dragon" [ref=f5e131]:
+            - generic [ref=f5e133]:
+              - paragraph [ref=f5e134]: แดง
+              - generic [ref=f5e135]:
+                - heading "Dragon" [level=2] [ref=f5e136]
+                - button "เปลี่ยนชื่อกลุ่ม Dragon" [ref=f5e137]
+              - paragraph [ref=f5e141]: 5,500 คะแนน
+            - generic [ref=f5e142]:
+              - button "ลด 1,000" [ref=f5e143]: "-1,000"
+              - button "ลด 500" [ref=f5e144]: "-500"
+              - button "เพิ่ม 500" [ref=f5e145]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e146]: +1,000
+          - listitem "เขียว — Forest" [ref=f5e147]:
+            - generic [ref=f5e149]:
+              - paragraph [ref=f5e150]: เขียว
+              - generic [ref=f5e151]:
+                - heading "Forest" [level=2] [ref=f5e152]
+                - button "เปลี่ยนชื่อกลุ่ม Forest" [ref=f5e153]
+              - paragraph [ref=f5e157]: 3,000 คะแนน
+            - generic [ref=f5e158]:
+              - button "ลด 1,000" [ref=f5e159]: "-1,000"
+              - button "ลด 500" [ref=f5e160]: "-500"
+              - button "เพิ่ม 500" [ref=f5e161]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e162]: +1,000
+          - listitem "ม่วง — Grape" [ref=f5e163]:
+            - generic [ref=f5e165]:
+              - paragraph [ref=f5e166]: ม่วง
+              - generic [ref=f5e167]:
+                - heading "Grape" [level=2] [ref=f5e168]
+                - button "เปลี่ยนชื่อกลุ่ม Grape" [ref=f5e169]
+              - paragraph [ref=f5e173]: 3,000 คะแนน
+            - generic [ref=f5e174]:
+              - button "ลด 1,000" [ref=f5e175]: "-1,000"
+              - button "ลด 500" [ref=f5e176]: "-500"
+              - button "เพิ่ม 500" [ref=f5e177]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e178]: +1,000
+          - listitem "ส้ม — Orange" [ref=f5e179]:
+            - generic [ref=f5e181]:
+              - paragraph [ref=f5e182]: ส้ม
+              - generic [ref=f5e183]:
+                - heading "Orange" [level=2] [ref=f5e184]
+                - button "เปลี่ยนชื่อกลุ่ม Orange" [ref=f5e185]
+              - paragraph [ref=f5e189]: 3,500 คะแนน
+            - generic [ref=f5e190]:
+              - button "ลด 1,000" [ref=f5e191]: "-1,000"
+              - button "ลด 500" [ref=f5e192]: "-500"
+              - button "เพิ่ม 500" [ref=f5e193]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e194]: +1,000
+          - listitem "ฟ้า — Sky" [ref=f5e195]:
+            - generic [ref=f5e197]:
+              - paragraph [ref=f5e198]: ฟ้า
+              - generic [ref=f5e199]:
+                - heading "Sky" [level=2] [ref=f5e200]
+                - button "เปลี่ยนชื่อกลุ่ม Sky" [ref=f5e201]
+              - paragraph [ref=f5e205]: 5,000 คะแนน
+            - generic [ref=f5e206]:
+              - button "ลด 1,000" [ref=f5e207]: "-1,000"
+              - button "ลด 500" [ref=f5e208]: "-500"
+              - button "เพิ่ม 500" [ref=f5e209]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e210]: +1,000
+          - listitem "ชมพู — Pinky" [ref=f5e211]:
+            - generic [ref=f5e213]:
+              - paragraph [ref=f5e214]: ชมพู
+              - generic [ref=f5e215]:
+                - heading "Pinky" [level=2] [ref=f5e216]
+                - button "เปลี่ยนชื่อกลุ่ม Pinky" [ref=f5e217]
+              - paragraph [ref=f5e221]: 4,000 คะแนน
+            - generic [ref=f5e222]:
+              - button "ลด 1,000" [ref=f5e223]: "-1,000"
+              - button "ลด 500" [ref=f5e224]: "-500"
+              - button "เพิ่ม 500" [ref=f5e225]: "+500"
+              - button "เพิ่ม 1,000" [ref=f5e226]: +1,000

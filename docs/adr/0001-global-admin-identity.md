@@ -1,0 +1,3 @@
+# Use one Admin identity across Camp memberships
+
+An Admin has one system-wide identity and PIN in `admin_accounts`, with explicit membership in each Camp they may manage; `pin_hash` therefore belongs to the account rather than `camp_members`. We chose this over duplicating an Admin identity and PIN per Camp so one login can list authorized Camps and create another Camp, while data access remains restricted by Camp membership. The first Admin is created by a server-only bootstrap command, and recovery remains possible without exposing a public setup route. A newly added Admin receives a temporary PIN and must replace it on first login; no Camp may disable its last active Admin.

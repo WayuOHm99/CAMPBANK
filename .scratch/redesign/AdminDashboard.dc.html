@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --canvas: oklch(0.977 0.003 240); --sunk: oklch(0.966 0.005 240); --surface: #ffffff; --line: oklch(0.905 0.008 240); --line-strong: #638eb2;
+      --ink: #212121; --dim: #5c5c5c; --deep: #205e91; --pressed: #18476d;
+      --sky: #36b8f2; --soft: #e7f6fd; --ok: #407400; --warn: #a64800;
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+    }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgb(16 32 48 / 0.05); }
+    .ec .chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 12px; font-weight: 600; }
+    .ec .jump { display: inline-flex; align-items: center; height: 44px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--dim); }
+    .ec .jump-on { background: var(--soft); color: var(--pressed); box-shadow: inset 0 0 0 1px var(--sky); }
+    .ec .metric-l { font-size: 12px; font-weight: 600; color: var(--dim); }
+    .ec .metric-v { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.022em; line-height: 1.1; }
+    .ec .th { font-size: 12px; font-weight: 600; color: var(--dim); padding: 0 0 10px; }
+    .ec .td { font-size: 14px; padding: 11px 0; border-top: 1px solid var(--line); }
+    .ec .sec-title { font-size: 16px; font-weight: 700; }
+    .ec .btn-sec { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 44px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--surface); color: var(--deep); font-size: 13px; font-weight: 600; }
+    .ec .field { display: flex; align-items: center; height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--canvas); font-size: 14px; font-weight: 600; }
+    .ec .radio { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+    .ec .rd { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-strong); display: inline-flex; align-items: center; justify-content: center; }
+    .ec .rd-on { border-color: var(--deep); }
+    .ec .url { font-size: 12px; color: var(--dim); word-break: break-all; line-height: 1.5; }
+  </style>
+</helmet>
+
+<div class="ec" style="width: 1440px; height: 900px; overflow: hidden; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 0 32px; height: 64px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <img src="eqcamp-mark.png" alt="" style="width: 34px; display: block; flex-shrink: 0">
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span class="eyebrow">EQ-BANK</span>
+      <span style="font-size: 17px; font-weight: 700; line-height: 1.2">EQCAMP Demo</span>
+    </div>
+    <span class="chip" style="color: var(--ok); margin-left: 8px">
+      <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="currentColor"></circle></svg>
+      กำลังใช้งาน
+    </span>
+    <span class="chip" style="color: var(--deep)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8 16a5.5 5.5 0 0 1 8 0"></path><circle cx="12" cy="19.5" r="1.2" fill="currentColor" stroke="none"></circle></svg>
+      ข้อมูลสด
+    </span>
+    <span style="flex-grow: 1"></span>
+    <span style="font-size: 14px; font-weight: 600">Admin Demo</span>
+    <span class="btn-sec">ออกจากระบบ</span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 4px; padding: 0 26px; height: 52px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <span class="jump jump-on">ภาพรวม</span>
+    <span class="jump">กลุ่ม</span>
+    <span class="jump">ปุ่มคะแนน</span>
+    <span class="jump">กิจกรรม</span>
+    <span class="jump">ผู้ใช้งาน</span>
+    <span class="jump">ลิงก์</span>
+    <span class="jump">ประวัติ</span>
+    <span class="jump">บันทึกตรวจสอบ</span>
+  </div>
+
+  <div style="display: flex; gap: 24px; padding: 24px 32px; flex-grow: 1; min-height: 0; overflow: hidden; align-items: flex-start">
+
+    <div style="display: flex; flex-direction: column; gap: 20px; flex-grow: 1; min-width: 0">
+
+      <div style="display: grid; grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr); gap: 16px">
+        <div class="card" style="display: flex; flex-direction: column; gap: 12px; padding: 18px 20px">
+          <div style="display: flex; align-items: baseline; gap: 10px">
+            <span class="metric-l">งบค่าย</span>
+            <span class="metric-v" style="font-size: 30px">100,000</span>
+          </div>
+          <div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line)">
+            <span style="width: 52%; background: var(--deep)"></span>
+            <span style="width: 48%; background: var(--soft)"></span>
+          </div>
+          <div style="display: flex; gap: 26px">
+            <span style="display: inline-flex; align-items: baseline; gap: 8px">
+              <span style="width: 9px; height: 9px; border-radius: 3px; background: var(--deep); align-self: center"></span>
+              <span style="font-size: 12.5px; font-weight: 600; color: var(--dim)">แจกแล้ว</span>
+              <span style="font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.022em">52,000</span>
+            </span>
+            <span style="display: inline-flex; align-items: baseline; gap: 8px">
+              <span style="width: 9px; height: 9px; border-radius: 3px; background: var(--soft); box-shadow: inset 0 0 0 1px var(--line-strong); align-self: center"></span>
+              <span style="font-size: 12.5px; font-weight: 600; color: var(--dim)">คงเหลือ</span>
+              <span style="font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.022em">48,000</span>
+            </span>
+          </div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; gap: 7px; padding: 18px 20px; justify-content: center">
+          <span class="metric-l">รายการคะแนน</span>
+          <span class="metric-v">128</span>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 20px 22px">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span class="sec-title" style="flex-grow: 1">อันดับทั้งหมด</span>
+          <span class="btn-sec">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4"></path><path d="M5 19h14"></path></svg>
+            ดาวน์โหลด CSV
+          </span>
+          <span class="btn-sec">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"></rect><path d="M15 5.5A2.5 2.5 0 0 0 12.5 4H6a2 2 0 0 0-2 2v6.5A2.5 2.5 0 0 0 5.5 15"></path></svg>
+            คัดลอกข้อความ
+          </span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 140px 180px">
+          <span class="th">อันดับ</span>
+          <span class="th">กลุ่ม</span>
+          <span class="th" style="text-align: right">คะแนน</span>
+          <span class="th" style="text-align: right">เวลาที่ถึงคะแนนนี้</span>
+
+          <span class="td" style="font-weight: 700">1</span>
+          <span class="td" style="display: flex; align-items: center; gap: 10px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #e0322f"></span><span style="font-weight: 600">กลุ่มเสือดาว</span></span>
+          <span class="td" style="text-align: right; font-weight: 700">12,500</span>
+          <span class="td" style="text-align: right; color: var(--dim)">19:42:07</span>
+
+          <span class="td" style="font-weight: 700">2</span>
+          <span class="td" style="display: flex; align-items: center; gap: 10px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #2563c9"></span><span style="font-weight: 600">กลุ่มสีน้ำเงิน</span></span>
+          <span class="td" style="text-align: right; font-weight: 700">11,000</span>
+          <span class="td" style="text-align: right; color: var(--dim)">19:30:11</span>
+
+          <span class="td" style="font-weight: 700">3</span>
+          <span class="td" style="display: flex; align-items: center; gap: 10px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #f2c200"></span><span style="font-weight: 600">กลุ่มพระอาทิตย์</span></span>
+          <span class="td" style="text-align: right; font-weight: 700">11,000</span>
+          <span class="td" style="text-align: right; color: var(--dim)">19:33:47</span>
+
+          <span class="td" style="font-weight: 700">4</span>
+          <span class="td" style="display: flex; align-items: center; gap: 10px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #148f4b"></span><span style="font-weight: 600">กลุ่มมังกร</span></span>
+          <span class="td" style="text-align: right; font-weight: 700">9,500</span>
+          <span class="td" style="text-align: right; color: var(--dim)">19:35:02</span>
+
+          <span class="td" style="font-weight: 700">5</span>
+          <span class="td" style="display: flex; align-items: center; gap: 10px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #7b3fbf"></span><span style="font-weight: 600">กลุ่มดาวเหนือ</span></span>
+          <span class="td" style="text-align: right; font-weight: 700">8,000</span>
+          <span class="td" style="text-align: right; color: var(--dim)">19:21:56</span>
+
+          <span class="td" style="font-weight: 700; color: var(--dim)">6</span>
+          <span class="td" style="display: flex; align-items: center; gap: 10px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #e2661a"></span><span style="font-weight: 600">กลุ่มสีส้ม</span></span>
+          <span class="td" style="text-align: right; font-weight: 700">0</span>
+          <span class="td" style="text-align: right; color: var(--dim)">18:00:00</span>
+        </div>
+
+        <span style="font-size: 12px; color: var(--dim); line-height: 1.6">เรียงตามคะแนนมากไปน้อย ถ้าเท่ากันใช้เวลาที่ถึงคะแนนนั้นก่อน แล้วจึงลำดับกลุ่มที่ตั้งไว้</span>
+      </div>
+
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px; width: 400px; flex-shrink: 0">
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 13px; padding: 18px 20px">
+        <span class="sec-title">คำเตือนงบค่าย</span>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <label style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 12px; font-weight: 600; color: var(--dim)">เตือนเมื่อเหลือ</span>
+            <span class="field">20,000</span>
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 12px; font-weight: 600; color: var(--dim)">หรือเหลือต่ำกว่า</span>
+            <span class="field">15%</span>
+          </label>
+        </div>
+        <span style="font-size: 12px; color: var(--dim); line-height: 1.6">คำเตือนไม่บล็อกการให้คะแนน Staff จะเห็นแถบเตือนบนหน้าจอทันที</span>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 13px; padding: 18px 20px">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span class="sec-title" style="flex-grow: 1">การเปิดเผยอันดับ</span>
+          <span style="display: inline-flex; align-items: center; width: 50px; height: 30px; padding: 3px; border-radius: 999px; background: var(--deep); justify-content: flex-end">
+            <span style="width: 24px; height: 24px; border-radius: 50%; background: #ffffff"></span>
+          </span>
+        </div>
+        <span style="font-size: 13px; color: var(--dim); line-height: 1.6">Staff และผู้ชมสาธารณะเห็นอันดับได้ตอนนี้</span>
+        <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 3px">
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">ช่วงอันดับที่เปิดสู่สาธารณะ</span>
+          <div style="display: flex; gap: 20px">
+            <span class="radio"><span class="rd"></span>3 อันดับ</span>
+            <span class="radio"><span class="rd rd-on"><span style="width: 9px; height: 9px; border-radius: 50%; background: var(--deep)"></span></span>5 อันดับ</span>
+            <span class="radio"><span class="rd"></span>10 อันดับ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 13px; padding: 18px 20px">
+        <span class="sec-title">ลิงก์เข้าใช้งาน</span>
+        <div style="display: flex; flex-direction: column; gap: 7px">
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">ลิงก์สำหรับ Staff (ส่วนตัว)</span>
+          <span class="url">https://eqbank.app/join/DEMO-STAFF-2026</span>
+          <div style="display: flex; gap: 8px; margin-top: 3px">
+            <span class="btn-sec" style="flex-grow: 1">เปิด</span>
+            <span class="btn-sec" style="flex-grow: 1">คัดลอก</span>
+            <span class="btn-sec" style="flex-grow: 1">แชร์</span>
+          </div>
+        </div>
+        <div style="height: 1px; background: var(--line)"></div>
+        <div style="display: flex; flex-direction: column; gap: 7px">
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">ลิงก์อันดับสาธารณะ</span>
+          <span class="url">https://eqbank.app/leaderboard/PUBLIC-9K4M-2026</span>
+          <div style="display: flex; gap: 8px; margin-top: 3px">
+            <span class="btn-sec" style="flex-grow: 1">เปิด</span>
+            <span class="btn-sec" style="flex-grow: 1">คัดลอก</span>
+            <span class="btn-sec" style="flex-grow: 1">หมุนรหัส</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-left: 3px solid var(--ink)">
+        <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0">
+          <span class="sec-title">ปิดค่าย</span>
+          <span style="font-size: 12px; color: var(--dim); line-height: 1.55">ย้อนกลับไม่ได้ ต้องระบุเหตุผล</span>
+        </div>
+        <span style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 18px; border-radius: 11px; background: var(--ink); color: #ffffff; font-size: 14px; font-weight: 700; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 1px 2px rgb(16 32 48 / 0.2)">ปิดค่าย</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

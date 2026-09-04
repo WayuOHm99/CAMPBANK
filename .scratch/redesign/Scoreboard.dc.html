@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: oklch(0.45 0.09 246); }
+    a:hover { color: oklch(0.38 0.08 246); }
+    .sb {
+      --canvas: oklch(0.965 0.004 250);
+      --surface: #ffffff;
+      --ink: oklch(0.19 0.008 250);
+      --dim: oklch(0.52 0.008 250);
+      --line: oklch(0.9 0.005 250);
+      --deep: #205e91;
+      --soft: #e7f6fd;
+      --sky: #36b8f2;
+      --pressed: #18476d;
+      --ok: oklch(0.52 0.14 148);
+      font-family: "Bai Jamjuree", "Noto Sans Thai", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+    }
+    .sb .kicker { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+    .sb .tile { overflow: hidden; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; }
+    .sb .hero { display: flex; align-items: center; gap: 10px; padding: 13px 16px; min-height: 76px; }
+    .sb .hero-name { font-size: 22px; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+    .sb .pad { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 10px 12px 12px; }
+    .sb .act { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 54px; border-radius: 12px; border: 1px solid transparent; }
+    .sb .act b { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+    .sb .act i { font-style: normal; font-size: 10px; font-weight: 600; opacity: 0.88; }
+    .sb .add { background: var(--deep); border-color: var(--deep); color: #ffffff; }
+    .sb .sub { background: var(--soft); border-color: var(--sky); color: var(--pressed); }
+  </style>
+</helmet>
+
+<div class="sb" style="width: 390px; height: 844px; overflow: hidden; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: var(--ink); color: #ffffff">
+    <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+      <span class="kicker" style="opacity: 0.62">EQ-BANK</span>
+      <span style="font-size: 16px; font-weight: 700; line-height: 1.2">EQCAMP Demo</span>
+    </div>
+    <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: oklch(0.85 0.16 148)">
+      <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="currentColor"></circle></svg>
+      กำลังใช้งาน
+    </span>
+    <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: oklch(0.84 0.1 240)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8 16a5.5 5.5 0 0 1 8 0"></path><circle cx="12" cy="19.5" r="1.2" fill="currentColor" stroke="none"></circle></svg>
+      สด
+    </span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <div style="display: flex; flex-direction: column; gap: 3px; flex-grow: 1; min-width: 0">
+      <span class="kicker" style="color: var(--dim)">งบคงเหลือ</span>
+      <div style="display: flex; align-items: baseline; gap: 7px">
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; line-height: 1">87,500</span>
+        <span style="font-size: 14px; font-weight: 500; color: var(--dim)">/ 100,000</span>
+      </div>
+      <div style="height: 4px; border-radius: 3px; background: var(--canvas); overflow: hidden; margin-top: 3px">
+        <div style="width: 87.5%; height: 100%; background: var(--deep)"></div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 3px; align-items: flex-end; text-align: right">
+      <span class="kicker" style="color: var(--dim)">ผู้บันทึก</span>
+      <span style="font-size: 15px; font-weight: 700">Staff A</span>
+      <span style="font-size: 11px; color: var(--dim)">19:42:07</span>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 8px; padding: 10px 16px">
+    <span style="display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 999px; background: var(--ink); color: #ffffff; font-size: 12px; font-weight: 600">ฐานผจญภัย</span>
+    <span style="display: inline-flex; align-items: center; height: 36px; padding: 0 13px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); font-size: 12px; font-weight: 600">รอบ 2</span>
+    <span style="flex-grow: 1"></span>
+    <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -4px 0; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); color: var(--dim)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+    </span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding: 4px 16px 0; flex-grow: 1; min-height: 0; overflow: hidden">
+
+    <div class="tile">
+      <div class="hero" style="background: #e0322f; color: #ffffff">
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="kicker" style="opacity: 0.78">สีแดง</span>
+          <span class="hero-name">กลุ่มเสือดาว</span>
+        </div>
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em">12,500</span>
+      </div>
+      <div class="pad">
+        <span class="act add"><i>เพิ่ม</i><b>+500</b></span>
+        <span class="act add"><i>เพิ่ม</i><b>+1,000</b></span>
+        <span class="act sub"><i>ลด</i><b>&minus;500</b></span>
+        <span class="act sub"><i>ลด</i><b>&minus;1,000</b></span>
+      </div>
+    </div>
+
+    <div class="tile">
+      <div class="hero" style="background: #f2c200; color: oklch(0.19 0.008 250)">
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="kicker" style="opacity: 0.72">สีเหลือง</span>
+          <span class="hero-name">กลุ่มพระอาทิตย์</span>
+        </div>
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em">11,000</span>
+      </div>
+      <div class="pad">
+        <span class="act add"><i>เพิ่ม</i><b>+500</b></span>
+        <span class="act add"><i>เพิ่ม</i><b>+1,000</b></span>
+        <span class="act sub"><i>ลด</i><b>&minus;500</b></span>
+        <span class="act sub"><i>ลด</i><b>&minus;1,000</b></span>
+      </div>
+    </div>
+
+    <div class="tile">
+      <div class="hero" style="background: #148f4b; color: #ffffff">
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="kicker" style="opacity: 0.78">สีเขียว</span>
+          <span class="hero-name">กลุ่มมังกร</span>
+        </div>
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em">9,500</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin: 12px 16px 16px; display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 16px; background: var(--ink); border-radius: 16px; color: #ffffff">
+    <span style="width: 4px; align-self: stretch; border-radius: 3px; background: #e0322f"></span>
+    <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+      <span style="font-size: 14px; font-weight: 700">กลุ่มเสือดาว +1,000</span>
+      <span style="font-size: 11px; font-weight: 500; opacity: 0.72">Staff A &middot; ย้อนกลับได้อีก 12 วินาที</span>
+    </div>
+    <span style="display: inline-flex; align-items: center; justify-content: center; height: 42px; padding: 0 16px; border: 1px solid rgb(255 255 255 / 45%); border-radius: 12px; font-size: 14px; font-weight: 600">ย้อนกลับ</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

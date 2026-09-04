@@ -1,0 +1,108 @@
+[     255ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:776
+[     333ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:776
+[   12265ms] [WARNING] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:776
+[   43951ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:776
+[   44073ms] [LOG] [Fast Refresh] done in 35ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js:776
+[  170101ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  170286ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://127.0.0.1:54321/rest/v1/rpc/get_camp_snapshot:0
+[  172119ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  172287ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:54321/rest/v1/rpc/get_camp_snapshot:0
+[  174295ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:54321/rest/v1/rpc/get_camp_snapshot:0
+[  176290ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:54321/rest/v1/rpc/get_camp_snapshot:0
+[  177131ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  178291ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  180300ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  182301ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  184300ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  186291ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  187250ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  190305ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/user:0
+[  190324ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/logout?scope=local:0
+[  190683ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  192701ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  197717ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  390086ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  390289ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  392109ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  392294ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  394297ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  396295ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  397127ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  398287ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  400310ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  402292ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  404297ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  406292ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  407193ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/user:0
+[  407219ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/logout?scope=local:0
+[  407280ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:54321/rest/v1/rpc/get_admin_login_options:0
+[  409410ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  411433ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  448922ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  450811ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  450938ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  452291ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  454296ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  455959ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  456291ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  458303ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  460303ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  462290ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  464293ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  466033ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  468289ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/user:0
+[  468296ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  468307ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/logout?scope=local:0
+[  470304ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  643086ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  644824ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  645107ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  646291ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  648293ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  650119ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  650297ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  652290ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  654299ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  656300ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  658292ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  660202ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://127.0.0.1:54321/auth/v1/user:0
+[  662289ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/user:0
+[  662307ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:54321/auth/v1/logout?scope=local:0
+[  662577ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[  664595ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1282226ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error during WebSocket handshake: Unexpected response code: 502 @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1282985ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1286042ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1289097ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1291293ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Connection closed before receiving a handshake response @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1291295ms] [ERROR] Failed to load resource: net::ERR_EMPTY_RESPONSE @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1292178ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1294331ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1295250ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1298315ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1298361ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1302320ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1302334ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1306331ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1309395ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1310317ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1310458ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1314321ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1316559ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1318319ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1322334ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1322708ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1323987ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1326337ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1330304ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1331537ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1334346ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1336794ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1338323ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1342336ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1342771ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1346342ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1350308ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0
+[ 1351306ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:54321/realtime/v1/websocket?apikey=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH&vsn=2.0.0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_072ti2c._.js:1916
+[ 1352353ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:3000/_next/hmr?id=0820bHEsuyHLVZztQM7cG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_0_90u2t._.js:16348
+[ 1354314ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:54321/auth/v1/user:0

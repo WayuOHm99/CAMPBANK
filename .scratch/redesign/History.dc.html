@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --canvas: oklch(0.977 0.003 240); --sunk: oklch(0.966 0.005 240); --surface: #ffffff; --line: oklch(0.905 0.008 240); --line-strong: #638eb2;
+      --ink: #212121; --dim: #5c5c5c; --deep: #205e91; --pressed: #18476d;
+      --sky: #36b8f2; --soft: #e7f6fd; --ok: #407400; --warn: #a64800;
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+    }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgb(16 32 48 / 0.05); }
+    .ec .filter { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; color: var(--dim); }
+    .ec .filter-on { background: var(--deep); border-color: var(--deep); color: #ffffff; }
+    .ec .row { display: flex; align-items: flex-start; gap: 11px; padding: 13px 15px; border-bottom: 1px solid var(--line); }
+    .ec .amt { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.022em; }
+    .ec .kind { display: inline-flex; align-items: center; height: 21px; padding: 0 7px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .ec .dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; margin-top: 5px; }
+    .ec .meta { font-size: 12px; font-weight: 400; color: var(--dim); line-height: 1.5; }
+  </style>
+</helmet>
+
+<div class="ec" style="width: 390px; height: 844px; overflow: hidden; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <span style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 10px; font-size: 14px; font-weight: 600; color: var(--deep)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 6l-6 6 6 6"></path></svg>
+      กลับหน้าให้คะแนน
+    </span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 16px 12px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <span class="eyebrow">EQCAMP DEMO</span>
+    <div style="display: flex; align-items: center; gap: 10px">
+      <span style="font-size: 23px; font-weight: 700; letter-spacing: -0.005em; flex-grow: 1">ประวัติคะแนน</span>
+      <span style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 13px; border: 1px solid var(--line-strong); border-radius: 11px; color: var(--deep); font-size: 13px; font-weight: 600">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4"></path><path d="M5 19h14"></path></svg>
+        CSV
+      </span>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 7px; padding: 12px 16px; overflow: hidden">
+    <span class="filter filter-on">ทั้งหมด</span>
+    <span class="filter">กลุ่ม</span>
+    <span class="filter">ผู้บันทึก</span>
+    <span class="filter">ประเภท</span>
+  </div>
+
+  <div style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 0 16px">
+    <div class="card" style="overflow: hidden">
+
+      <div class="row">
+        <span class="dot" style="background: #e0322f"></span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 15px; font-weight: 700; line-height: 1.35">กลุ่มเสือดาว</span>
+          <span class="meta">19:42:07 &middot; Staff A</span>
+          <span class="meta">ฐานผจญภัย &middot; รอบ 2</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end">
+          <span class="amt" style="color: var(--deep)">+1,000</span>
+          <span class="kind" style="background: var(--soft); color: var(--pressed)">เพิ่มคะแนน</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="dot" style="background: #e0322f"></span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 15px; font-weight: 700; line-height: 1.35">กลุ่มเสือดาว</span>
+          <span class="meta">19:41:52 &middot; Staff A</span>
+          <span class="meta">แก้รายการ 19:41:38</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end">
+          <span class="amt" style="color: var(--dim)">&minus;500</span>
+          <span class="kind" style="background: var(--canvas); color: var(--dim); border: 1px solid var(--line)">ย้อนกลับ</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="dot" style="background: #2563c9"></span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 15px; font-weight: 700; line-height: 1.35">กลุ่มสีน้ำเงิน</span>
+          <span class="meta">19:38:14 &middot; Admin Demo</span>
+          <span class="meta">เหตุผล: แก้คะแนนซ้ำจากฐานที่ 4</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end">
+          <span class="amt" style="color: var(--warn)">&minus;1,000</span>
+          <span class="kind" style="background: var(--surface); color: var(--warn); border: 1px solid var(--warn)">ปรับโดยผู้ดูแล</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="dot" style="background: #148f4b"></span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 15px; font-weight: 700; line-height: 1.35">กลุ่มมังกร</span>
+          <span class="meta">19:35:02 &middot; Staff B</span>
+          <span class="meta">ฐานผจญภัย &middot; รอบ 2</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end">
+          <span class="amt" style="color: var(--deep)">+500</span>
+          <span class="kind" style="background: var(--soft); color: var(--pressed)">เพิ่มคะแนน</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="dot" style="background: #f2c200"></span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 15px; font-weight: 700; line-height: 1.35">กลุ่มพระอาทิตย์</span>
+          <span class="meta">19:33:47 &middot; Staff C</span>
+          <span class="meta">ฐานผจญภัย &middot; รอบ 1</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end">
+          <span class="amt" style="color: var(--pressed)">&minus;500</span>
+          <span class="kind" style="background: var(--soft); color: var(--pressed); border: 1px solid var(--sky)">ลดคะแนน</span>
+        </div>
+      </div>
+
+      <div class="row" style="border-bottom: none">
+        <span class="dot" style="background: #2563c9"></span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 15px; font-weight: 700; line-height: 1.35">กลุ่มสีน้ำเงิน</span>
+          <span class="meta">19:30:11 &middot; Staff B</span>
+          <span class="meta">ไม่ระบุกิจกรรม</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end">
+          <span class="amt" style="color: var(--deep)">+1,000</span>
+          <span class="kind" style="background: var(--soft); color: var(--pressed)">เพิ่มคะแนน</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px 22px">
+    <span style="display: inline-flex; align-items: center; justify-content: center; height: 48px; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--surface); color: var(--deep); font-size: 15px; font-weight: 600">โหลดเพิ่ม 50 รายการ</span>
+    <span style="font-size: 12px; color: var(--dim); text-align: center; line-height: 1.55">รายการทั้งหมดแก้ไขหรือลบไม่ได้ การแก้ไขจะสร้างรายการใหม่เสมอ</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

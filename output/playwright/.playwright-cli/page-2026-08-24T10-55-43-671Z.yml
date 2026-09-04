@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e15] [cursor=pointer]
+  - alert [ref=e19]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - paragraph [ref=e47]: EQ-BANK ADMIN
+          - heading "ค่ายของฉัน" [level=1] [ref=e48]
+          - paragraph [ref=e49]: Admin Demo
+        - button "ออกจากระบบ" [ref=e50]
+      - button "+ สร้าง Camp ใหม่" [ref=e51]
+      - generic [ref=e52]:
+        - link [ref=e53] [cursor=pointer]:
+          - /url: /admin/camps/663d3cd7-9054-4479-831e-be8043412e56
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - paragraph [ref=e56]: EQ-SUSANCDEAS
+              - heading "EQCAMP E2E" [level=2] [ref=e57]
+            - 'generic "สถานะ Camp: ปิดค่ายแล้ว" [ref=e58]':
+              - generic [ref=e59]: ■
+              - generic [ref=e60]: ปิดค่ายแล้ว
+          - paragraph [ref=e61]: 23 ส.ค. 2569 · โรงเรียน E2E
+          - paragraph [ref=e62]: งบคงเหลือ
+          - paragraph [ref=e63]: 49,100 / 50,000
+        - link [ref=e64] [cursor=pointer]:
+          - /url: /admin/camps/10000000-0000-4000-8000-000000000002
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - paragraph [ref=e67]: EQRACE26
+              - heading "EQCAMP Concurrency Test" [level=2] [ref=e68]
+            - 'generic "สถานะ Camp: กำลังใช้งาน" [ref=e69]':
+              - generic [ref=e70]: ●
+              - generic [ref=e71]: กำลังใช้งาน
+          - paragraph [ref=e72]: 22 ส.ค. 2569 · Local Test
+          - paragraph [ref=e73]: งบคงเหลือ
+          - paragraph [ref=e74]: 1,000 / 1,000
+        - link [ref=e75] [cursor=pointer]:
+          - /url: /admin/camps/10000000-0000-4000-8000-000000000001
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - paragraph [ref=e78]: EQDEMO26
+              - heading "EQCAMP Demo" [level=2] [ref=e79]
+            - 'generic "สถานะ Camp: กำลังใช้งาน" [ref=e80]':
+              - generic [ref=e81]: ●
+              - generic [ref=e82]: กำลังใช้งาน
+          - paragraph [ref=e83]: 22 ส.ค. 2569 · โรงเรียนตัวอย่าง
+          - paragraph [ref=e84]: งบคงเหลือ
+          - paragraph [ref=e85]: 100,000 / 100,000

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EQCAMP">
+  <rect width="512" height="512" rx="112" fill="#173f31"/>
+  <circle cx="402" cy="110" r="58" fill="#ffd45c"/>
+  <path d="M90 365 196 178l64 112 44-75 118 150H90Z" fill="#70d6b4"/>
+  <path d="M157 365 257 210l100 155H157Z" fill="#f6f8f2"/>
+  <text x="256" y="430" fill="#fff" font-family="Arial,sans-serif" font-size="54" font-weight="800" text-anchor="middle">EQCAMP</text>
+</svg>

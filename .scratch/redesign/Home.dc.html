@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --surface: #ffffff;
+      --sunk: oklch(0.966 0.005 240);
+      --hair: oklch(0.905 0.008 240);
+      --b3: #e7f6fd;
+      --b9: #205e91;
+      --b12: #18476d;
+      --sky: #36b8f2;
+      --sky-lift: #5fcbf7;
+      --grp-green: #80e800;
+      --grp-orange: #ff6f00;
+      --ink: #212121;
+      --dim: #5c5c5c;
+      --e1: 0 0 0 1px var(--hair), 0 1px 2px rgb(16 32 48 / 0.05);
+      --e-solid: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(16 32 48 / 0.18);
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .ec .bar { align-self: flex-end; width: 100%; border-start-start-radius: 3px; border-start-end-radius: 3px; }
+    .ec .feat { display: flex; align-items: flex-start; gap: 14px; }
+    .ec .feat i {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+      background: var(--b3); color: var(--b12);
+    }
+    .ec .feat b { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.4; }
+    .ec .feat u { display: block; text-decoration: none; font-size: 12.5px; color: var(--dim); line-height: 1.55; margin-top: 3px; }
+  </style>
+</helmet>
+
+<div class="ec" style="width: 1440px; height: 900px; overflow: hidden; background: var(--surface); color: var(--ink); display: flex">
+
+  <div style="position: relative; width: 820px; flex-shrink: 0; overflow: hidden; display: flex; flex-direction: column; background: linear-gradient(158deg, #24699f 0%, #17456c 100%)">
+
+    <div style="position: absolute; inset-inline-end: -120px; inset-block-start: 88px; width: 540px; opacity: 0.085">
+      <img src="eqcamp-mark.png" alt="" style="width: 100%; display: block">
+    </div>
+
+    <div style="position: relative; display: flex; flex-direction: column; gap: 52px; padding: 56px 64px 0; flex-grow: 1; min-height: 0">
+
+      <div style="display: flex; align-items: center; gap: 18px">
+        <span style="display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 21px; background: var(--surface); box-shadow: 0 12px 28px -14px rgb(6 22 38 / 0.6)">
+          <img src="eqcamp-mark.png" alt="EQCAMP" style="width: 62px; display: block">
+        </span>
+        <span style="font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: 0.01em">EQ-BANK</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 22px">
+        <span style="font-size: 62px; font-weight: 600; line-height: 1.24; letter-spacing: 0; color: #ffffff">
+          ให้คะแนนเร็ว<br><span style="color: var(--sky-lift)">ตรวจสอบย้อนหลังได้</span>
+        </span>
+        <span style="font-size: 17.5px; font-weight: 400; line-height: 1.7; color: rgb(255 255 255 / 0.76); max-width: 520px; text-wrap: pretty">
+          ระบบคะแนนกิจกรรมค่าย ที่ทีมงานหลายคนใช้พร้อมกันได้จากมือถือ
+        </span>
+      </div>
+
+    </div>
+
+    <div style="position: relative; display: flex; align-items: flex-end; gap: 14px; height: 156px; padding: 0 64px 0; margin-inline: -6px">
+      <span class="bar" style="height: 42%; background: #e0322f"></span>
+      <span class="bar" style="height: 68%; background: #2563c9"></span>
+      <span class="bar" style="height: 28%; background: var(--grp-green)"></span>
+      <span class="bar" style="height: 84%; background: #f2c200"></span>
+      <span class="bar" style="height: 54%; background: var(--grp-orange)"></span>
+      <span class="bar" style="height: 100%; background: var(--sky)"></span>
+      <span class="bar" style="height: 37%; background: #d6398a"></span>
+      <span class="bar" style="height: 62%; background: #7b3fbf"></span>
+      <span class="bar" style="height: 21%; background: #8a5a33"></span>
+      <span class="bar" style="height: 49%; background: #148f4b"></span>
+    </div>
+
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 26px; width: 620px; flex-shrink: 0; padding: 46px 56px 40px">
+
+    <div style="display: flex; align-items: center; gap: 13px; padding: 11px 15px; border-radius: 13px; box-shadow: var(--e1)">
+      <img src="eqgroup-mark.png" alt="EQGROUP" style="height: 28px; display: block">
+      <span style="font-size: 12.5px; font-weight: 600; color: var(--dim); line-height: 1.5">โดย บริษัท อีคิวกรุ๊ป จำกัด (EQGROUP)</span>
+    </div>
+
+    <span style="font-size: 32px; font-weight: 700; line-height: 1.28; margin-top: 6px">เข้าใช้งาน</span>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: -8px">
+      <span style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 62px; border-radius: 13px; background: var(--b9); color: #ffffff; font-size: 17px; font-weight: 700; box-shadow: var(--e-solid)">
+        เข้าสู่ระบบผู้ดูแล
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13m0 0-5-5m5 5-5 5"></path></svg>
+      </span>
+      <div style="display: flex; align-items: center; gap: 13px; padding: 14px 16px; border-radius: 13px; background: var(--sunk); box-shadow: inset 0 0 0 1px var(--hair)">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--b9); flex-shrink: 0" aria-hidden="true"><path d="M10.5 13.5a4.5 4.5 0 0 0 6.4 0l2.6-2.6a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2"></path><path d="M13.5 10.5a4.5 4.5 0 0 0-6.4 0l-2.6 2.6a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"></path></svg>
+        <span style="font-size: 13.5px; font-weight: 500; line-height: 1.6">Staff เข้าผ่านลิงก์เฉพาะค่าย ไม่ต้องใช้รหัสผ่าน</span>
+      </div>
+    </div>
+
+    <div style="height: 1px; background: var(--hair); margin: 2px 0"></div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <div class="feat">
+        <i>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"></circle><path d="M3.5 19a5.5 5.5 0 0 1 11 0"></path><path d="M16 5.4a3.2 3.2 0 0 1 0 5.2M18.5 19a5.6 5.6 0 0 0-2.2-4.5"></path></svg>
+        </i>
+        <span><b>ทีมงานให้คะแนนพร้อมกันได้</b><u>5–10 คนกดพร้อมกัน ฐานข้อมูลจัดลำดับให้เอง ไม่มีคะแนนหาย</u></span>
+      </div>
+      <div class="feat">
+        <i>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"></path></svg>
+        </i>
+        <span><b>งบค่ายกับอันดับคำนวณสด</b><u>ทุกเครื่องเห็นตรงกันภายใน 1–2 วินาที</u></span>
+      </div>
+      <div class="feat">
+        <i>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 19.5 6v6c0 4-3.2 7.3-7.5 8.5C7.7 19.3 4.5 16 4.5 12V6Z"></path><path d="m9 12 2.2 2.2L15.5 10"></path></svg>
+        </i>
+        <span><b>ทุกรายการแก้ไม่ได้</b><u>การแก้ไขสร้างรายการใหม่เสมอ ย้อนดูได้ว่าใครทำอะไรเมื่อไร</u></span>
+      </div>
+    </div>
+
+    <span style="flex-grow: 1"></span>
+
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

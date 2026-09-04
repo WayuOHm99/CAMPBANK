@@ -1,0 +1,28 @@
+# Dependencies
+/node_modules/
+
+# Next.js
+/.next/
+/out/
+/next-env.d.ts
+
+# Test output
+/coverage/
+/.playwright-cli/
+/playwright-report/
+/test-results/
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Supabase local state
+/supabase/.branches/
+/supabase/.temp/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+*.tsbuildinfo

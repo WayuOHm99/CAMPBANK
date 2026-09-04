@@ -1,0 +1,375 @@
+@import "tailwindcss";
+
+/* ── EQ-BANK v6 token layer ───────────────────────────────────────────────
+   Surfaces are cool-tinted neutrals; the blue is a 12-step scale whose
+   steps 3/7/9/10/12 are the exact brand values already in use. Everything
+   below is exposed to Tailwind as a utility (bg-b9, text-dim, rounded-card).
+   The legacy --eq-* names further down alias into these, so the 432 existing
+   var() references in the components keep working unchanged.            */
+@theme {
+  --font-sans:
+    var(--font-anuphan, ui-sans-serif), "Noto Sans Thai", ui-sans-serif,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --color-surface: #ffffff;
+  --color-canvas: oklch(0.977 0.003 240);
+  --color-sunk: oklch(0.966 0.005 240);
+  --color-hair: oklch(0.905 0.008 240);
+
+  --color-b1: color-mix(in oklab, #205e91 3%, white);
+  --color-b2: color-mix(in oklab, #205e91 6%, white);
+  --color-b3: #e7f6fd;
+  --color-b4: color-mix(in oklab, #36b8f2 20%, white);
+  --color-b5: color-mix(in oklab, #36b8f2 30%, white);
+  --color-b6: color-mix(in oklab, #205e91 24%, white);
+  --color-b7: #638eb2;
+  --color-b8: color-mix(in oklab, #205e91 64%, white);
+  --color-b9: #205e91;
+  --color-b10: #1b507b;
+  --color-b11: #205e91;
+  --color-b12: #18476d;
+
+  --color-sky: #36b8f2;
+  --color-sky-lift: #5fcbf7;
+
+  --color-ink: #212121;
+  --color-dim: #5c5c5c;
+  --color-ok: #407400;
+  --color-warn: #a64800;
+
+  --radius-chip: 0.5rem;
+  --radius-control: 0.625rem;
+  --radius-card: 0.875rem;
+
+  --ease-eq: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Depth is a shadow stack, not a border: a 1px spread ring reads crisper
+   than border-box and composes with real shadows. */
+@utility elev-1 {
+  box-shadow:
+    0 0 0 1px var(--color-hair),
+    0 1px 2px rgb(16 32 48 / 0.05);
+}
+
+@utility elev-2 {
+  box-shadow:
+    0 0 0 1px oklch(0.88 0.01 240),
+    0 2px 4px rgb(16 32 48 / 0.04),
+    0 10px 20px -10px rgb(16 32 48 / 0.14);
+}
+
+@utility elev-solid {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px rgb(16 32 48 / 0.18);
+}
+
+/* Thai never takes negative tracking — the marks collide. Numbers do. */
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.022em;
+}
+
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --eq-ink: var(--color-ink);
+  --eq-brand-bright: var(--color-sky);
+  --eq-brand-deep: var(--color-b9);
+  --eq-brand-deep-hover: var(--color-b10);
+  --eq-brand-deep-pressed: var(--color-b12);
+  --eq-blue-soft: var(--color-b3);
+  --eq-blue-nested: var(--color-sunk);
+  --eq-green: #80e800;
+  --eq-green-dark: var(--color-ok);
+  --eq-green-soft: #f5f5f5;
+  --eq-orange: #ff6f00;
+  --eq-orange-dark: var(--color-warn);
+  --eq-orange-soft: #ffffff;
+  --eq-score-add: var(--eq-brand-deep);
+  --eq-score-add-hover: var(--eq-brand-deep-hover);
+  --eq-score-add-pressed: var(--eq-brand-deep-pressed);
+  --eq-score-add-soft: var(--eq-blue-soft);
+  --eq-score-subtract: var(--eq-brand-deep-pressed);
+  --eq-score-subtract-border: var(--eq-brand-bright);
+  --eq-score-subtract-soft: var(--eq-blue-soft);
+  --eq-score-subtract-hover: color-mix(
+    in srgb,
+    var(--eq-brand-bright) 18%,
+    white
+  );
+  --eq-score-subtract-pressed: color-mix(
+    in srgb,
+    var(--eq-brand-bright) 26%,
+    white
+  );
+  --eq-gray: var(--color-dim);
+  --eq-gray-soft: var(--color-sunk);
+  --eq-brand-950: var(--eq-brand-deep-pressed);
+  --eq-brand-900: var(--eq-brand-deep);
+  --eq-brand-700: var(--eq-brand-deep);
+  --eq-brand-600: var(--eq-brand-deep);
+  --eq-mint: var(--eq-brand-bright);
+  --eq-accent: var(--eq-brand-bright);
+  --eq-canvas: var(--color-surface);
+  --eq-canvas-soft: var(--color-canvas);
+  --eq-surface: var(--color-surface);
+  --eq-border: var(--color-hair);
+  --eq-border-strong: var(--color-b7);
+  --eq-muted: var(--color-dim);
+  --eq-danger: #212121;
+  --eq-danger-soft: #f5f5f5;
+  --eq-warning: var(--eq-orange-dark);
+  --eq-warning-soft: var(--eq-orange-soft);
+  --eq-focus: var(--eq-brand-deep);
+  --eq-radius-card: var(--radius-card);
+  --eq-shadow-card:
+    0 0 0 1px var(--color-hair),
+    0 1px 2px rgb(16 32 48 / 0.05);
+  --eq-motion-fast: 160ms;
+  --eq-motion-normal: 240ms;
+  --eq-ease-out: var(--ease-eq);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--eq-canvas-soft);
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--eq-canvas-soft);
+  color: var(--eq-ink);
+  font-family: var(--font-sans);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  transition-duration: var(--eq-motion-fast);
+  transition-property:
+    background-color, border-color, box-shadow, color, opacity, transform;
+  transition-timing-function: var(--eq-ease-out);
+}
+
+button {
+  touch-action: manipulation;
+}
+
+button:not(:disabled):active,
+a:active {
+  transform: scale(0.985);
+}
+
+.eq-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: color-mix(in srgb, var(--eq-brand-deep) 45%, transparent)
+    transparent;
+  scrollbar-width: thin;
+}
+
+.eq-card {
+  border-radius: var(--eq-radius-card);
+  background: var(--eq-surface);
+  box-shadow: var(--eq-shadow-card);
+}
+
+.eq-action-primary {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px rgb(16 32 48 / 0.18);
+}
+
+.eq-action-primary:not(:disabled):hover {
+  background: var(--eq-brand-deep-hover);
+}
+
+.eq-action-primary:not(:disabled):active {
+  background: var(--eq-brand-deep-pressed);
+}
+
+.eq-score-action {
+  border: 1px solid transparent;
+  color: white;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px rgb(16 32 48 / 0.18);
+}
+
+.eq-score-action-add {
+  border-color: var(--eq-score-add);
+  background: var(--eq-score-add);
+}
+
+.eq-score-action-subtract {
+  border-color: var(--eq-score-subtract-border);
+  background: var(--eq-score-subtract-soft);
+  color: var(--eq-score-subtract);
+  box-shadow: none;
+}
+
+button.eq-score-action-add:not(:disabled):hover {
+  border-color: var(--eq-score-add-hover);
+  background: var(--eq-score-add-hover);
+}
+
+button.eq-score-action-add:not(:disabled):active {
+  border-color: var(--eq-score-add-pressed);
+  background: var(--eq-score-add-pressed);
+}
+
+button.eq-score-action-subtract:not(:disabled):hover {
+  border-color: var(--eq-score-subtract-border);
+  background: var(--eq-score-subtract-hover);
+}
+
+button.eq-score-action-subtract:not(:disabled):active {
+  border-color: var(--eq-score-subtract);
+  background: var(--eq-score-subtract-pressed);
+}
+
+.eq-score-action:disabled {
+  box-shadow: none;
+}
+
+.eq-score-direction-add {
+  color: var(--eq-score-add);
+}
+
+.eq-score-direction-subtract {
+  color: var(--eq-score-subtract);
+}
+
+.eq-score-direction-add[aria-pressed="true"] {
+  border-color: var(--eq-score-add);
+  background: var(--eq-score-add-soft);
+  box-shadow: inset 0 0 0 1px var(--eq-score-add);
+}
+
+.eq-score-direction-subtract[aria-pressed="true"] {
+  border-color: var(--eq-score-subtract-border);
+  background: var(--eq-score-subtract-soft);
+  box-shadow: inset 0 0 0 1px var(--eq-score-subtract);
+}
+
+.eq-score-sign-add {
+  background: var(--eq-score-add-soft);
+  color: var(--eq-score-add);
+}
+
+.eq-score-sign-subtract {
+  background: var(--eq-score-subtract-soft);
+  color: var(--eq-score-subtract);
+}
+
+.eq-notice {
+  border: 1px solid var(--eq-border);
+  border-left: 3px solid var(--eq-brand-deep);
+  border-radius: 0.75rem;
+  background: var(--eq-surface);
+}
+
+.eq-notice-attention {
+  border-left-color: var(--eq-orange-dark);
+}
+
+.eq-notice-critical {
+  border-left-color: var(--eq-ink);
+}
+
+.eq-dialog[open] {
+  animation: eq-dialog-enter var(--eq-motion-normal) var(--eq-ease-out) both;
+}
+
+.eq-dialog[open]::backdrop {
+  animation: eq-backdrop-enter var(--eq-motion-normal) ease-out both;
+}
+
+.eq-disclosure {
+  align-self: start;
+  min-width: 0;
+}
+
+.eq-disclosure > summary {
+  list-style-position: outside;
+}
+
+.eq-disclosure-body {
+  min-width: 0;
+}
+
+@keyframes eq-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes eq-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--eq-focus);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .eq-disclosure[open] > .eq-disclosure-body {
+    max-height: min(70dvh, 44rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 639px) {
+  .eq-color-dialog {
+    margin: auto 0 0;
+    max-height: calc(100dvh - env(safe-area-inset-top) - 0.75rem);
+    width: 100%;
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

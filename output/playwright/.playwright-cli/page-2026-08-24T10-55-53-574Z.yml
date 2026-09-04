@@ -1,0 +1,191 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e15] [cursor=pointer]
+  - alert [ref=e19]
+  - main [ref=e86]:
+    - generic [ref=e88]:
+      - link "← ค่ายของฉัน" [ref=e89] [cursor=pointer]:
+        - /url: /admin
+      - generic [ref=e90]:
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: EQ-BANK · EQDEMO26
+          - heading "EQCAMP Demo" [level=1] [ref=e93]
+        - generic [ref=e94]:
+          - 'generic "สถานะ Camp: กำลังใช้งาน" [ref=e95]':
+            - generic [ref=e96]: ●
+            - generic [ref=e97]: กำลังใช้งาน
+          - 'generic "การเชื่อมต่อ: ข้อมูลสด" [ref=e98]':
+            - generic [ref=e99]: ●
+            - generic [ref=e100]: ข้อมูลสด
+    - generic [ref=e101]:
+      - group [ref=e102]:
+        - generic "รายละเอียดค่าย" [ref=e103] [cursor=pointer]
+      - generic [ref=e104]:
+        - navigation "ทางลัดจัดการค่าย" [ref=e105]:
+          - generic [ref=e106]:
+            - link "ภาพรวม" [ref=e107] [cursor=pointer]:
+              - /url: "#camp-overview"
+            - link "อันดับ" [ref=e108] [cursor=pointer]:
+              - /url: "#camp-ranking"
+            - link "คะแนน" [ref=e109] [cursor=pointer]:
+              - /url: "#camp-scoring"
+            - link "กลุ่มและคน" [ref=e110] [cursor=pointer]:
+              - /url: "#camp-groups-people"
+            - link "ลิงก์" [ref=e111] [cursor=pointer]:
+              - /url: "#camp-links"
+            - link "บันทึกตรวจสอบ" [ref=e112] [cursor=pointer]:
+              - /url: "#camp-audit"
+            - link "ปิดค่าย" [ref=e113] [cursor=pointer]:
+              - /url: "#camp-close"
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - paragraph [ref=e116]: งบทั้งหมด
+            - paragraph [ref=e117]: 100,000
+          - generic [ref=e118]:
+            - paragraph [ref=e119]: แจกแล้ว
+            - paragraph [ref=e120]: "0"
+          - generic [ref=e121]:
+            - paragraph [ref=e122]: คงเหลือ
+            - paragraph [ref=e123]: 100,000
+          - generic [ref=e124]:
+            - paragraph [ref=e125]: รายการ
+            - paragraph [ref=e126]: "0"
+        - navigation [ref=e127]:
+          - link "ให้คะแนน" [ref=e128] [cursor=pointer]:
+            - /url: /camp/10000000-0000-4000-8000-000000000001
+          - link "ประวัติ" [ref=e129] [cursor=pointer]:
+            - /url: /camp/10000000-0000-4000-8000-000000000001/history
+        - region [ref=e130]:
+          - paragraph [ref=e131]: อันดับล่าสุด
+          - heading "อันดับทั้งหมด" [level=2] [ref=e132]
+          - paragraph [ref=e133]: Admin เห็นครบ 8 กลุ่ม ส่วน Top 3, Top 5 หรือ Top 10 มีผลเฉพาะหน้าสาธารณะ
+          - paragraph [ref=e134]: เรียงจากคะแนนมากไปน้อย หากคะแนนเท่ากัน กลุ่มที่ได้คะแนนระดับนั้นก่อนจะอยู่สูงกว่า และหากเวลาเท่ากันอีกครั้งจะใช้ลำดับกลุ่มที่ตั้งไว้ ระบบแสดงลำดับแยกโดยไม่มีอันดับร่วม
+          - generic [ref=e135]:
+            - button "ดาวน์โหลดอันดับ CSV" [ref=e136]
+            - button "คัดลอกอันดับทั้งหมด" [ref=e137]
+          - group [ref=e138]:
+            - generic "ดูข้อความพร้อมคัดลอก" [ref=e139] [cursor=pointer]
+          - list [ref=e140]:
+            - listitem "อันดับ 1 Banana" [ref=e141]:
+              - generic [ref=e142]: "1"
+              - generic [ref=e144]: เหลือง — Banana
+              - generic [ref=e145]: "0"
+            - listitem "อันดับ 2 Shark" [ref=e146]:
+              - generic [ref=e147]: "2"
+              - generic [ref=e149]: น้ำเงิน — Shark
+              - generic [ref=e150]: "0"
+            - listitem "อันดับ 3 Dragon" [ref=e151]:
+              - generic [ref=e152]: "3"
+              - generic [ref=e154]: แดง — Dragon
+              - generic [ref=e155]: "0"
+            - listitem "อันดับ 4 Forest" [ref=e156]:
+              - generic [ref=e157]: "4"
+              - generic [ref=e159]: เขียว — Forest
+              - generic [ref=e160]: "0"
+            - listitem "อันดับ 5 Grape" [ref=e161]:
+              - generic [ref=e162]: "5"
+              - generic [ref=e164]: ม่วง — Grape
+              - generic [ref=e165]: "0"
+            - listitem "อันดับ 6 Orange" [ref=e166]:
+              - generic [ref=e167]: "6"
+              - generic [ref=e169]: ส้ม — Orange
+              - generic [ref=e170]: "0"
+            - listitem "อันดับ 7 Sky" [ref=e171]:
+              - generic [ref=e172]: "7"
+              - generic [ref=e174]: ฟ้า — Sky
+              - generic [ref=e175]: "0"
+            - listitem "อันดับ 8 Pinky" [ref=e176]:
+              - generic [ref=e177]: "8"
+              - generic [ref=e179]: ชมพู — Pinky
+              - generic [ref=e180]: "0"
+        - generic [ref=e181]:
+          - generic [ref=e182]:
+            - paragraph [ref=e183]: ลิงก์สำหรับ Staff
+            - paragraph [ref=e184]: ผู้ที่มีลิงก์นี้สามารถเลือกชื่อ Staff ได้ โปรดส่งเฉพาะผู้เกี่ยวข้อง
+            - generic [ref=e186]:
+              - textbox "URL ลิงก์ Staff" [ref=e187]: http://127.0.0.1:3000/join/DEMO-STAFF-2026
+              - generic [ref=e188]:
+                - link "เปิดลิงก์ Staff" [ref=e189] [cursor=pointer]:
+                  - /url: /join/DEMO-STAFF-2026
+                  - text: เปิด
+                - button "คัดลอกลิงก์ Staff" [ref=e190]: คัดลอก
+                - button "แชร์ลิงก์ Staff" [ref=e191]: แชร์
+          - generic [ref=e192]:
+            - generic [ref=e193]:
+              - generic [ref=e194]:
+                - paragraph [ref=e195]: LEADERBOARD
+                - heading "ซ่อนอันดับอยู่" [level=2] [ref=e196]
+              - button "เปิด" [ref=e197]
+            - group "ช่วงผลสาธารณะ" [ref=e198]:
+              - paragraph [ref=e200]: จำกัดเฉพาะหน้าสาธารณะ Admin ยังเห็นอันดับครบทุกกลุ่ม
+              - generic [ref=e201]:
+                - button "Top 3" [pressed] [ref=e202]
+                - button "Top 5" [ref=e203]
+                - button "Top 10" [ref=e204]
+            - paragraph [ref=e205]: /leaderboard/DEMO-BOARD-2026
+        - generic [ref=e206]:
+          - generic [ref=e207]:
+            - generic [ref=e208]:
+              - group [ref=e209]:
+                - generic "งบและการเตือน" [ref=e210] [cursor=pointer]
+              - group [ref=e211]:
+                - generic "ปุ่มคะแนน" [ref=e212] [cursor=pointer]
+            - generic [ref=e213]:
+              - group [ref=e214]:
+                - generic "กิจกรรมและรอบ" [ref=e215] [cursor=pointer]
+              - group [ref=e216]:
+                - generic "ลิงก์และการยกเลิกสิทธิ์" [ref=e217] [cursor=pointer]
+          - group [ref=e218]:
+            - generic "ปรับคะแนนโดย Admin" [ref=e219] [cursor=pointer]
+            - option "เหลือง — Banana (0)" [selected]
+            - option "น้ำเงิน — Shark (0)"
+            - option "แดง — Dragon (0)"
+            - option "เขียว — Forest (0)"
+            - option "ม่วง — Grape (0)"
+            - option "ส้ม — Orange (0)"
+            - option "ฟ้า — Sky (0)"
+            - option "ชมพู — Pinky (0)"
+        - generic [ref=e220]:
+          - group [ref=e222]:
+            - generic "ชื่อและสีกลุ่ม" [ref=e223] [cursor=pointer]
+          - generic [ref=e224]:
+            - group [ref=e225]:
+              - generic "Staff" [ref=e226] [cursor=pointer]
+            - group [ref=e227]:
+              - generic "Admin" [ref=e228] [cursor=pointer]
+        - group [ref=e230]:
+          - generic "บันทึกตรวจสอบ" [ref=e231] [cursor=pointer]
+        - group [ref=e233]:
+          - generic "ปิด Camp" [ref=e234] [cursor=pointer]
+        - generic [ref=e235]:
+          - article [ref=e236]:
+            - paragraph [ref=e238]: เหลือง
+            - heading "Banana" [level=3] [ref=e239]
+            - paragraph [ref=e240]: "0"
+          - article [ref=e241]:
+            - paragraph [ref=e243]: น้ำเงิน
+            - heading "Shark" [level=3] [ref=e244]
+            - paragraph [ref=e245]: "0"
+          - article [ref=e246]:
+            - paragraph [ref=e248]: แดง
+            - heading "Dragon" [level=3] [ref=e249]
+            - paragraph [ref=e250]: "0"
+          - article [ref=e251]:
+            - paragraph [ref=e253]: เขียว
+            - heading "Forest" [level=3] [ref=e254]
+            - paragraph [ref=e255]: "0"
+          - article [ref=e256]:
+            - paragraph [ref=e258]: ม่วง
+            - heading "Grape" [level=3] [ref=e259]
+            - paragraph [ref=e260]: "0"
+          - article [ref=e261]:
+            - paragraph [ref=e263]: ส้ม
+            - heading "Orange" [level=3] [ref=e264]
+            - paragraph [ref=e265]: "0"
+          - article [ref=e266]:
+            - paragraph [ref=e268]: ฟ้า
+            - heading "Sky" [level=3] [ref=e269]
+            - paragraph [ref=e270]: "0"
+          - article [ref=e271]:
+            - paragraph [ref=e273]: ชมพู
+            - heading "Pinky" [level=3] [ref=e274]
+            - paragraph [ref=e275]: "0"

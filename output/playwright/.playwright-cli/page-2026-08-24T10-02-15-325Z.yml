@@ -1,0 +1,10 @@
+- generic [active] [ref=f5e1]:
+  - main [ref=f5e2]:
+    - generic [ref=f5e3]:
+      - generic "EQ BANK" [ref=f5e4]:
+        - paragraph [ref=f5e5]: EQ BANK
+      - heading "กำลังเปิดค่าย" [level=1] [ref=f5e7]
+      - paragraph [ref=f5e8]: ตรวจสอบลิงก์และการเชื่อมต่อ
+      - link "← กลับหน้าแรก" [ref=f5e9] [cursor=pointer]:
+        - /url: /
+  - button "Open Next.js Dev Tools" [ref=f5e15] [cursor=pointer]

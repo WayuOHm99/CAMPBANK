@@ -1,0 +1,15 @@
+---
+description: Require verified facts and explicit handling of unknowns throughout EQCAMP work
+alwaysApply: true
+---
+
+# No guessing
+
+- Never invent requirements, repository state, command results, package behavior, credentials, or test outcomes.
+- Resolve unknowns in this order: inspect the repository and environment, consult the accepted specification and ADRs, check current official documentation, then run a focused experiment or test.
+- Clearly distinguish verified facts from inferences. Record any necessary low-risk implementation inference in the relevant decision log.
+- If an unresolved choice could change data integrity, security, the domain model, cost, deployment, or destructive behavior, stop only that workstream and ask the user.
+- For reversible low-risk details not fixed by the specification, choose the simplest option consistent with existing decisions only after verifying the tools and APIs involved.
+- Never claim a command or test passed unless its actual result was observed.
+- Do not silently substitute a different requirement when a requested capability cannot be implemented.
+

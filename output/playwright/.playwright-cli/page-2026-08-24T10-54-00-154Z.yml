@@ -1,0 +1,29 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e15] [cursor=pointer]
+  - alert [ref=e19]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - generic "EQ-BANK" [ref=e22]:
+        - paragraph [ref=e23]: EQ-BANK
+      - paragraph [ref=e25]: ADMIN
+      - heading "เข้าสู่ระบบ Admin" [level=1] [ref=e26]
+      - paragraph [ref=e27]: เลือกชื่อและกรอก PIN 4 หลัก
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - text: ชื่อ Admin
+          - combobox "ชื่อ Admin" [ref=e30]:
+            - option "Admin Demo" [selected]
+        - generic [ref=e31]:
+          - generic [ref=e32]: PIN
+          - generic [ref=e33]:
+            - textbox "PIN" [ref=e34]: "1234"
+            - list "PIN 4 หลัก" [ref=e35]:
+              - 'listitem "หลักที่ 1: กรอกแล้ว" [ref=e43]': •
+              - 'listitem "หลักที่ 2: กรอกแล้ว" [ref=e44]': •
+              - 'listitem "หลักที่ 3: กรอกแล้ว" [ref=e45]': •
+              - 'listitem "หลักที่ 4: กรอกแล้ว" [ref=e46]': •
+          - generic [ref=e40]: กรอกแล้ว 4 จาก 4 หลัก
+        - alert [ref=e47]: ลองใหม่อีกครั้งภายหลัง
+        - button "เข้าสู่ระบบ" [ref=e41]
+        - link "กลับหน้าแรก" [ref=e42] [cursor=pointer]:
+          - /url: /

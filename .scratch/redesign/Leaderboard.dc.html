@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --canvas: oklch(0.977 0.003 240); --sunk: oklch(0.966 0.005 240); --surface: #ffffff; --line: oklch(0.905 0.008 240); --line-strong: #638eb2;
+      --ink: #212121; --dim: #5c5c5c; --deep: #205e91; --pressed: #18476d;
+      --sky: #36b8f2; --soft: #e7f6fd; --ok: #407400;
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+    }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgb(16 32 48 / 0.05); }
+    .ec .rank { display: flex; align-items: center; gap: 13px; padding: 14px 16px 14px 0; overflow: hidden; }
+    .ec .no { font-size: 20px; font-weight: 700; color: var(--dim); width: 26px; text-align: center; flex-shrink: 0; }
+    .ec .strip { width: 6px; align-self: stretch; flex-shrink: 0; }
+    .ec .gname { font-size: 17px; font-weight: 700; line-height: 1.3; }
+    .ec .gscore { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.022em; }
+  </style>
+</helmet>
+
+<div class="ec" style="width: 390px; height: 844px; overflow: hidden; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 20px 18px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <div style="display: flex; flex-direction: column; gap: 5px; flex-grow: 1; min-width: 0">
+      <span class="eyebrow">EQ-BANK</span>
+      <span style="font-size: 15px; font-weight: 600; color: var(--dim)">EQCAMP Demo</span>
+      <span style="font-size: 28px; font-weight: 700; line-height: 1.25; margin-top: 2px">อันดับผลค่าย</span>
+    </div>
+    <img src="eqcamp-lockup.png" alt="EQCAMP" style="height: 74px; display: block; flex-shrink: 0">
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 8px; padding: 13px 20px 4px">
+    <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 12px; font-weight: 600; color: var(--dim)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+      แสดงอันดับ 1–5
+    </span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px; padding: 12px 20px 0; flex-grow: 1; min-height: 0; overflow: hidden">
+
+    <div class="card" style="display: flex; overflow: hidden; box-shadow: 0 0 0 1px var(--line-strong), 0 1px 2px rgb(16 32 48 / 0.06)">
+      <span class="strip" style="background: #e0322f"></span>
+      <div class="rank" style="padding-block: 20px; flex-grow: 1">
+        <span class="no" style="font-size: 26px; color: var(--ink)">1</span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="gname" style="font-size: 20px">กลุ่มเสือดาว</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">สีแดง</span>
+        </div>
+        <span class="gscore" style="font-size: 23px">12,500</span>
+      </div>
+    </div>
+
+    <div class="card" style="display: flex; overflow: hidden">
+      <span class="strip" style="background: #2563c9"></span>
+      <div class="rank" style="flex-grow: 1">
+        <span class="no">2</span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="gname">กลุ่มสีน้ำเงิน</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">สีน้ำเงิน</span>
+        </div>
+        <span class="gscore">11,000</span>
+      </div>
+    </div>
+
+    <div class="card" style="display: flex; overflow: hidden">
+      <span class="strip" style="background: #f2c200"></span>
+      <div class="rank" style="flex-grow: 1">
+        <span class="no">3</span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="gname">กลุ่มพระอาทิตย์</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">สีเหลือง</span>
+        </div>
+        <span class="gscore">11,000</span>
+      </div>
+    </div>
+
+    <div class="card" style="display: flex; overflow: hidden">
+      <span class="strip" style="background: #148f4b"></span>
+      <div class="rank" style="flex-grow: 1">
+        <span class="no">4</span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="gname">กลุ่มมังกร</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">สีเขียว</span>
+        </div>
+        <span class="gscore">9,500</span>
+      </div>
+    </div>
+
+    <div class="card" style="display: flex; overflow: hidden">
+      <span class="strip" style="background: #7b3fbf"></span>
+      <div class="rank" style="flex-grow: 1">
+        <span class="no">5</span>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1">
+          <span class="gname">กลุ่มดาวเหนือ</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">สีม่วง</span>
+        </div>
+        <span class="gscore">8,000</span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 11px; margin-top: 2px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color: var(--dim); flex-shrink: 0; margin-top: 1px" aria-hidden="true"><path d="M12 11v5"></path><circle cx="12" cy="7.6" r="1.1" fill="currentColor" stroke="none"></circle><circle cx="12" cy="12" r="9"></circle></svg>
+      <span style="font-size: 12px; font-weight: 400; color: var(--dim); line-height: 1.6">อันดับ 2 และ 3 คะแนนเท่ากัน เรียงตามเวลาที่ทำคะแนนถึงก่อน</span>
+    </div>
+
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 8px; padding: 16px 20px 24px">
+    <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ok)">
+      <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="currentColor"></circle></svg>
+      อัปเดตล่าสุด 19:42
+    </span>
+    <span style="flex-grow: 1"></span>
+    <span style="font-size: 12px; color: var(--dim)">หน้านี้อ่านอย่างเดียว</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

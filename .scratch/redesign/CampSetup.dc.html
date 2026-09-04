@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --canvas: oklch(0.977 0.003 240); --sunk: oklch(0.966 0.005 240); --surface: #ffffff; --line: oklch(0.905 0.008 240); --line-strong: #638eb2;
+      --ink: #212121; --dim: #5c5c5c; --deep: #205e91; --pressed: #18476d;
+      --sky: #36b8f2; --soft: #e7f6fd; --ok: #407400; --warn: #a64800;
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+    }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgb(16 32 48 / 0.05); }
+    .ec .field { display: flex; align-items: center; height: 46px; padding: 0 13px; border: 1px solid var(--line); border-radius: 11px; background: var(--canvas); font-size: 14px; }
+    .ec .sw { width: 46px; height: 46px; border-radius: 11px; flex-shrink: 0; }
+    .ec .chipname { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: var(--canvas); border: 1px solid var(--line); font-size: 12px; font-weight: 600; color: var(--dim); }
+    .ec .swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .ec .swatch span.dot { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+    .ec .swatch span.nm { font-size: 11px; font-weight: 600; color: var(--dim); }
+  </style>
+</helmet>
+
+<div class="ec" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--surface); border-bottom: 1px solid var(--line)">
+    <span style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 10px; font-size: 14px; font-weight: 600; color: var(--deep)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 6l-6 6 6 6"></path></svg>
+      ตั้งค่าค่าย
+    </span>
+    <span style="flex-grow: 1"></span>
+    <span style="font-size: 12px; font-weight: 600; color: var(--dim); padding-right: 10px">ขั้นที่ 2 จาก 3</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 14px; padding: 16px 16px 0; flex-grow: 1; min-height: 0; overflow: hidden">
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+      <span style="height: 4px; border-radius: 3px; background: var(--deep)"></span>
+      <span style="height: 4px; border-radius: 3px; background: var(--deep)"></span>
+      <span style="height: 4px; border-radius: 3px; background: #ebebeb"></span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <span style="font-size: 23px; font-weight: 700; line-height: 1.3; letter-spacing: -0.005em">กำหนดสีและชื่อกลุ่ม</span>
+      <span style="font-size: 13px; color: var(--dim); line-height: 1.6">แต่ละกลุ่มต้องใช้สีที่ไม่ซ้ำกัน ชื่อกลุ่มเว้นว่างได้ ระบบจะเรียกว่า “กลุ่มสี…” ให้เอง</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 9px; padding: 12px">
+        <div style="display: flex; align-items: center; gap: 11px">
+          <span class="sw" style="background: #e0322f"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex-grow: 1">
+            <span style="font-size: 12px; font-weight: 600; color: var(--dim)">กลุ่มที่ 1</span>
+            <span class="chipname" style="align-self: flex-start">สีแดง</span>
+          </div>
+          <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 11px; color: var(--deep)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"></path><path d="m14.5 6.5 3 3"></path></svg>
+          </span>
+        </div>
+        <span class="field" style="font-weight: 600">กลุ่มเสือดาว</span>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 9px; padding: 12px">
+        <div style="display: flex; align-items: center; gap: 11px">
+          <span class="sw" style="background: #2563c9"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex-grow: 1">
+            <span style="font-size: 12px; font-weight: 600; color: var(--dim)">กลุ่มที่ 2</span>
+            <span class="chipname" style="align-self: flex-start">สีน้ำเงิน</span>
+          </div>
+          <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 11px; color: var(--deep)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"></path><path d="m14.5 6.5 3 3"></path></svg>
+          </span>
+        </div>
+        <span class="field" style="color: var(--dim)">เว้นว่างเพื่อใช้ “กลุ่มสีน้ำเงิน”</span>
+      </div>
+
+      <div class="card" style="display: flex; align-items: center; gap: 11px; padding: 12px; box-shadow: 0 0 0 1px var(--deep), 0 0 0 4px rgb(32 94 145 / 0.12)">
+        <span class="sw" style="border: 2px dashed var(--line-strong); background: var(--canvas)"></span>
+        <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex-grow: 1">
+          <span style="font-size: 12px; font-weight: 600; color: var(--dim)">กลุ่มที่ 3</span>
+          <span style="font-size: 14px; font-weight: 700; color: var(--deep)">ยังไม่ได้เลือกสี</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="position: absolute; inset: 0; background: rgb(33 33 33 / 34%)"></div>
+
+  <div style="position: absolute; inset-inline: 0; bottom: 0; display: flex; flex-direction: column; gap: 14px; padding: 10px 16px 22px; background: var(--surface); border-top: 1px solid var(--line); border-start-start-radius: 20px; border-start-end-radius: 20px">
+
+    <span style="width: 42px; height: 4px; border-radius: 3px; background: var(--line); align-self: center"></span>
+
+    <div style="display: flex; align-items: center; gap: 10px">
+      <span style="font-size: 18px; font-weight: 700; flex-grow: 1">เลือกสีกลุ่มที่ 3</span>
+      <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -6px -8px -6px 0; border-radius: 11px; color: var(--dim)">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+      </span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px 6px">
+
+      <span class="swatch"><span class="dot" style="background: #e0322f; opacity: 0.32"></span><span class="nm">ใช้แล้ว</span></span>
+      <span class="swatch"><span class="dot" style="background: #2563c9; opacity: 0.32"></span><span class="nm">ใช้แล้ว</span></span>
+      <span class="swatch"><span class="dot" style="background: #148f4b; box-shadow: 0 0 0 3px var(--surface), 0 0 0 6px var(--deep)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span><span class="nm" style="color: var(--deep)">สีเขียว</span></span>
+      <span class="swatch"><span class="dot" style="background: #f2c200"></span><span class="nm">สีเหลือง</span></span>
+      <span class="swatch"><span class="dot" style="background: #e2661a"></span><span class="nm">สีส้ม</span></span>
+
+      <span class="swatch"><span class="dot" style="background: #7b3fbf"></span><span class="nm">สีม่วง</span></span>
+      <span class="swatch"><span class="dot" style="background: #d6398a"></span><span class="nm">สีชมพู</span></span>
+      <span class="swatch"><span class="dot" style="background: #2aa8d8"></span><span class="nm">สีฟ้า</span></span>
+      <span class="swatch"><span class="dot" style="background: #8a5a33"></span><span class="nm">สีน้ำตาล</span></span>
+      <span class="swatch"><span class="dot" style="background: #6b7280"></span><span class="nm">สีเทา</span></span>
+
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 2px">
+      <span style="display: inline-flex; align-items: center; justify-content: center; height: 50px; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--surface); color: var(--deep); font-size: 15px; font-weight: 600">ยกเลิก</span>
+      <span style="display: inline-flex; align-items: center; justify-content: center; height: 50px; border-radius: 11px; background: var(--deep); color: #ffffff; font-size: 15px; font-weight: 700; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(16 32 48 / 0.18)">ใช้สีเขียว</span>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

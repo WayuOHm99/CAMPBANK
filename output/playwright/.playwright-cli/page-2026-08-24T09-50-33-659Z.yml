@@ -1,0 +1,21 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic "EQ BANK" [ref=e5]:
+          - img "โลโก้ EQCAMP" [ref=e6]
+          - generic [ref=e7]:
+            - paragraph [ref=e8]: EQ BANK
+            - paragraph [ref=e9]: ระบบคะแนนกิจกรรมค่าย
+        - generic [ref=e10]: ระบบภายในค่าย
+      - generic [ref=e11]:
+        - heading "เข้าใช้งาน EQ BANK" [level=1] [ref=e12]
+        - paragraph [ref=e13]: Staff เปิดลิงก์ที่ได้รับจากผู้ดูแลค่าย ส่วน Admin เข้าจัดการระบบด้านล่าง
+        - generic [ref=e14]:
+          - link "เข้าสู่ระบบ Admin" [ref=e15] [cursor=pointer]:
+            - /url: /admin
+            - generic [ref=e17]: →
+          - link "เปิด EQCAMP Demo" [ref=e18] [cursor=pointer]:
+            - /url: /join/DEMO-STAFF-2026
+            - generic [ref=e20]: →
+  - button "Open Next.js Dev Tools" [ref=e26] [cursor=pointer]

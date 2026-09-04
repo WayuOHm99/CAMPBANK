@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #205e91; }
+    a:hover { color: #1b507b; }
+    .ec {
+      --canvas: oklch(0.977 0.003 240);
+      --surface: #ffffff;
+      --sunk: oklch(0.966 0.005 240);
+      --b1: color-mix(in oklab, #205e91 3%, white);
+      --b2: color-mix(in oklab, #205e91 6%, white);
+      --b3: #e7f6fd;
+      --b4: color-mix(in oklab, #36b8f2 20%, white);
+      --b5: color-mix(in oklab, #36b8f2 30%, white);
+      --b6: color-mix(in oklab, #205e91 24%, white);
+      --b7: #638eb2;
+      --b8: color-mix(in oklab, #205e91 64%, white);
+      --b9: #205e91;
+      --b10: #1b507b;
+      --b11: #205e91;
+      --b12: #18476d;
+      --ink: #212121;
+      --dim: #5c5c5c;
+      --ok: #407400;
+      --warn: #a64800;
+      --hair: oklch(0.905 0.008 240);
+      --e1: 0 0 0 1px var(--hair), 0 1px 2px rgb(16 32 48 / 0.05);
+      --e2: 0 0 0 1px oklch(0.88 0.01 240), 0 2px 4px rgb(16 32 48 / 0.04), 0 10px 20px -10px rgb(16 32 48 / 0.14);
+      --e-solid: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(16 32 48 / 0.18);
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .ec .mono { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+    .ec .num { font-variant-numeric: tabular-nums; letter-spacing: -0.022em; }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: var(--e1); }
+    .ec .h2 { font-size: 19px; font-weight: 700; }
+    .ec .cap { font-size: 12px; font-weight: 400; color: var(--dim); line-height: 1.65; }
+    .ec .step { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .ec .step i { height: 52px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgb(16 32 48 / 0.07); }
+    .ec .step b { font-size: 11px; font-weight: 600; }
+    .ec .step u { text-decoration: none; font-size: 10px; color: var(--dim); line-height: 1.4; }
+    .ec .act { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; border-radius: 10px; }
+    .ec .act u { text-decoration: none; display: flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 600; opacity: 0.88; }
+    .ec .act b { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.022em; }
+    .ec .add { background: var(--b9); color: #ffffff; box-shadow: var(--e-solid); }
+    .ec .sub { background: var(--b3); color: var(--b12); box-shadow: inset 0 0 0 1px #36b8f2; }
+    .ec .chip { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 7px; background: var(--surface); box-shadow: 0 0 0 1px var(--hair); font-size: 11.5px; font-weight: 600; }
+    .ec .btn { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 18px; border-radius: 10px; font-size: 15px; font-weight: 600; }
+    .ec .code { background: var(--sunk); border-radius: 11px; box-shadow: inset 0 0 0 1px var(--hair); padding: 17px 19px; font-size: 12.5px; line-height: 1.85; white-space: pre-wrap; }
+    .ec .spec { display: flex; gap: 10px; font-size: 13px; line-height: 1.6; }
+    .ec .spec b { font-weight: 600; min-width: 122px; flex-shrink: 0; }
+    .ec .elev { display: flex; flex-direction: column; gap: 7px; align-items: center; padding: 16px 10px; border-radius: 11px; background: var(--surface); }
+  </style>
+</helmet>
+
+<div class="ec" style="width: 880px; min-height: 2600px; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column; gap: 20px; padding: 34px 32px 40px">
+
+  <div style="display: flex; flex-direction: column; gap: 7px">
+    <span class="eyebrow">EQ-BANK DESIGN SYSTEM &middot; V6</span>
+    <span style="font-size: 31px; font-weight: 700; line-height: 1.25">Editorial Calm — ระบบพื้นฐาน</span>
+    <span class="cap" style="font-size: 13px; max-width: 660px">v6 เปิดให้ใช้ภาพจริง พื้นสีแบรนด์เต็มพื้นที่ และสามสีของ EQGROUP ได้ตามที่เจ้าของสั่ง โดยยังคงสเกล 12 ขั้นตามหลัก Radix, พื้นเทาอมฟ้า และ shadow ซ้อนชั้นจาก v5 ไว้ทั้งหมด</span>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 22px 24px">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="h2">อัตลักษณ์แบรนด์และไฟล์ภาพ</span>
+      <span class="cap">ทั้งสามไฟล์สร้างจากต้นฉบับใน <span class="mono">logo/</span> โดยคีย์พื้นขาวออกเป็นโปร่งใส จึงวางบนพื้นสีเข้มได้ ต้นฉบับไม่ถูกแก้ ไม่มีการวาดโลโก้ใหม่หรือเปลี่ยนสัดส่วน</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="display: flex; align-items: center; justify-content: center; height: 128px; border-radius: 11px; background: linear-gradient(158deg, #24699f 0%, #1a4b74 100%)">
+          <img src="eqcamp-mark.png" alt="EQCAMP mark" style="height: 92px; display: block">
+        </span>
+        <span class="mono" style="font-size: 11px; font-weight: 600">eqcamp-mark.png</span>
+        <span class="cap" style="font-size: 11px">เครื่องหมายอย่างเดียว ใช้บนแผ่นขาว บนพื้นน้ำเงิน และเป็นลายน้ำที่ความทึบต่ำ</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="display: flex; align-items: center; justify-content: center; height: 128px; border-radius: 11px; background: var(--sunk); box-shadow: inset 0 0 0 1px var(--hair)">
+          <img src="eqcamp-lockup.png" alt="EQCAMP lockup" style="height: 104px; display: block">
+        </span>
+        <span class="mono" style="font-size: 11px; font-weight: 600">eqcamp-lockup.png</span>
+        <span class="cap" style="font-size: 11px">เครื่องหมายพร้อม wordmark ตัวอักษรไล่จากน้ำเงินเข้มไปฟ้าสด ใช้เฉพาะบนพื้นสว่าง</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="display: flex; align-items: center; justify-content: center; height: 128px; border-radius: 11px; background: var(--sunk); box-shadow: inset 0 0 0 1px var(--hair)">
+          <img src="eqgroup-mark.png" alt="EQGROUP" style="height: 60px; display: block">
+        </span>
+        <span class="mono" style="font-size: 11px; font-weight: 600">eqgroup-mark.png</span>
+        <span class="cap" style="font-size: 11px">เครื่องหมายบริษัทเจ้าของ ใช้คู่กับข้อความ &ldquo;โดย บริษัท อีคิวกรุ๊ป จำกัด (EQGROUP)&rdquo;</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 4px">
+      <span style="font-size: 14px; font-weight: 700">สามสีของ EQGROUP — v6 เปิดให้ใช้แล้ว</span>
+      <span class="cap">ค่าด้านล่างสุ่มจากไฟล์โลโก้จริงด้วย Pillow ไม่ได้คัดลอกจากเอกสาร ตัวเลขตรงกับที่ design system เดิมบันทึกไว้แทบทุกค่า</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+      <span class="step"><i style="background: #80e800"></i><b>grp-green</b><u class="mono">#80E800 &middot; สุ่มได้ตรงเป๊ะ</u></span>
+      <span class="step"><i style="background: #ff6f00"></i><b>grp-orange</b><u class="mono">#FF6F00 &middot; สุ่มได้ #F86800</u></span>
+      <span class="step"><i style="background: #36b8f2"></i><b>brand-sky</b><u class="mono">#36B8F2 &middot; สุ่มได้ #30B8F0</u></span>
+      <span class="step"><i style="background: #5fcbf7"></i><b>sky-lift</b><u class="mono">#5FCBF7 &middot; ฟ้าสำหรับตัวอักษรบนพื้นน้ำเงิน</u></span>
+    </div>
+
+    <div style="display: flex; gap: 11px; align-items: flex-start; padding: 13px 15px; background: var(--surface); box-shadow: 0 0 0 1px var(--hair); border-left: 3px solid var(--b9); border-radius: 11px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color: var(--b9); flex-shrink: 0; margin-top: 2px" aria-hidden="true"><path d="M12 11v5"></path><circle cx="12" cy="7.6" r="1.1" fill="currentColor" stroke="none"></circle><circle cx="12" cy="12" r="9"></circle></svg>
+      <span class="cap">ข้อยกเว้นเดียวที่เหลือไม่ใช่ข้อห้ามด้านความสวยงาม แต่เป็นข้อกำหนดการใช้งาน: คู่ปุ่มเพิ่ม/ลดคะแนนยังใช้น้ำเงินคู่เดิมพร้อมข้อความและเครื่องหมายกำกับ เพราะใบงาน 17 กำหนดว่าความหมายห้ามขึ้นกับสีอย่างเดียว การเติมเขียว/ส้มเข้าไปตรงนั้นจะทำให้ Staff อ่านผิดตอนรีบ</span>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 22px 24px">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="h2">EQ Blue — สเกล 12 ขั้น</span>
+      <span class="cap">ขั้น 3, 7, 9, 10, 12 คือค่าแบรนด์เดิมที่ใช้อยู่แล้วเป๊ะ ๆ ขั้นที่เหลือสร้างด้วย <span class="mono">color-mix()</span> จากค่าเดิม ไม่ได้เดาสีขึ้นใหม่ แต่ละขั้นมีหน้าที่ตายตัว ไม่ใช่แค่ “อ่อนไปเข้ม”</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+      <span class="step"><i style="background: var(--b1)"></i><b>1</b><u>พื้นหน้าเว็บ</u></span>
+      <span class="step"><i style="background: var(--b2)"></i><b>2</b><u>พื้นรอง</u></span>
+      <span class="step"><i style="background: var(--b3)"></i><b>3 &middot; เดิม</b><u>พื้นคอมโพเนนต์ ปุ่มลดคะแนน</u></span>
+      <span class="step"><i style="background: var(--b4)"></i><b>4</b><u>hover</u></span>
+      <span class="step"><i style="background: var(--b5)"></i><b>5</b><u>กดค้าง / ถูกเลือก</u></span>
+      <span class="step"><i style="background: var(--b6)"></i><b>6</b><u>เส้นคั่นที่กดไม่ได้</u></span>
+      <span class="step"><i style="background: var(--b7)"></i><b>7 &middot; เดิม</b><u>ขอบช่องกรอกและปุ่มรอง</u></span>
+      <span class="step"><i style="background: var(--b8)"></i><b>8</b><u>ขอบตอน hover / focus</u></span>
+      <span class="step"><i style="background: var(--b9)"></i><b>9 &middot; เดิม</b><u>สีทึบ ปุ่มหลัก</u></span>
+      <span class="step"><i style="background: var(--b10)"></i><b>10 &middot; เดิม</b><u>สีทึบตอน hover</u></span>
+      <span class="step"><i style="background: var(--b11)"></i><b>11 &middot; เดิม</b><u>ตัวอักษรคอนทราสต์ต่ำ</u></span>
+      <span class="step"><i style="background: var(--b12)"></i><b>12 &middot; เดิม</b><u>ตัวอักษรคอนทราสต์สูง</u></span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding-top: 4px">
+      <span class="step"><i style="background: var(--surface)"></i><b>surface</b><u class="mono">#FFFFFF</u></span>
+      <span class="step"><i style="background: var(--canvas)"></i><b>canvas</b><u class="mono">oklch(.977 .003 240)</u></span>
+      <span class="step"><i style="background: var(--sunk)"></i><b>sunk</b><u class="mono">oklch(.966 .005 240)</u></span>
+      <span class="step"><i style="background: var(--hair)"></i><b>hairline</b><u class="mono">oklch(.905 .008 240)</u></span>
+      <span class="step"><i style="background: var(--ink)"></i><b>ink</b><u class="mono">#212121 &middot; 16.1:1</u></span>
+      <span class="step"><i style="background: var(--dim)"></i><b>dim</b><u class="mono">#5C5C5C &middot; 6.69:1</u></span>
+      <span class="step"><i style="background: var(--ok)"></i><b>state-ok</b><u class="mono">#407400 &middot; 5.65:1</u></span>
+      <span class="step"><i style="background: var(--warn)"></i><b>state-warn</b><u class="mono">#A64800 &middot; 5.92:1</u></span>
+    </div>
+
+    <div style="display: flex; gap: 11px; align-items: flex-start; padding: 13px 15px; background: var(--surface); box-shadow: 0 0 0 1px var(--hair); border-left: 3px solid var(--warn); border-radius: 11px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color: var(--warn); flex-shrink: 0; margin-top: 2px" aria-hidden="true"><path d="M12 8v5"></path><circle cx="12" cy="16.6" r="1.1" fill="currentColor" stroke="none"></circle><circle cx="12" cy="12" r="9"></circle></svg>
+      <span class="cap">สีของกลุ่มไม่ใช่โทเคนของระบบ เป็นข้อมูลของค่าย ปรากฏได้เฉพาะเป็นแถบ 3px หรือจุดเล็ก พร้อมชื่อสีเป็นตัวอักษรกำกับเสมอ</span>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 22px 24px">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="h2">ความลึก — ขอบคือ shadow</span>
+      <span class="cap">แทน <span class="mono">border: 1px</span> ด้วย <span class="mono">box-shadow</span> ที่ spread 1px ทำให้เส้นคมกว่า ไม่กินพื้นที่ box model และซ้อนชั้นกับเงาจริงได้ ปุ่มสีทึบได้เส้นสว่างด้านในบนสุด (<span class="mono">inset 0 1px 0</span>) ซึ่งเป็นรายละเอียดที่ทำให้ปุ่มดูมีมิติโดยไม่ต้องใช้ gradient</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
+      <span class="elev" style="box-shadow: 0 0 0 1px var(--hair)"><b style="font-size: 12px">e0 &middot; แบน</b><u class="cap mono" style="font-size: 10px; text-align: center">0 0 0 1px hairline</u></span>
+      <span class="elev" style="box-shadow: var(--e1)"><b style="font-size: 12px">e1 &middot; การ์ด</b><u class="cap mono" style="font-size: 10px; text-align: center">+ 0 1px 2px /.05</u></span>
+      <span class="elev" style="box-shadow: var(--e2)"><b style="font-size: 12px">e2 &middot; ลอย</b><u class="cap mono" style="font-size: 10px; text-align: center">+ 0 10px 20px -10px</u></span>
+      <span class="elev" style="background: var(--b9); color: #ffffff; box-shadow: var(--e-solid)"><b style="font-size: 12px">ปุ่มสีทึบ</b><u class="mono" style="font-size: 10px; text-align: center; opacity: 0.82">inset 0 1px 0 white/.16</u></span>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 22px 24px">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="h2">ตัวอักษร</span>
+      <span class="cap">Anuphan ทั้งระบบ กฎสำคัญ: <b>tracking ติดลบใช้กับตัวเลขและละตินเท่านั้น ตัวอักษรไทยคงที่ 0 เสมอ</b> เพราะสระบน-ล่างและวรรณยุกต์จะชนกัน — ต่างจาก Linear/Vercel ที่บีบหัวข้อได้ถึง −3px เพราะเป็นละตินล้วน</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: baseline; gap: 18px"><span class="cap mono" style="width: 178px; flex-shrink: 0">28–36 / 600 / ไทย 0</span><span style="font-size: 28px; font-weight: 600">หัวข้อหน้า</span></div>
+      <div style="display: flex; align-items: baseline; gap: 18px"><span class="cap mono" style="width: 178px; flex-shrink: 0">19–23 / 700 / ไทย 0</span><span style="font-size: 20px; font-weight: 700">หัวข้อส่วน</span></div>
+      <div style="display: flex; align-items: baseline; gap: 18px"><span class="cap mono" style="width: 178px; flex-shrink: 0">14–15 / 600</span><span style="font-size: 15px; font-weight: 600">ป้ายกำกับและปุ่ม</span></div>
+      <div style="display: flex; align-items: baseline; gap: 18px"><span class="cap mono" style="width: 178px; flex-shrink: 0">13–14 / 400 / 1.65</span><span style="font-size: 14px; font-weight: 400; line-height: 1.65">เนื้อความอธิบาย อ่านสบายในระยะมือถือ</span></div>
+      <div style="display: flex; align-items: baseline; gap: 18px"><span class="cap mono" style="width: 178px; flex-shrink: 0">25–36 / 700 / tnum &minus;.022em</span><span class="num" style="font-size: 34px; font-weight: 700">48,000</span></div>
+      <div style="display: flex; align-items: baseline; gap: 18px"><span class="cap mono" style="width: 178px; flex-shrink: 0">10.5 / 600 / +.11em</span><span class="eyebrow">EQ-BANK</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 16px; padding: 22px 24px">
+    <span class="h2">คอมโพเนนต์</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <span style="font-size: 12px; font-weight: 600; color: var(--dim)">คู่ปุ่มคะแนน</span>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+          <span class="act add"><u><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>เพิ่มคะแนน</u><b>+1,000</b></span>
+          <span class="act sub"><u><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg>ลดคะแนน</u><b>&minus;1,000</b></span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <span style="font-size: 12px; font-weight: 600; color: var(--dim)">ปุ่มทั่วไป</span>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <span class="btn" style="background: var(--b9); color: #ffffff; box-shadow: var(--e-solid)">บันทึก</span>
+          <span class="btn" style="background: var(--surface); color: var(--b9); box-shadow: 0 0 0 1px var(--b6)">ยกเลิก</span>
+          <span class="btn" style="background: var(--ink); color: #ffffff; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 1px 2px rgb(16 32 48 / 0.2)">ปิดค่าย</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <span style="font-size: 12px; font-weight: 600; color: var(--dim)">สถานะ — สองแกนแยกกันเสมอ</span>
+        <div style="display: flex; gap: 7px; flex-wrap: wrap">
+          <span class="chip" style="color: var(--ok)"><svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="currentColor"></circle></svg>กำลังใช้งาน</span>
+          <span class="chip" style="color: var(--dim)"><svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="currentColor"></circle></svg>ปิดค่ายแล้ว</span>
+          <span class="chip" style="color: var(--b9)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8 16a5.5 5.5 0 0 1 8 0"></path></svg>ข้อมูลสด</span>
+          <span class="chip" style="color: var(--warn)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path></svg>สัญญาณช้า</span>
+          <span class="chip" style="color: var(--ink); box-shadow: 0 0 0 1px var(--ink)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="m4 4 16 16"></path><path d="M5 12.5a10 10 0 0 1 5-2.7"></path></svg>ออฟไลน์</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <span style="font-size: 12px; font-weight: 600; color: var(--dim)">ช่องกรอก โฟกัส และแถบแจ้งเตือน</span>
+        <div style="display: flex; gap: 8px">
+          <span class="num" style="display: flex; align-items: center; height: 44px; padding: 0 13px; border-radius: 10px; background: var(--surface); box-shadow: 0 0 0 1px var(--b7); font-size: 14px; font-weight: 600; flex-grow: 1">100,000</span>
+          <span class="num" style="display: flex; align-items: center; height: 44px; padding: 0 13px; border-radius: 10px; background: var(--surface); box-shadow: 0 0 0 1px var(--b9), 0 0 0 4px rgb(32 94 145 / 0.14); font-size: 14px; font-weight: 600; flex-grow: 1">โฟกัส</span>
+        </div>
+        <span style="display: flex; gap: 10px; padding: 11px 13px; background: var(--surface); box-shadow: 0 0 0 1px var(--hair); border-left: 3px solid var(--warn); border-radius: 11px; font-size: 12px; font-weight: 500; line-height: 1.55">งบค่ายเหลือน้อยกว่า 15% แล้ว ยังให้คะแนนต่อได้ตามปกติ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 22px 24px">
+    <span class="h2">รูปทรง ระยะ และการเคลื่อนไหว</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 26px">
+      <span class="spec"><b>มุมโค้ง</b><span>ชิป 7–8px &middot; ปุ่มและช่องกรอก 10–11px &middot; การ์ด 14px</span></span>
+      <span class="spec"><b>มุมซ้อนใน</b><span>รัศมีใน = รัศมีนอก &minus; ระยะขอบ (14 &minus; 12 &rarr; 10)</span></span>
+      <span class="spec"><b>ระยะขอบหน้า</b><span>มือถือ 16px &middot; แท็บเล็ต 24px &middot; เดสก์ท็อป 32px</span></span>
+      <span class="spec"><b>เป้าสัมผัส</b><span>ไม่ต่ำกว่า 44&times;44px ปุ่มหลัก 48–56px</span></span>
+      <span class="spec"><b>จังหวะ</b><span>160ms ปุ่ม &middot; 240ms แผงและกล่องโต้ตอบ</span></span>
+      <span class="spec"><b>เส้นโค้ง</b><span class="mono">cubic-bezier(0.22, 1, 0.36, 1)</span></span>
+      <span class="spec"><b>โฟกัส</b><span>วงคู่ 1px สีเข้ม + 4px โปร่ง อ่านออกทุกพื้นหลัง</span></span>
+      <span class="spec"><b>ลดการเคลื่อนไหว</b><span>ตัดการขยับตำแหน่งทั้งหมดเมื่อผู้ใช้ตั้งค่า reduce</span></span>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 13px; padding: 22px 24px">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="h2">ชั้นโทเคนใน Tailwind 4</span>
+      <span class="cap">แทนบล็อก <span class="mono">:root { --eq-* }</span> ใน <span class="mono">src/app/globals.css</span> ชื่อ utility ตามชื่อโทเคน — <span class="mono">--color-b9</span> ใช้เป็น <span class="mono">bg-b9</span> ได้ทันที</span>
+    </div>
+
+    <div class="code mono">@import "tailwindcss";
+
+@theme {
+  --font-sans: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+
+  /* พื้นผิว — เทาอมฟ้าอ่อน ไม่ใช่เทากลาง */
+  --color-surface: #ffffff;
+  --color-canvas:  oklch(0.977 0.003 240);
+  --color-sunk:    oklch(0.966 0.005 240);
+  --color-hair:    oklch(0.905 0.008 240);
+
+  /* EQ Blue 12 ขั้น — 3/7/9/10/12 คือค่าแบรนด์เดิม */
+  --color-b3:  #e7f6fd;
+  --color-b6:  color-mix(in oklab, #205e91 24%, white);
+  --color-b7:  #638eb2;
+  --color-b9:  #205e91;
+  --color-b10: #1b507b;
+  --color-b12: #18476d;
+
+  --color-ink: #212121;
+  --color-dim: #5c5c5c;
+  --color-ok:   #407400;
+  --color-warn: #a64800;
+
+  --radius-chip:    0.5rem;
+  --radius-control: 0.625rem;
+  --radius-card:    0.875rem;
+
+  --ease-eq: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@utility elev-1 { box-shadow: 0 0 0 1px var(--color-hair), 0 1px 2px rgb(16 32 48 / 0.05); }
+@utility elev-2 { box-shadow: 0 0 0 1px oklch(0.88 0.01 240), 0 2px 4px rgb(16 32 48 / 0.04), 0 10px 20px -10px rgb(16 32 48 / 0.14); }
+@utility elev-solid { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(16 32 48 / 0.18); }</div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <span style="display: flex; flex-direction: column; gap: 5px; padding: 11px 13px; background: var(--sunk); box-shadow: inset 0 0 0 1px var(--hair); border-radius: 10px">
+        <span style="font-size: 11px; font-weight: 600; color: var(--dim)">เดิม</span>
+        <span class="mono" style="font-size: 11.5px; line-height: 1.65; color: var(--dim); word-break: break-all">className="bg-[var(--eq-brand-deep)] text-white rounded-2xl shadow-sm border border-[var(--eq-border)]"</span>
+      </span>
+      <span style="display: flex; flex-direction: column; gap: 5px; padding: 11px 13px; background: var(--surface); box-shadow: 0 0 0 1px var(--b7); border-radius: 10px">
+        <span style="font-size: 11px; font-weight: 600; color: var(--b9)">ใหม่</span>
+        <span class="mono" style="font-size: 11.5px; line-height: 1.65; word-break: break-all">className="bg-b9 text-surface rounded-card elev-solid"</span>
+      </span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

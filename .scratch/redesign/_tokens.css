@@ -1,0 +1,44 @@
+/* EQ-BANK v5 shared token block — paste into every .dc.html <helmet><style> */
+    .ec {
+      /* Surfaces — cool-tinted neutrals (Stripe canvas-soft, Linear tinted black) */
+      --canvas: oklch(0.977 0.003 240);
+      --surface: #ffffff;
+      --sunk: oklch(0.966 0.005 240);
+
+      /* EQ Blue — 12 steps, Radix roles. Steps 3/7/9/10/12 are the exact existing brand values. */
+      --b1: color-mix(in oklab, #205e91 3%, white);
+      --b2: color-mix(in oklab, #205e91 6%, white);
+      --b3: #e7f6fd;
+      --b4: color-mix(in oklab, #36b8f2 20%, white);
+      --b5: color-mix(in oklab, #36b8f2 30%, white);
+      --b6: color-mix(in oklab, #205e91 24%, white);
+      --b7: #638eb2;
+      --b8: color-mix(in oklab, #205e91 64%, white);
+      --b9: #205e91;
+      --b10: #1b507b;
+      --b11: #205e91;
+      --b12: #18476d;
+
+      /* Text */
+      --ink: #212121;
+      --dim: #5c5c5c;
+
+      /* Status */
+      --ok: #407400;
+      --warn: #a64800;
+
+      /* Hairlines and elevation — shadow-as-border (Vercel) */
+      --hair: oklch(0.905 0.008 240);
+      --e0: 0 0 0 1px var(--hair);
+      --e1: 0 0 0 1px var(--hair), 0 1px 2px rgb(16 32 48 / 0.05);
+      --e2: 0 0 0 1px oklch(0.88 0.01 240), 0 2px 4px rgb(16 32 48 / 0.04), 0 10px 20px -10px rgb(16 32 48 / 0.14);
+      --e-solid: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(16 32 48 / 0.18);
+
+      font-family: Anuphan, "Noto Sans Thai", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Stripe rule: every numeric cell gets tabular figures plus tightened tracking.
+       Thai text never receives negative tracking — marks and vowels collide. */
+    .ec .num { font-variant-numeric: tabular-nums; letter-spacing: -0.022em; }
+    .ec .card { background: var(--surface); border-radius: 14px; box-shadow: var(--e1); }
+    .ec .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.11em; color: var(--dim); }
