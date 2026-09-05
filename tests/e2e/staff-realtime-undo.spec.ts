@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { E2E_ORIGIN } from "./support/origin";
+
 function scoreFrom(text: string | null) {
   return Number((text ?? "").replace(/[^0-9]/g, ""));
 }
@@ -13,8 +15,8 @@ test("two Staff sessions receive Realtime Score and Quick Undo", async ({
   const staffB = await contextB.newPage();
 
   await Promise.all([
-    staffA.goto("http://127.0.0.1:3000/join/DEMO-STAFF-2026"),
-    staffB.goto("http://127.0.0.1:3000/join/DEMO-STAFF-2026"),
+    staffA.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
+    staffB.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
   ]);
   await staffA.getByRole("button", { name: "Staff A" }).click();
   await staffB.getByRole("button", { name: "Staff B" }).click();

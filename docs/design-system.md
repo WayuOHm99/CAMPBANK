@@ -184,7 +184,9 @@ finished; it must not keep moving or block the next valid action.
   stacks and internal overflow keep a long panel from stretching its sibling.
 - Toast/Quick Undo enters once and shows a 15-second progress affordance. The
   database timestamp and RPC eligibility determine whether Undo succeeds; the
-  progress animation is not a timer or permission check.
+  progress animation is not a timer or permission check. Each transaction starts
+  its own receipt-based monotonic visual window, avoiding device/server clock
+  skew. Expiring or used toasts disable Undo immediately and fade out in 160ms.
 - Loading uses a stable status region with `aria-busy="true"`. Its sweep is
   decorative and may disappear without losing the loading label.
 - Page navigation uses React View Transition only when Next.js exposes it and

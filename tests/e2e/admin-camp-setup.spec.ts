@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
+import { E2E_ORIGIN } from "./support/origin";
+
 test("Admin changes a temporary PIN and activates a configured Camp", async ({
   browser,
   page,
@@ -138,6 +140,10 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   const reopenedColorDialog = page.getByRole("dialog", {
     name: "เลือกสีของกลุ่ม",
   });
+  await expect(reopenedColorDialog).toHaveScreenshot(
+    "color-dialog-end-state.png",
+    { animations: "disabled" },
+  );
   await expect(
     reopenedColorDialog.getByRole("radio", {
       exact: true,
@@ -294,6 +300,7 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
     .first()
     .click();
   const resetPin = adminManagement.getByLabel("PIN ชั่วคราวใหม่ 4 หลัก");
+  await expect(resetPin).toBeVisible({ timeout: 10_000 });
   await expect(resetPin).toHaveAttribute("inputmode", "numeric");
   await expect(resetPin).toHaveAttribute("type", "password");
   await expect(resetPin).toHaveAttribute("maxlength", "4");
@@ -313,7 +320,7 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
 
   const publicContext = await browser.newContext();
   const publicPage = await publicContext.newPage();
-  await publicPage.goto(`http://127.0.0.1:3000${publicPath}`);
+  await publicPage.goto(`${E2E_ORIGIN}${publicPath}`);
   await expect(
     publicPage.getByRole("link", { name: "กลับหน้าแรก" }),
   ).toHaveAttribute("href", "/");
@@ -322,6 +329,10 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   ).toBeVisible();
   await expect(publicPage.getByText("อันดับคะแนนล่าสุด")).toBeVisible();
   await expect(publicPage.getByText("แสดง 5 อันดับแรก")).toBeVisible();
+  await expect(publicPage.locator("main")).toHaveScreenshot(
+    "leaderboard-end-state.png",
+    { animations: "disabled" },
+  );
 
   page.once("dialog", (dialog) => dialog.accept());
   await page.getByRole("button", { name: "ปิด", exact: true }).click();
@@ -332,7 +343,7 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
 
   const staffContext = await browser.newContext();
   const staffPage = await staffContext.newPage();
-  await staffPage.goto(`http://127.0.0.1:3000${staffPath}`);
+  await staffPage.goto(`${E2E_ORIGIN}${staffPath}`);
   await expect(
     staffPage.getByRole("link", { name: "กลับหน้าแรก" }),
   ).toHaveAttribute("href", "/");

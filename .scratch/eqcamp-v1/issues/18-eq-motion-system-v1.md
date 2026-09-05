@@ -4,7 +4,7 @@
 
 **Blocked by:** 08 — Realtime and connection safety; 17 — Consistent semantic Score action buttons.
 
-**Status:** ready-for-agent
+**Status:** in-progress — implementation and automated verification complete; physical-device Pilot remains
 
 ## Product intent
 
@@ -67,15 +67,15 @@
 
 ## Acceptance criteria
 
-- [ ] Motion tokens and component usage are documented in `docs/design-system.md`.
-- [ ] Staff Score actions, Group card feedback, Dialogs, Dropdowns/disclosures, Toast/Quick Undo, loading states, navigation, and Leaderboard have one consistent motion language.
-- [ ] The selected panel remains independent and long content remains contained at 320, 390, 834, and 1440 CSS pixels.
-- [ ] Reduced-motion users receive no positional movement or continuous animation and lose no state information.
-- [ ] Animation never blocks a second valid interaction, changes Score sequencing, hides offline/integrity states, or queues a write.
-- [ ] Keyboard focus, Escape, focus return, screen-reader names, and 44px targets remain correct.
-- [ ] Mobile Safari, Android Chromium, tablet WebKit, and desktop Chromium receive usable fallbacks where an API is unsupported.
-- [ ] Visual comparisons cover stable end states without asserting timing-sensitive intermediate frames.
-- [ ] Formatting, lint, typecheck, unit, authenticated integration, responsive E2E, concurrency, and production build checks pass.
+- [x] Motion tokens and component usage are documented in `docs/design-system.md`.
+- [x] Staff Score actions, Group card feedback, Dialogs, Dropdowns/disclosures, Toast/Quick Undo, loading states, navigation, and Leaderboard have one consistent motion language.
+- [x] The selected panel remains independent and long content remains contained at 320, 390, 834, and 1440 CSS pixels.
+- [x] Reduced-motion users receive no positional movement or continuous animation and lose no state information.
+- [x] Animation never blocks a second valid interaction, changes Score sequencing, hides offline/integrity states, or queues a write.
+- [x] Keyboard focus, Escape, focus return, screen-reader names, and 44px targets remain correct.
+- [x] Mobile Safari, Android Chromium, tablet WebKit, and desktop Chromium receive usable fallbacks where an API is unsupported.
+- [x] Visual comparisons cover stable end states without asserting timing-sensitive intermediate frames.
+- [x] Formatting, lint, typecheck, unit, authenticated integration, responsive E2E, concurrency, and production build checks pass.
 - [ ] A physical-device Pilot verifies smoothness on at least one lower-powered Android device and one iPhone/iPad before release.
 
 ## Verified references

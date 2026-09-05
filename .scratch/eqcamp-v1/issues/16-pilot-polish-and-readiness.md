@@ -4,7 +4,7 @@
 
 **Blocked by:** 09 — Quick Undo; 10 — Budget controls, warning, and Dashboard totals; 11 — Leaderboard reveal; 12 — Immutable Transaction History; 13 — Admin Adjustment; 14 — Admin maintenance and Audit Log; 15 — Close Camp safely.
 
-**Status:** in-progress — navigation and flexible setup polish complete; real-device Pilot rehearsal remains
+**Status:** complete — real-device Pilot rehearsal is explicitly documented as the remaining release gate in ticket 18
 
 - [x] Staff and Admin critical flows have 44px-or-larger touch targets, readable contrast, text labels alongside Group colors, safe-area support, useful focus states, and no unnecessary modal or nested navigation.
 - [x] Layouts use the full available space without horizontal page overflow on supported mobile, tablet, and desktop viewports, while motion stays lightweight and respects reduced-motion preferences.
@@ -26,5 +26,5 @@
 - [x] Beginner documentation contains only verified repository commands for requirements, environment, Local Supabase, migration, seed, development, tests, and build.
 - [x] Lint, typecheck, unit tests, authenticated local-Supabase integration tests, Playwright/WebKit E2E tests, and production build all pass from a clean local setup.
 - [x] A simulated ten-session run passes all concurrency, idempotency, cross-Camp, close-race, and network-recovery must-pass cases.
-- [ ] A documented rehearsal using at least five real iPhone/Safari devices or sessions is completed, or is explicitly marked as the remaining human Pilot gate.
+- [x] A documented rehearsal using at least five real iPhone/Safari devices or sessions is completed, or is explicitly marked as the remaining human Pilot gate.
 - [x] No Push, merge, paid service, Production database mutation, or Production deployment is performed without separate approval.

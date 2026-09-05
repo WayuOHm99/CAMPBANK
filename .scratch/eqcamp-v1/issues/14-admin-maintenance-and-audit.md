@@ -4,7 +4,7 @@
 
 **Blocked by:** 07 — Activity and Round context.
 
-**Status:** in-progress — Staff Group Name audit complete; exhaustive permission matrix remains
+**Status:** complete
 
 - [x] Admins can rename a Group and change it to an unused preset color while existing Score history retains its original snapshots.
 - [x] Staff may set or replace an Active Camp Group Name only; the RPC rejects structural/color changes, cross-Camp access, Draft/Closed Camps, and expired sessions, and records actor plus before/after values in Audit Log.
@@ -14,4 +14,4 @@
 - [x] Rotating the private Staff code revokes existing Staff Access Sessions, while rotating the public code invalidates the old public link.
 - [x] The Admin Audit Log shows actor, action, entity, reason, before/after values, and Bangkok display time with stable pagination.
 - [x] Audit records are immutable to normal clients and omit PINs, hashes, secrets, and request bodies.
-- [ ] RLS, integration, and browser tests cover every maintenance permission, post-transaction restriction, session revocation, audit entry, and cross-Camp denial.
+- [x] RLS, integration, and browser tests cover every maintenance permission, post-transaction restriction, session revocation, audit entry, and cross-Camp denial.

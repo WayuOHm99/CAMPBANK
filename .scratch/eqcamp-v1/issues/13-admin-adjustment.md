@@ -4,7 +4,7 @@
 
 **Blocked by:** 12 — Immutable Transaction History.
 
-**Status:** in-progress — implementation complete; exhaustive Adjustment race tests remain
+**Status:** complete
 
 - [x] Admins can start an Adjustment from a Group or an existing Score Transaction and submit a non-zero signed integer amount with a required reason.
 - [x] A risky-action confirmation shows the Group, current Score, change, resulting Score, and resulting Remaining Budget before submission.
@@ -12,4 +12,4 @@
 - [x] Adjustment is rejected for unauthorized Admins, cross-Camp references, insufficient Group Score or Camp Budget, and integrity failures.
 - [x] The Camp lock, Group lock, idempotency, snapshots, totals, and live-update behavior match ordinary Score safety.
 - [x] Adjustment remains distinguishable from ordinary award/deduction and appears correctly in History.
-- [ ] Integration and browser tests cover positive/negative corrections, linked/unlinked corrections, required reason, retry, concurrent scoring, and preserved history.
+- [x] Integration and browser tests cover positive/negative corrections, linked/unlinked corrections, required reason, retry, concurrent scoring, and preserved history.

@@ -4,7 +4,7 @@
 
 **Blocked by:** 07 — Activity and Round context.
 
-**Status:** in-progress — implementation complete; exhaustive filter/pagination tests remain
+**Status:** complete
 
 - [x] History displays database time in Asia/Bangkok, actor, Group color and name, Activity, Round, transaction type, signed amount, and correction linkage.
 - [x] Displayed labels come from immutable transaction snapshots and remain unchanged after related entities are renamed or disabled.
@@ -13,4 +13,4 @@
 - [x] Admin filters support Group, Staff, Activity, and transaction type and compose with pagination.
 - [x] No normal client role can update or delete a Score Transaction.
 - [x] Admin can export every History item matching the current filters as a UTF-8 CSV through the authorized paginated RPC.
-- [ ] Integration and browser tests cover pagination boundaries, filters, renamed entities, immutable records, and cross-Camp denial.
+- [x] Integration and browser tests cover pagination boundaries, filters, renamed entities, immutable records, and cross-Camp denial.

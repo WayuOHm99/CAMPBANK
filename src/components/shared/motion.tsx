@@ -8,22 +8,27 @@ type MotionBoundaryProps = {
   children: React.ReactNode;
 };
 
+function subscribeToBrowserSupport() {
+  return () => undefined;
+}
+
+function getViewTransitionSupport() {
+  const webKitEngine =
+    navigator.userAgent.includes("AppleWebKit") &&
+    !/(Chrome|Chromium|Edg)/.test(navigator.userAgent);
+  return (
+    !webKitEngine &&
+    "startViewTransition" in document &&
+    CSS.supports("view-transition-class: none")
+  );
+}
+
 function useViewTransitionSupport() {
-  const [supported, setSupported] = React.useState(false);
-
-  React.useEffect(() => {
-    const webKitEngine =
-      navigator.userAgent.includes("AppleWebKit") &&
-      !/(Chrome|Chromium|Edg)/.test(navigator.userAgent);
-
-    setSupported(
-      !webKitEngine &&
-        "startViewTransition" in document &&
-        CSS.supports("view-transition-class: none"),
-    );
-  }, []);
-
-  return supported;
+  return React.useSyncExternalStore(
+    subscribeToBrowserSupport,
+    getViewTransitionSupport,
+    () => false,
+  );
 }
 
 /**

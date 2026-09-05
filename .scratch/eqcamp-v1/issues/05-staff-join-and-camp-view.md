@@ -4,7 +4,7 @@
 
 **Blocked by:** 04 — Configure and activate a Camp.
 
-**Status:** in-progress — optional names and audited Staff naming flow complete; exhaustive session-revocation coverage remains
+**Status:** complete
 
 - [x] A valid private Staff Join Link exposes only the intended active Camp and its active Staff names; the root page does not enumerate Camps.
 - [x] Selecting a Staff name binds an anonymous Supabase identity to a Camp-scoped Access Session without trusting local storage for authority.

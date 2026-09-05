@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { E2E_ORIGIN } from "./support/origin";
+
 function scoreFrom(text: string | null) {
   return Number((text ?? "").replace(/[^0-9]/g, ""));
 }
@@ -41,7 +43,7 @@ test("Realtime failure falls back to authoritative two-second refreshes", async 
   const actorPage = await actorContext.newPage();
   await Promise.all([
     page.goto("/join/DEMO-STAFF-2026"),
-    actorPage.goto("http://127.0.0.1:3000/join/DEMO-STAFF-2026"),
+    actorPage.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
   ]);
   await page.getByRole("button", { name: "Staff B" }).click();
   await actorPage.getByRole("button", { name: "Staff A" }).click();

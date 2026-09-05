@@ -4,7 +4,7 @@
 
 **Blocked by:** 03 — Create and revisit a Draft Camp.
 
-**Status:** in-progress — count-only Step 1 and explicit color/name Step 2 complete; exhaustive activation guards remain
+**Status:** complete
 
 - [x] The Admin starts with no preset Group count; Step 1 only increases or decreases the count from 1–20, without assigning colors or names.
 - [x] Step 2 requires one unused accessible preset color per Group, allows an empty Group Name in Draft and at activation, and keeps the configured insertion order.
@@ -17,4 +17,4 @@
 - [x] Successful activation gives all Groups the same database `score_reached_at`, creates separate random Staff and public codes of at least 12 human-readable characters, and changes status atomically.
 - [x] Configuration and activation actions are audited; the final active Admin cannot be disabled.
 - [x] The review step presents an actionable readiness checklist and jumps directly to each incomplete setup step.
-- [ ] Integration and browser tests cover the happy path and every activation guard.
+- [x] Integration and browser tests cover the happy path and every activation guard.

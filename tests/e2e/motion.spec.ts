@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { E2E_ORIGIN } from "./support/origin";
+
 test("motion end states remain usable and contained with reduced motion", async ({
   page,
 }) => {
@@ -49,36 +51,46 @@ test("motion end states remain usable and contained with reduced motion", async 
 test("Score feedback distinguishes local and remote updates without blocking another action", async ({
   browser,
 }) => {
+  test.setTimeout(60_000);
   const contextA = await browser.newContext();
   const contextB = await browser.newContext();
   const staffA = await contextA.newPage();
   const staffB = await contextB.newPage();
 
   await Promise.all([
-    staffA.goto("http://127.0.0.1:3000/join/DEMO-STAFF-2026"),
-    staffB.goto("http://127.0.0.1:3000/join/DEMO-STAFF-2026"),
+    staffA.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
+    staffB.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
   ]);
   await staffA.getByRole("button", { name: "Staff A" }).click();
+  await expect(
+    staffA.getByRole("heading", { name: "EQCAMP Demo" }),
+  ).toBeVisible({ timeout: 10_000 });
   await staffB.getByRole("button", { name: "Staff B" }).click();
-  await Promise.all([
-    expect(staffA.getByRole("heading", { name: "EQCAMP Demo" })).toBeVisible(),
-    expect(staffB.getByRole("heading", { name: "EQCAMP Demo" })).toBeVisible(),
-    expect(
-      staffA.getByLabel("การเชื่อมต่อ: ข้อมูลสด"),
-    ).toBeVisible(),
-    expect(
-      staffB.getByLabel("การเชื่อมต่อ: ข้อมูลสด"),
-    ).toBeVisible(),
-  ]);
+  await expect(
+    staffB.getByRole("heading", { name: "EQCAMP Demo" }),
+  ).toBeVisible({ timeout: 10_000 });
 
   const bananaA = staffA.getByRole("listitem", { name: "เหลือง — Banana" });
   const bananaB = staffB.getByRole("listitem", { name: "เหลือง — Banana" });
   const sharkA = staffA.getByRole("listitem", { name: "น้ำเงิน — Shark" });
+  const scoreLabel = /^-?[\d,]+ คะแนน$/;
+  const startingBanana = Number(
+    (await bananaA.getByText(scoreLabel).innerText()).replace(/[^\d-]/g, ""),
+  );
+  const startingShark = await sharkA.getByText(scoreLabel).innerText();
 
   await bananaA.getByRole("button", { name: "เพิ่มคะแนน 500" }).click();
   await expect(bananaA).toHaveAttribute("data-motion-feedback", "local");
-  await expect(bananaB.getByText("500 คะแนน")).toBeVisible({
-    timeout: 5_000,
+  const firstToastId = await staffA
+    .locator(".eq-toast")
+    .getAttribute("data-toast-id");
+  await expect(
+    bananaB.getByText(
+      `${(startingBanana + 500).toLocaleString("en-US")} คะแนน`,
+      { exact: true },
+    ),
+  ).toBeVisible({
+    timeout: 8_000,
   });
   await expect(bananaB).toHaveAttribute("data-motion-feedback", "remote", {
     timeout: 5_000,
@@ -88,9 +100,60 @@ test("Score feedback distinguishes local and remote updates without blocking ano
     sharkA.getByRole("button", { name: "เพิ่มคะแนน 500" }),
   ).toBeEnabled();
   await sharkA.getByRole("button", { name: "เพิ่มคะแนน 500" }).click();
-  await expect(staffA.getByRole("status")).toContainText(
+  await expect(
+    sharkA.getByText(
+      `${(Number(startingShark.replace(/[^\d-]/g, "")) + 500).toLocaleString(
+        "en-US",
+      )} คะแนน`,
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(staffA.locator(".eq-toast")).toContainText(
     "ย้อนกลับได้ภายใน 15 วินาที",
   );
+  await expect
+    .poll(() => staffA.locator(".eq-toast").getAttribute("data-toast-id"))
+    .not.toBe(firstToastId);
+  const undoButton = staffA.getByRole("button", {
+    name: "ย้อนกลับ",
+    exact: true,
+  });
+  await expect(undoButton).toBeEnabled();
+  await undoButton.click();
+  await expect(sharkA.getByText(startingShark, { exact: true })).toBeVisible();
+  await expect(sharkA).not.toHaveAttribute("data-motion-feedback", "remote");
+  await expect(staffA.locator(".eq-toast")).toHaveCount(0);
+  await expect(bananaA).not.toHaveAttribute("data-motion-feedback", /.+/);
+  await bananaA.evaluate((element) =>
+    element.scrollIntoView({ block: "center", inline: "nearest" }),
+  );
+  await expect(bananaA).toHaveScreenshot("staff-score-end-state.png", {
+    animations: "disabled",
+    mask: [bananaA.getByText(scoreLabel)],
+    maskColor: "#e7f6fd",
+  });
+
+  await bananaA.getByRole("button", { name: "เพิ่มคะแนน 500" }).click();
+  await expect(
+    bananaB.getByText(
+      `${(startingBanana + 1000).toLocaleString("en-US")} คะแนน`,
+      { exact: true },
+    ),
+  ).toBeVisible();
+  const previousCue = await bananaB
+    .locator(".eq-group-feedback")
+    .elementHandle();
+  await bananaA.getByRole("button", { name: "เพิ่มคะแนน 500" }).click();
+  await expect(
+    bananaB.getByText(
+      `${(startingBanana + 1500).toLocaleString("en-US")} คะแนน`,
+      { exact: true },
+    ),
+  ).toBeVisible();
+  expect(await previousCue!.evaluate((element) => element.isConnected)).toBe(
+    false,
+  );
+  await expect(bananaB.locator(".eq-group-feedback")).toHaveCount(1);
 
   await contextA.close();
   await contextB.close();

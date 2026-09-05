@@ -4,7 +4,7 @@
 
 **Blocked by:** 06 — Atomic Score actions.
 
-**Status:** in-progress — implementation complete; exhaustive concurrent Budget-edit tests remain
+**Status:** complete
 
 - [x] The Admin Dashboard shows Camp Budget, Distributed Score, Remaining Budget, and Score Transaction count from authoritative Camp data.
 - [x] An Admin can change Active Camp Budget only with a reason and risky-action confirmation.
@@ -13,4 +13,4 @@
 - [x] Admins can configure Amount, Percentage, both, or neither warning thresholds; equality with either enabled threshold activates the warning.
 - [x] Active warnings are clearly visible to Staff and Admin without blocking valid Score actions.
 - [x] Every Budget and warning change stores an immutable audit entry with actor, reason where required, and before/after values.
-- [ ] Unit, integration, concurrency, and browser tests cover calculations, thresholds, safe edits, rejection, and simultaneous Score actions.
+- [x] Unit, integration, concurrency, and browser tests cover calculations, thresholds, safe edits, rejection, and simultaneous Score actions.

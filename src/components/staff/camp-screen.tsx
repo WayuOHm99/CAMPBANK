@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import {
   ScoreActionContent,
@@ -15,6 +22,7 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { getGroupDisplayName } from "@/lib/groups/get-group-display-name";
 import { createClientUuid } from "@/lib/ids/create-client-uuid";
 import { formatScore } from "@/lib/score/format-score";
+import { remoteScoreChanges } from "@/lib/score/score-feedback";
 import { useCampLiveSync } from "@/lib/realtime/use-camp-live-sync";
 import { ensureAnonymousSession } from "@/lib/supabase/client";
 import {
@@ -32,6 +40,8 @@ type Toast = {
   message: string;
   transactionId: string;
   createdAt: string;
+  feedbackDeadline: number;
+  exiting?: boolean;
 };
 
 type ScoreConfirmation = {
@@ -54,6 +64,11 @@ type GroupFeedback = {
   kind: "local" | "remote";
   message: string;
 };
+
+function subscribeToStoredJoinCode(onChange: () => void) {
+  window.addEventListener("storage", onChange);
+  return () => window.removeEventListener("storage", onChange);
+}
 
 const GROUP_LAYOUTS: Array<{ id: GroupLayout; label: string }> = [
   { id: "auto", label: "อัตโนมัติ" },
@@ -108,20 +123,20 @@ export function CampScreen({ campId }: CampScreenProps) {
   const [toast, setToast] = useState<Toast>();
   const [scoreConfirmation, setScoreConfirmation] =
     useState<ScoreConfirmation>();
-  const [groupFeedback, setGroupFeedback] = useState<GroupFeedback>();
+  const [groupFeedback, setGroupFeedback] = useState<
+    Record<string, GroupFeedback>
+  >({});
   const latestRefreshId = useRef(0);
   const groupScoreBaseline = useRef(new Map<string, number>());
   const localTransactionIds = useRef(new Set<string>());
   const scoreBaselineReady = useRef(false);
   const editButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [joinCode, setJoinCode] = useState("");
+  const joinCode = useSyncExternalStore(
+    subscribeToStoredJoinCode,
+    () => window.localStorage.getItem(`eqcamp:staff-link:${campId}`) ?? "",
+    () => "",
+  );
   const { activityId, roundId } = activityPreference;
-
-  useEffect(() => {
-    setJoinCode(
-      window.localStorage.getItem(`eqcamp:staff-link:${campId}`) ?? "",
-    );
-  }, [campId]);
 
   const refresh = useCallback(async () => {
     const refreshId = latestRefreshId.current + 1;
@@ -141,38 +156,33 @@ export function CampScreen({ campId }: CampScreenProps) {
 
     if (refreshId !== latestRefreshId.current) return;
     const nextSnapshot = data as CampSnapshot;
-    const newestTransaction = nextSnapshot.recent_transactions[0];
     const changedGroups = scoreBaselineReady.current
-      ? nextSnapshot.groups.filter(
-          (group) =>
-            groupScoreBaseline.current.get(group.id) !== group.current_score,
+      ? remoteScoreChanges(
+          nextSnapshot.groups,
+          groupScoreBaseline.current,
+          nextSnapshot.recent_transactions,
+          localTransactionIds.current,
         )
       : [];
 
-    if (
-      newestTransaction &&
-      localTransactionIds.current.has(newestTransaction.id)
-    ) {
-      localTransactionIds.current.delete(newestTransaction.id);
-    } else if (changedGroups.length > 0) {
-      const changedGroup =
-        changedGroups.find(
-          (group) => group.id === newestTransaction?.group_id,
-        ) ?? changedGroups[0];
-      setGroupFeedback({
-        groupId: changedGroup.id,
-        id:
-          newestTransaction?.id ??
-          `${changedGroup.id}:${changedGroup.current_score}`,
-        kind: "remote",
-        message: `คะแนนของ ${getGroupDisplayName(
-          changedGroup.color_name,
-          changedGroup.custom_name,
-        )} อัปเดตจาก Staff คนอื่นเป็น ${formatScore(
-          changedGroup.current_score,
-        )} คะแนน`,
-      });
+    if (changedGroups.length > 0) {
+      setGroupFeedback((current) => ({
+        ...current,
+        ...Object.fromEntries(
+          changedGroups.map((group) => [
+            group.id,
+            {
+              groupId: group.id,
+              id: `${group.id}:${group.current_score}`,
+              kind: "remote" as const,
+              message: `คะแนนล่าสุดของ ${getGroupDisplayName(group.color_name, group.custom_name)} อัปเดตเป็น ${formatScore(group.current_score)} คะแนน`,
+            },
+          ]),
+        ),
+      }));
     }
+    for (const transaction of nextSnapshot.recent_transactions)
+      localTransactionIds.current.delete(transaction.id);
 
     groupScoreBaseline.current = new Map(
       nextSnapshot.groups.map((group) => [group.id, group.current_score]),
@@ -183,11 +193,28 @@ export function CampScreen({ campId }: CampScreenProps) {
   }, [campId]);
 
   useEffect(() => {
-    if (!groupFeedback) return;
+    if (Object.keys(groupFeedback).length === 0) return;
 
-    const timeout = window.setTimeout(() => setGroupFeedback(undefined), 2_400);
+    const timeout = window.setTimeout(() => setGroupFeedback({}), 2_400);
     return () => window.clearTimeout(timeout);
   }, [groupFeedback]);
+
+  useEffect(() => {
+    if (!toast) return;
+    const delay = toast.exiting
+      ? 160
+      : Math.max(0, toast.feedbackDeadline - performance.now());
+    const timeout = window.setTimeout(() => {
+      setToast((current) =>
+        current?.id !== toast.id
+          ? current
+          : toast.exiting
+            ? undefined
+            : { ...current, exiting: true },
+      );
+    }, delay);
+    return () => window.clearTimeout(timeout);
+  }, [toast]);
 
   const handleSyncError = useCallback((syncError: unknown) => {
     setError(
@@ -328,7 +355,7 @@ export function CampScreen({ campId }: CampScreenProps) {
 
     const clientActionId = createClientUuid();
     setPendingActions((current) => new Set(current).add(actionKey));
-    setGroupFeedback(undefined);
+    setGroupFeedback({});
     setError(undefined);
 
     try {
@@ -357,16 +384,19 @@ export function CampScreen({ campId }: CampScreenProps) {
       const group = snapshot.groups.find((item) => item.id === groupId);
       localTransactionIds.current.add(result.transaction.id);
       groupScoreBaseline.current.set(groupId, result.group.current_score);
-      setGroupFeedback({
-        groupId,
-        id: result.transaction.id,
-        kind: "local",
-        message: `บันทึกคะแนนของ ${
-          group
-            ? getGroupDisplayName(group.color_name, group.custom_name)
-            : "กลุ่ม"
-        } แล้ว`,
-      });
+      setGroupFeedback((current) => ({
+        ...current,
+        [groupId]: {
+          groupId,
+          id: result.transaction.id,
+          kind: "local",
+          message: `บันทึกคะแนนของ ${
+            group
+              ? getGroupDisplayName(group.color_name, group.custom_name)
+              : "กลุ่ม"
+          } แล้ว`,
+        },
+      }));
       setSnapshot((current) => {
         if (!current) return current;
         return {
@@ -424,15 +454,11 @@ export function CampScreen({ campId }: CampScreenProps) {
           } แล้ว`,
           transactionId: result.transaction.id,
           createdAt: result.transaction.created_at,
+          feedbackDeadline: performance.now() + 15_000,
         };
       });
       void refresh().catch(handleSyncError);
       triggerSuccessfulScoreHaptic();
-      window.setTimeout(() => {
-        setToast((current) =>
-          current?.id === result.transaction.id ? undefined : current,
-        );
-      }, 15_000);
     } catch (scoreError) {
       setError(
         scoreError instanceof Error
@@ -479,7 +505,8 @@ export function CampScreen({ campId }: CampScreenProps) {
 
   async function undo() {
     const actionKey = toast ? `undo:${toast.transactionId}` : "";
-    if (!toast || pendingActions.size > 0 || !live.canWrite) return;
+    if (!toast || toast.exiting || pendingActions.size > 0 || !live.canWrite)
+      return;
 
     setPendingActions((current) => new Set(current).add(actionKey));
     setError(undefined);
@@ -493,7 +520,15 @@ export function CampScreen({ campId }: CampScreenProps) {
       if (rpcError) throw rpcError;
       if (isRpcFailure(data)) throw new Error(data.error.message);
 
-      setToast(undefined);
+      const result = data as ScoreResult;
+      localTransactionIds.current.add(result.transaction.id);
+      groupScoreBaseline.current.set(
+        result.group.id,
+        result.group.current_score,
+      );
+      setToast((current) =>
+        current ? { ...current, exiting: true } : current,
+      );
       void refresh().catch(handleSyncError);
     } catch (undoError) {
       setError(
@@ -644,22 +679,26 @@ export function CampScreen({ campId }: CampScreenProps) {
           </p>
         ) : null}
 
-        {!live.online ? (
+        {
           <p
+            hidden={live.online}
             className="eq-notice eq-notice-critical mb-4 px-4 py-3 text-sm font-semibold text-[var(--eq-ink)]"
             role="alert"
           >
             การเชื่อมต่อขาดหาย ให้คะแนนไม่ได้
             และระบบจะไม่เก็บรายการไว้ส่งภายหลัง
           </p>
-        ) : null}
+        }
 
-        {live.online && live.state === "degraded" ? (
-          <p className="eq-notice eq-notice-attention mb-4 px-4 py-3 text-sm font-semibold text-[var(--eq-orange-dark)]">
+        {
+          <p
+            hidden={!live.online || live.state !== "degraded"}
+            className="eq-notice eq-notice-attention mb-4 px-4 py-3 text-sm font-semibold text-[var(--eq-orange-dark)]"
+          >
             การอัปเดตข้อมูลทันทีขัดข้องชั่วคราว ระบบกำลังดึงข้อมูลล่าสุดทุก 2
             วินาที
           </p>
-        ) : null}
+        }
 
         {error ? (
           <p
@@ -779,14 +818,18 @@ export function CampScreen({ campId }: CampScreenProps) {
                 <article
                   aria-label={`${group.color_name} — ${displayName}`}
                   className="eq-group-card scroll-mt-32 flex min-w-0 self-start snap-start flex-row overflow-hidden rounded-2xl border border-[var(--eq-border)] bg-white shadow-sm"
-                  data-motion-feedback={
-                    groupFeedback?.groupId === group.id
-                      ? groupFeedback.kind
-                      : undefined
-                  }
+                  data-motion-feedback={groupFeedback[group.id]?.kind}
                   key={group.id}
                   role="listitem"
                 >
+                  {groupFeedback[group.id] ? (
+                    <span
+                      aria-hidden="true"
+                      className="eq-group-feedback"
+                      data-kind={groupFeedback[group.id].kind}
+                      key={groupFeedback[group.id].id}
+                    />
+                  ) : null}
                   <span
                     aria-hidden="true"
                     className="w-1 shrink-0 self-stretch"
@@ -917,13 +960,20 @@ export function CampScreen({ campId }: CampScreenProps) {
       </div>
 
       <span aria-live="polite" className="sr-only">
-        {groupFeedback?.kind === "remote" ? groupFeedback.message : ""}
+        {Object.values(groupFeedback)
+          .filter((feedback) => feedback.kind === "remote")
+          .map((feedback) => feedback.message)
+          .join(" · ")}
       </span>
 
       {toast ? (
         <div
           className="eq-toast fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-md items-center gap-3 overflow-hidden rounded-2xl bg-[var(--eq-brand-deep)] px-5 py-4 font-semibold text-white shadow-lg"
-          role="status"
+          key={toast.id}
+          data-exiting={toast.exiting || undefined}
+          aria-hidden={toast.exiting || undefined}
+          data-toast-id={toast.id}
+          role={toast.exiting ? undefined : "status"}
         >
           <span className="grid min-w-0 flex-1 gap-0.5">
             <span>{toast.message}</span>
@@ -933,7 +983,9 @@ export function CampScreen({ campId }: CampScreenProps) {
           </span>
           <button
             className="min-h-11 rounded-xl border border-white/50 bg-transparent px-4 font-semibold disabled:opacity-50"
-            disabled={pendingActions.size > 0 || !live.canWrite}
+            disabled={
+              toast.exiting || pendingActions.size > 0 || !live.canWrite
+            }
             onClick={() => void undo()}
             type="button"
           >

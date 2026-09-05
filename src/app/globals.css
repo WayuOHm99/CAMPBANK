@@ -316,7 +316,6 @@ button.eq-score-action-subtract:not(:disabled):active {
   border-left: 3px solid var(--eq-brand-deep);
   border-radius: 0.75rem;
   background: var(--eq-surface);
-  animation: eq-notice-enter var(--eq-motion-normal) var(--eq-ease-out) both;
 }
 
 .eq-notice-attention {
@@ -353,18 +352,27 @@ button.eq-score-action-subtract:not(:disabled):active {
 }
 
 .eq-group-card {
+  position: relative;
   transition:
     border-color var(--eq-motion-fast) var(--eq-ease-out),
     box-shadow var(--eq-motion-fast) var(--eq-ease-out),
     background-color var(--eq-motion-fast) var(--eq-ease-out);
 }
 
-.eq-group-card[data-motion-feedback="local"] {
+.eq-group-feedback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.eq-group-feedback[data-kind="local"] {
   animation: eq-score-local var(--eq-motion-normal) var(--eq-ease-out) 2
     alternate;
 }
 
-.eq-group-card[data-motion-feedback="remote"] {
+.eq-group-feedback[data-kind="remote"] {
   animation: eq-score-remote var(--eq-motion-normal) var(--eq-ease-out) 2
     alternate;
 }
@@ -384,6 +392,27 @@ button.eq-score-action-subtract:not(:disabled):active {
   transform: scaleX(1);
   transform-origin: left;
   animation: eq-undo-window 15s linear both;
+}
+
+.eq-toast[data-exiting="true"] {
+  pointer-events: none;
+  animation: eq-notice-enter var(--eq-motion-fast) ease-in reverse both;
+}
+
+.eq-notice[hidden] {
+  opacity: 0;
+}
+
+.eq-notice {
+  transition:
+    opacity var(--eq-motion-fast) ease-out,
+    display var(--eq-motion-fast) allow-discrete;
+}
+
+@starting-style {
+  .eq-notice:not([hidden]) {
+    opacity: 0;
+  }
 }
 
 .eq-ranking-item {
@@ -471,7 +500,7 @@ button.eq-score-action-subtract:not(:disabled):active {
 @keyframes eq-score-local {
   to {
     border-color: var(--eq-brand-deep);
-    background-color: var(--eq-blue-soft);
+    background-color: color-mix(in srgb, var(--eq-blue-soft) 25%, transparent);
     box-shadow:
       0 0 0 2px var(--eq-brand-deep),
       var(--eq-shadow-card);

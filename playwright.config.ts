@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const e2eOrigin = "http://127.0.0.1:32081";
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
@@ -7,7 +9,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? "github" : "html",
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: e2eOrigin,
     trace: "retain-on-failure",
   },
   projects: [
@@ -31,9 +33,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run dev",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
+    command: "npm run dev -- --port 32081",
+    url: e2eOrigin,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });
