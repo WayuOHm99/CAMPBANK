@@ -155,6 +155,7 @@ export function StaffJoinScreen({ campCode }: StaffJoinScreenProps) {
     return (
       <ScreenState
         backHref="/"
+        busy
         title="กำลังเปิดค่าย"
         message="ตรวจสอบลิงก์และการเชื่อมต่อ"
       />
@@ -164,7 +165,7 @@ export function StaffJoinScreen({ campCode }: StaffJoinScreenProps) {
   return (
     <main className="min-h-dvh bg-[var(--eq-canvas-soft)] px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(1.25rem+env(safe-area-inset-top))] text-[var(--eq-ink)]">
       <div className="mx-auto w-full max-w-4xl">
-        <header className="mb-8">
+        <header className="eq-app-header mb-8">
           <Link
             className="inline-flex min-h-11 items-center text-sm font-bold text-[var(--eq-brand-deep)]"
             href="/"

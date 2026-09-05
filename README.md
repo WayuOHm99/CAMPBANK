@@ -107,6 +107,8 @@ npm run build
 
 ## PWA และ Offline
 
+ก่อน release ให้ทำ [Physical-device Pilot rehearsal](docs/pilot-rehearsal.md) บน Safari อย่างน้อย 5 sessions พร้อม Android รุ่นกำลังต่ำและ iPhone/iPad โดยใช้ `bash scripts/pilot-rehearsal.sh` ช่วยบันทึกผล การทดสอบจำลองใน Playwright ยังไม่แทนผลจากเครื่องจริง
+
 Manifest, install metadata และ Service Worker มีไว้สำหรับติดตั้งเว็บแบบพื้นฐานเท่านั้น Service Worker ไม่ cache หรือ queue Score request เมื่อ Internet ขาด ปุ่มคะแนนจะถูกปิดและระบบจะ refresh สถานะจริงก่อนเปิดปุ่มอีกครั้ง
 
 ## โครงสร้างหลัก

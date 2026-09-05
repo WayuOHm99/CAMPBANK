@@ -28,7 +28,12 @@ const RACE_PLUS_1000_ID = "41000000-0000-4000-8000-000000000001";
 type RpcResult = {
   ok: boolean;
   error?: { code: string; message: string };
-  transaction?: { id: string; amount: number };
+  transaction?: {
+    id: string;
+    amount: number;
+    transaction_type?: string;
+    reverses_transaction_id?: string;
+  };
   camp?: {
     distributed_amount: number;
     remaining_budget: number;
@@ -133,6 +138,21 @@ async function snapshot(client: SupabaseClient, campId: string) {
 
   expect(error).toBeNull();
   return data as CampSnapshot;
+}
+
+async function quickUndo(
+  client: SupabaseClient,
+  transactionId: string,
+  clientActionId = crypto.randomUUID(),
+) {
+  const { data, error } = await client.rpc("quick_undo", {
+    p_camp_id: DEMO_CAMP_ID,
+    p_client_action_id: clientActionId,
+    p_transaction_id: transactionId,
+  });
+
+  expect(error).toBeNull();
+  return data as RpcResult;
 }
 
 describe
@@ -276,6 +296,116 @@ describe
         reverses_transaction_id: awarded.result.transaction?.id,
       });
     });
+
+    it("quick-undoes a deduction and preserves the linked opposite transaction", async () => {
+      await applyScore(demoStaffA, {
+        campId: DEMO_CAMP_ID,
+        groupId: DEMO_GROUP_ID,
+        scoreButtonId: DEMO_PLUS_1000_ID,
+      });
+      const deducted = await applyScore(demoStaffA, {
+        campId: DEMO_CAMP_ID,
+        groupId: DEMO_GROUP_ID,
+        scoreButtonId: DEMO_MINUS_1000_ID,
+      });
+      expect(deducted.result).toMatchObject({
+        ok: true,
+        transaction: { amount: -1_000 },
+      });
+
+      const undone = await quickUndo(
+        demoStaffA,
+        deducted.result.transaction!.id,
+      );
+      expect(undone).toMatchObject({
+        ok: true,
+        transaction: {
+          amount: 1_000,
+          transaction_type: "quick_undo",
+          reverses_transaction_id: deducted.result.transaction!.id,
+        },
+      });
+
+      const current = await snapshot(demoStaffA, DEMO_CAMP_ID);
+      expect(current.recent_transactions[0]).toMatchObject({
+        amount: 1_000,
+        transaction_type: "quick_undo",
+        reverses_transaction_id: deducted.result.transaction!.id,
+      });
+    });
+
+    it("rejects an older action and another Staff member's action", async () => {
+      const older = await applyScore(demoStaffA, {
+        campId: DEMO_CAMP_ID,
+        groupId: DEMO_GROUP_ID,
+        scoreButtonId: DEMO_PLUS_500_ID,
+      });
+      const latest = await applyScore(demoStaffA, {
+        campId: DEMO_CAMP_ID,
+        groupId: DEMO_GROUP_ID,
+        scoreButtonId: DEMO_PLUS_500_ID,
+      });
+
+      expect(
+        await quickUndo(demoStaffA, older.result.transaction!.id),
+      ).toMatchObject({
+        ok: false,
+        error: { code: "UNDO_NOT_LATEST" },
+      });
+
+      const staffB = await joinStaff("DEMO-STAFF-2026", DEMO_STAFF_B_ID);
+      expect(
+        await quickUndo(staffB, latest.result.transaction!.id),
+      ).toMatchObject({
+        ok: false,
+        error: { code: "UNDO_NOT_LATEST" },
+      });
+    });
+
+    it("allows one winner when two Quick Undo requests race", async () => {
+      const awarded = await applyScore(demoStaffA, {
+        campId: DEMO_CAMP_ID,
+        groupId: DEMO_GROUP_ID,
+        scoreButtonId: DEMO_PLUS_500_ID,
+      });
+
+      const outcomes = await Promise.all([
+        quickUndo(demoStaffA, awarded.result.transaction!.id),
+        quickUndo(demoStaffA, awarded.result.transaction!.id),
+      ]);
+
+      expect(outcomes.filter((result) => result.ok)).toHaveLength(1);
+      expect(outcomes.filter((result) => !result.ok)).toEqual([
+        expect.objectContaining({
+          error: expect.objectContaining({ code: "ALREADY_UNDONE" }),
+        }),
+      ]);
+      const current = await snapshot(demoStaffA, DEMO_CAMP_ID);
+      expect(
+        current.recent_transactions.filter(
+          (transaction) =>
+            transaction.reverses_transaction_id ===
+            awarded.result.transaction!.id,
+        ),
+      ).toHaveLength(1);
+    });
+
+    it("rejects Quick Undo after the database's 15-second window", async () => {
+      const awarded = await applyScore(demoStaffA, {
+        campId: DEMO_CAMP_ID,
+        groupId: DEMO_GROUP_ID,
+        scoreButtonId: DEMO_PLUS_500_ID,
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 15_250));
+
+      expect(
+        await quickUndo(demoStaffA, awarded.result.transaction!.id),
+      ).toMatchObject({
+        ok: false,
+        error: { code: "UNDO_EXPIRED" },
+      });
+    }, 20_000);
 
     it("allows exactly one concurrent +1,000 action when Remaining Budget is 1,000", async () => {
       const [staffA, staffB] = await Promise.all([

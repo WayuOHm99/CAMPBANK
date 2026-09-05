@@ -147,6 +147,72 @@ will be queued for later.
 - Motion: 160–240ms color/opacity/transform feedback only. Respect
   `prefers-reduced-motion`; avoid layout animation and performance-heavy blur.
 
+## Motion system
+
+EQ Motion System V1 treats animation as short operational feedback, never as
+authority or decoration. The authoritative Score, Budget, Camp status, and
+connection state always come from the same database snapshots and remain
+readable when every animation is disabled.
+
+### Tokens and timing
+
+| Token                         | Value                        | Use                                       |
+| ----------------------------- | ---------------------------- | ----------------------------------------- |
+| `--eq-motion-fast`            | `160ms`                      | opacity and control feedback              |
+| `--eq-motion-normal`          | `240ms`                      | page, card, dialog, and toast transitions |
+| `--eq-motion-distance-short`  | `0.25rem`                    | local control or card feedback            |
+| `--eq-motion-distance-medium` | `0.75rem`                    | page/dialog entrance only                 |
+| `--eq-ease-out`               | `var(--ease-eq)`             | entrances and one-shot feedback           |
+| `--eq-ease-standard`          | `cubic-bezier(0.2, 0, 0, 1)` | state changes and ranking movement        |
+
+Durations stay in the 160–240ms range. A visual feedback marker may remain
+available to assistive technology or test automation after its animation has
+finished; it must not keep moving or block the next valid action.
+
+### Component behavior
+
+- Score buttons use color/opacity/short transform feedback. Only the tapped
+  button enters pending state; another valid action remains available whenever
+  database sequencing allows it.
+- Group cards distinguish the local actor from a remote update with written
+  `data-motion-feedback` state plus separate one-shot treatments. Remote change
+  is announced through `aria-live`; meaning never depends on motion.
+- Dialogs use a contained 240ms entrance and become bottom-sheet-like on small
+  screens. Native focus trapping, Escape, and focus return remain owned by the
+  dialog component rather than animation.
+- Disclosures animate only their selected content. Independent desktop column
+  stacks and internal overflow keep a long panel from stretching its sibling.
+- Toast/Quick Undo enters once and shows a 15-second progress affordance. The
+  database timestamp and RPC eligibility determine whether Undo succeeds; the
+  progress animation is not a timer or permission check.
+- Loading uses a stable status region with `aria-busy="true"`. Its sweep is
+  decorative and may disappear without losing the loading label.
+- Page navigation uses React View Transition only when Next.js exposes it and
+  the browser reports both `startViewTransition` and `view-transition-class`
+  support. WebKit uses the normal render fallback because its React transition
+  path is not reliable across the complete Staff route; other unsupported
+  engines use the same fallback. Header and focus behavior do not depend on
+  that API.
+- Ranking items use named view transitions for reordering. The final DOM order
+  and written rank remain authoritative, including when transitions are not
+  supported.
+- A closed-Camp winner receives one short emphasis only. Closed, offline, and
+  integrity-failure copy is persistent and is never hidden by animation.
+
+### Reduced motion and compatibility
+
+Under `prefers-reduced-motion: reduce`, positional movement, continuous
+sweeps, toast progress, card emphasis, and View Transition animation are
+disabled. State text, busy announcements, local/remote markers, Undo controls,
+and final ranking order remain present. Unsupported View Transition and haptic
+APIs fall back to ordinary rendering and written feedback; no polyfill is
+required and no Score write is queued.
+
+Stable end states are checked at 320, 390, 834, and 1440 CSS pixels. Screenshot
+tests wait for the final state and never assert an intermediate frame. The
+physical-device Pilot covers lower-powered Android Chromium and iPhone/iPad
+Safari before release.
+
 ## Private entry surfaces
 
 - **v6.** Home is a two-panel entry: a brand panel carrying the EQCAMP mark and

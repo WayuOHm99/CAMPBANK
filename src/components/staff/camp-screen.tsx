@@ -48,6 +48,13 @@ type ActivityPreference = {
 
 type GroupLayout = "auto" | "single" | "double" | "rail";
 
+type GroupFeedback = {
+  groupId: string;
+  id: string;
+  kind: "local" | "remote";
+  message: string;
+};
+
 const GROUP_LAYOUTS: Array<{ id: GroupLayout; label: string }> = [
   { id: "auto", label: "อัตโนมัติ" },
   { id: "single", label: "1 คอลัมน์" },
@@ -101,14 +108,20 @@ export function CampScreen({ campId }: CampScreenProps) {
   const [toast, setToast] = useState<Toast>();
   const [scoreConfirmation, setScoreConfirmation] =
     useState<ScoreConfirmation>();
+  const [groupFeedback, setGroupFeedback] = useState<GroupFeedback>();
   const latestRefreshId = useRef(0);
+  const groupScoreBaseline = useRef(new Map<string, number>());
+  const localTransactionIds = useRef(new Set<string>());
+  const scoreBaselineReady = useRef(false);
   const editButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [joinCode] = useState(() =>
-    typeof window === "undefined"
-      ? ""
-      : (window.localStorage.getItem(`eqcamp:staff-link:${campId}`) ?? ""),
-  );
+  const [joinCode, setJoinCode] = useState("");
   const { activityId, roundId } = activityPreference;
+
+  useEffect(() => {
+    setJoinCode(
+      window.localStorage.getItem(`eqcamp:staff-link:${campId}`) ?? "",
+    );
+  }, [campId]);
 
   const refresh = useCallback(async () => {
     const refreshId = latestRefreshId.current + 1;
@@ -127,9 +140,54 @@ export function CampScreen({ campId }: CampScreenProps) {
     }
 
     if (refreshId !== latestRefreshId.current) return;
-    setSnapshot(data as CampSnapshot);
+    const nextSnapshot = data as CampSnapshot;
+    const newestTransaction = nextSnapshot.recent_transactions[0];
+    const changedGroups = scoreBaselineReady.current
+      ? nextSnapshot.groups.filter(
+          (group) =>
+            groupScoreBaseline.current.get(group.id) !== group.current_score,
+        )
+      : [];
+
+    if (
+      newestTransaction &&
+      localTransactionIds.current.has(newestTransaction.id)
+    ) {
+      localTransactionIds.current.delete(newestTransaction.id);
+    } else if (changedGroups.length > 0) {
+      const changedGroup =
+        changedGroups.find(
+          (group) => group.id === newestTransaction?.group_id,
+        ) ?? changedGroups[0];
+      setGroupFeedback({
+        groupId: changedGroup.id,
+        id:
+          newestTransaction?.id ??
+          `${changedGroup.id}:${changedGroup.current_score}`,
+        kind: "remote",
+        message: `คะแนนของ ${getGroupDisplayName(
+          changedGroup.color_name,
+          changedGroup.custom_name,
+        )} อัปเดตจาก Staff คนอื่นเป็น ${formatScore(
+          changedGroup.current_score,
+        )} คะแนน`,
+      });
+    }
+
+    groupScoreBaseline.current = new Map(
+      nextSnapshot.groups.map((group) => [group.id, group.current_score]),
+    );
+    scoreBaselineReady.current = true;
+    setSnapshot(nextSnapshot);
     setError(undefined);
   }, [campId]);
+
+  useEffect(() => {
+    if (!groupFeedback) return;
+
+    const timeout = window.setTimeout(() => setGroupFeedback(undefined), 2_400);
+    return () => window.clearTimeout(timeout);
+  }, [groupFeedback]);
 
   const handleSyncError = useCallback((syncError: unknown) => {
     setError(
@@ -139,6 +197,7 @@ export function CampScreen({ campId }: CampScreenProps) {
     );
   }, []);
   const live = useCampLiveSync({
+    alwaysPoll: true,
     campId,
     onError: handleSyncError,
     refresh,
@@ -269,6 +328,7 @@ export function CampScreen({ campId }: CampScreenProps) {
 
     const clientActionId = createClientUuid();
     setPendingActions((current) => new Set(current).add(actionKey));
+    setGroupFeedback(undefined);
     setError(undefined);
 
     try {
@@ -295,6 +355,18 @@ export function CampScreen({ campId }: CampScreenProps) {
 
       const result = data as ScoreResult;
       const group = snapshot.groups.find((item) => item.id === groupId);
+      localTransactionIds.current.add(result.transaction.id);
+      groupScoreBaseline.current.set(groupId, result.group.current_score);
+      setGroupFeedback({
+        groupId,
+        id: result.transaction.id,
+        kind: "local",
+        message: `บันทึกคะแนนของ ${
+          group
+            ? getGroupDisplayName(group.color_name, group.custom_name)
+            : "กลุ่ม"
+        } แล้ว`,
+      });
       setSnapshot((current) => {
         if (!current) return current;
         return {
@@ -455,6 +527,7 @@ export function CampScreen({ campId }: CampScreenProps) {
       <ScreenState
         backHref={joinCode ? `/join/${joinCode}` : "/"}
         backLabel={joinCode ? "กลับหน้าเลือก Staff" : "กลับหน้าแรก"}
+        busy
         title="กำลังโหลดคะแนน"
         message="ดึงข้อมูลล่าสุดจากค่าย"
       />
@@ -466,12 +539,12 @@ export function CampScreen({ campId }: CampScreenProps) {
     auto: "grid items-start grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3",
     single: "grid items-start max-w-3xl grid-cols-1 gap-4",
     double: "grid items-start grid-cols-2 gap-3 sm:gap-4",
-    rail: "eq-scroll grid items-start snap-x snap-mandatory grid-flow-col auto-cols-[minmax(17.5rem,85vw)] gap-4 overflow-x-auto pb-3 sm:auto-cols-[minmax(19rem,44vw)] xl:auto-cols-[minmax(20rem,30vw)]",
+    rail: "eq-scroll relative grid items-start snap-x snap-mandatory grid-flow-col auto-cols-[minmax(17.5rem,85vw)] gap-4 overflow-x-auto pb-3 sm:auto-cols-[minmax(19rem,44vw)] xl:auto-cols-[minmax(20rem,30vw)]",
   } satisfies Record<GroupLayout, string>;
 
   return (
     <main className="min-h-dvh bg-[var(--eq-canvas-soft)] pb-[calc(6rem+env(safe-area-inset-bottom))] text-[var(--eq-ink)]">
-      <header className="sticky top-0 z-20 border-b border-[var(--eq-border)] bg-[var(--eq-canvas-soft)] px-4 pb-2 pt-[calc(0.5rem+env(safe-area-inset-top))]">
+      <header className="eq-app-header sticky top-0 z-20 border-b border-[var(--eq-border)] bg-[var(--eq-canvas-soft)] px-4 pb-2 pt-[calc(0.5rem+env(safe-area-inset-top))]">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
@@ -705,7 +778,12 @@ export function CampScreen({ campId }: CampScreenProps) {
               return (
                 <article
                   aria-label={`${group.color_name} — ${displayName}`}
-                  className="scroll-mt-32 flex min-w-0 self-start snap-start flex-row overflow-hidden rounded-2xl border border-[var(--eq-border)] bg-white shadow-sm"
+                  className="eq-group-card scroll-mt-32 flex min-w-0 self-start snap-start flex-row overflow-hidden rounded-2xl border border-[var(--eq-border)] bg-white shadow-sm"
+                  data-motion-feedback={
+                    groupFeedback?.groupId === group.id
+                      ? groupFeedback.kind
+                      : undefined
+                  }
                   key={group.id}
                   role="listitem"
                 >
@@ -838,12 +916,21 @@ export function CampScreen({ campId }: CampScreenProps) {
         </div>
       </div>
 
+      <span aria-live="polite" className="sr-only">
+        {groupFeedback?.kind === "remote" ? groupFeedback.message : ""}
+      </span>
+
       {toast ? (
         <div
-          className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-md items-center gap-3 rounded-2xl bg-[var(--eq-brand-deep)] px-5 py-4 font-semibold text-white shadow-lg"
+          className="eq-toast fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-md items-center gap-3 overflow-hidden rounded-2xl bg-[var(--eq-brand-deep)] px-5 py-4 font-semibold text-white shadow-lg"
           role="status"
         >
-          <span className="min-w-0 flex-1">{toast.message}</span>
+          <span className="grid min-w-0 flex-1 gap-0.5">
+            <span>{toast.message}</span>
+            <span className="text-xs font-medium text-white/80">
+              ย้อนกลับได้ภายใน 15 วินาที
+            </span>
+          </span>
           <button
             className="min-h-11 rounded-xl border border-white/50 bg-transparent px-4 font-semibold disabled:opacity-50"
             disabled={pendingActions.size > 0 || !live.canWrite}

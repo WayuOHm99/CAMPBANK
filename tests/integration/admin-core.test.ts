@@ -7,6 +7,7 @@ import {
 } from "@/lib/supabase/jwt-timing";
 
 const DEMO_ADMIN_ID = "60000000-0000-4000-8000-000000000001";
+const DEMO_CAMP_ID = "10000000-0000-4000-8000-000000000001";
 
 function localCredentials() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -51,6 +52,30 @@ async function login(client: SupabaseClient, pin: string) {
     admin?: { id: string; display_name: string; must_change_pin: boolean };
     error?: { code: string; message: string };
     expires_at?: string;
+  };
+}
+
+type HistoryCursor = { created_at: string; id: string };
+
+async function transactionHistoryPage(
+  client: SupabaseClient,
+  campId: string,
+  cursor: HistoryCursor | null,
+) {
+  const { data, error } = await client.rpc("get_transaction_history", {
+    ...(cursor
+      ? {
+          p_before_created_at: cursor.created_at,
+          p_before_id: cursor.id,
+        }
+      : {}),
+    p_camp_id: campId,
+    p_limit: 1,
+  });
+  expect(error).toBeNull();
+  return data as {
+    items: Array<{ id: string }>;
+    next_cursor: HistoryCursor | null;
   };
 }
 
@@ -279,6 +304,15 @@ describe
       expect(created.error).toBeNull();
       const campId = created.data.camp.id as string;
 
+      const unconfiguredActivation = await client.rpc("activate_camp", {
+        p_camp_id: campId,
+      });
+      expect(unconfiguredActivation.error).toBeNull();
+      expect(unconfiguredActivation.data).toMatchObject({
+        ok: false,
+        error: { code: "ACTIVATION_REQUIREMENTS" },
+      });
+
       const empty = await client.rpc("save_draft_setup", {
         p_camp_id: campId,
         p_groups: [],
@@ -312,6 +346,50 @@ describe
       });
       expect(configured.error).toBeNull();
       expect(configured.data).toMatchObject({ ok: true, group_count: 1 });
+
+      const positiveOnly = await client.rpc("save_score_buttons", {
+        p_buttons: [
+          { label: "+500", amount: 500, enabled: true, sort_order: 1 },
+        ],
+        p_camp_id: campId,
+      });
+      expect(positiveOnly.error).toBeNull();
+      expect(positiveOnly.data).toMatchObject({ ok: true });
+      const missingNegativeActivation = await client.rpc("activate_camp", {
+        p_camp_id: campId,
+      });
+      expect(missingNegativeActivation.error).toBeNull();
+      expect(missingNegativeActivation.data).toMatchObject({
+        ok: false,
+        error: { code: "ACTIVATION_REQUIREMENTS" },
+      });
+
+      const negativeOnly = await client.rpc("save_score_buttons", {
+        p_buttons: [
+          { label: "-500", amount: -500, enabled: true, sort_order: 1 },
+        ],
+        p_camp_id: campId,
+      });
+      expect(negativeOnly.error).toBeNull();
+      expect(negativeOnly.data).toMatchObject({ ok: true });
+      const missingPositiveActivation = await client.rpc("activate_camp", {
+        p_camp_id: campId,
+      });
+      expect(missingPositiveActivation.error).toBeNull();
+      expect(missingPositiveActivation.data).toMatchObject({
+        ok: false,
+        error: { code: "ACTIVATION_REQUIREMENTS" },
+      });
+
+      const restoredButtons = await client.rpc("save_score_buttons", {
+        p_buttons: [
+          { label: "+500", amount: 500, enabled: true, sort_order: 1 },
+          { label: "-500", amount: -500, enabled: true, sort_order: 2 },
+        ],
+        p_camp_id: campId,
+      });
+      expect(restoredButtons.error).toBeNull();
+      expect(restoredButtons.data).toMatchObject({ ok: true });
 
       const activated = await client.rpc("activate_camp", {
         p_camp_id: campId,
@@ -598,30 +676,194 @@ describe
       expect(adjustmentRetry.error).toBeNull();
       expect(adjustmentRetry.data).toEqual(adjusted.data);
 
-      const firstPage = await admin.rpc("get_transaction_history", {
+      const missingAdjustmentReason = await admin.rpc("admin_adjust_score", {
+        p_adjusts_transaction_id: null,
+        p_amount: 100,
         p_camp_id: configuredCampId,
-        p_limit: 1,
+        p_client_action_id: crypto.randomUUID(),
+        p_group_id: group.id,
+        p_reason: "",
       });
-      expect(firstPage.error).toBeNull();
-      expect(firstPage.data.items).toHaveLength(1);
-      expect(firstPage.data.items[0]).toMatchObject({
-        transaction_type: "adjustment",
-        group_custom_name_snapshot: "Banana Prime",
+      expect(missingAdjustmentReason.error).toBeNull();
+      expect(missingAdjustmentReason.data).toMatchObject({
+        ok: false,
+        error: { code: "REASON_REQUIRED" },
       });
-      expect(firstPage.data.next_cursor).toBeTruthy();
 
-      const secondPage = await admin.rpc("get_transaction_history", {
-        p_before_created_at: firstPage.data.next_cursor.created_at,
-        p_before_id: firstPage.data.next_cursor.id,
+      const invalidAdjustmentLink = await admin.rpc("admin_adjust_score", {
+        p_adjusts_transaction_id: awarded.data.transaction.id,
+        p_amount: 100,
         p_camp_id: configuredCampId,
-        p_limit: 1,
+        p_client_action_id: crypto.randomUUID(),
+        p_group_id: initialSnapshot.data.groups[1].id,
+        p_reason: "ทดสอบลิงก์ข้ามกลุ่ม",
       });
-      expect(secondPage.error).toBeNull();
-      expect(secondPage.data.items).toHaveLength(1);
-      expect(secondPage.data.items[0]).toMatchObject({
+      expect(invalidAdjustmentLink.error).toBeNull();
+      expect(invalidAdjustmentLink.data).toMatchObject({
+        ok: false,
+        error: { code: "INVALID_ADJUSTMENT_LINK" },
+      });
+
+      const negativeAdjustment = await admin.rpc("admin_adjust_score", {
+        p_adjusts_transaction_id: null,
+        p_amount: -100,
+        p_camp_id: configuredCampId,
+        p_client_action_id: crypto.randomUUID(),
+        p_group_id: group.id,
+        p_reason: "ลดคะแนนตามผลตรวจสอบ",
+      });
+      expect(negativeAdjustment.error).toBeNull();
+      expect(negativeAdjustment.data).toMatchObject({
+        ok: true,
+        transaction: {
+          amount: -100,
+          transaction_type: "adjustment",
+          adjusts_transaction_id: null,
+        },
+      });
+
+      const [concurrentAdjustment, concurrentScore] = await Promise.all([
+        admin.rpc("admin_adjust_score", {
+          p_adjusts_transaction_id: null,
+          p_amount: 100,
+          p_camp_id: configuredCampId,
+          p_client_action_id: crypto.randomUUID(),
+          p_group_id: group.id,
+          p_reason: "ทดสอบพร้อมรายการ Staff",
+        }),
+        staff.rpc("apply_score_transaction", {
+          p_activity_id: null,
+          p_camp_id: configuredCampId,
+          p_client_action_id: crypto.randomUUID(),
+          p_group_id: group.id,
+          p_round_id: null,
+          p_score_button_id: plus500.id,
+        }),
+      ]);
+      expect(concurrentAdjustment.error).toBeNull();
+      expect(concurrentScore.error).toBeNull();
+      expect(concurrentAdjustment.data).toMatchObject({ ok: true });
+      expect(concurrentScore.data).toMatchObject({ ok: true });
+
+      const beforeBudgetRace = await admin.rpc("get_admin_camp_snapshot", {
+        p_camp_id: configuredCampId,
+      });
+      expect(beforeBudgetRace.error).toBeNull();
+      const distributedBeforeBudgetRace = beforeBudgetRace.data.camp
+        .distributed_amount as number;
+      const [budgetRace, scoreRace] = await Promise.all([
+        admin.rpc("update_camp_budget", {
+          p_camp_id: configuredCampId,
+          p_reason: "ทดสอบล็อกพร้อมการให้คะแนน",
+          p_total_budget: distributedBeforeBudgetRace,
+          p_warning_amount: null,
+          p_warning_percent: null,
+        }),
+        staff.rpc("apply_score_transaction", {
+          p_activity_id: null,
+          p_camp_id: configuredCampId,
+          p_client_action_id: crypto.randomUUID(),
+          p_group_id: group.id,
+          p_round_id: null,
+          p_score_button_id: plus500.id,
+        }),
+      ]);
+      expect(budgetRace.error).toBeNull();
+      expect(scoreRace.error).toBeNull();
+      expect(
+        [budgetRace.data, scoreRace.data].filter((item) => item.ok),
+      ).toHaveLength(1);
+      expect(
+        [budgetRace.data, scoreRace.data]
+          .filter((item) => !item.ok)
+          .map((item) => item.error.code),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.stringMatching(/INVALID_BUDGET|INSUFFICIENT_BUDGET/),
+        ]),
+      );
+      const afterBudgetRace = await admin.rpc("get_admin_camp_snapshot", {
+        p_camp_id: configuredCampId,
+      });
+      expect(afterBudgetRace.error).toBeNull();
+      expect(afterBudgetRace.data.camp.distributed_amount).toBe(
+        afterBudgetRace.data.groups.reduce(
+          (total: number, item: { current_score: number }) =>
+            total + item.current_score,
+          0,
+        ),
+      );
+      expect(afterBudgetRace.data.camp.remaining_budget).toBeGreaterThanOrEqual(
+        0,
+      );
+
+      const completeHistory = await admin.rpc("get_transaction_history", {
+        p_camp_id: configuredCampId,
+        p_limit: 50,
+      });
+      expect(completeHistory.error).toBeNull();
+      expect(
+        completeHistory.data.items.find(
+          (item: { id: string }) => item.id === awarded.data.transaction.id,
+        ),
+      ).toMatchObject({
         id: awarded.data.transaction.id,
         group_custom_name_snapshot: group.custom_name,
       });
+
+      const pagedIds: string[] = [];
+      let cursor: HistoryCursor | null = null;
+      do {
+        const historyPage = await transactionHistoryPage(
+          admin,
+          configuredCampId,
+          cursor,
+        );
+        pagedIds.push(...historyPage.items.map((item) => item.id));
+        cursor = historyPage.next_cursor;
+      } while (cursor);
+      expect(pagedIds).toEqual(
+        completeHistory.data.items.map((item: { id: string }) => item.id),
+      );
+
+      const adjustmentHistory = await admin.rpc("get_transaction_history", {
+        p_camp_id: configuredCampId,
+        p_group_id: group.id,
+        p_limit: 50,
+        p_transaction_type: "adjustment",
+      });
+      expect(adjustmentHistory.error).toBeNull();
+      expect(adjustmentHistory.data.items.length).toBeGreaterThanOrEqual(3);
+      expect(
+        adjustmentHistory.data.items.every(
+          (item: { group_id: string; transaction_type: string }) =>
+            item.group_id === group.id &&
+            item.transaction_type === "adjustment",
+        ),
+      ).toBe(true);
+
+      const invalidHistoryFilter = await admin.rpc("get_transaction_history", {
+        p_camp_id: configuredCampId,
+        p_limit: 50,
+        p_transaction_type: "unknown",
+      });
+      expect(invalidHistoryFilter.error).toBeNull();
+      expect(invalidHistoryFilter.data).toMatchObject({
+        ok: false,
+        error: { code: "INVALID_FILTER" },
+      });
+
+      const immutableTransaction = await admin
+        .from("transactions")
+        .update({ amount: 99_999 })
+        .eq("id", awarded.data.transaction.id);
+      expect(immutableTransaction.error).toMatchObject({ code: "42501" });
+
+      const immutableAudit = await admin
+        .from("audit_logs")
+        .delete()
+        .eq("camp_id", configuredCampId);
+      expect(immutableAudit.error).toMatchObject({ code: "42501" });
 
       const addedStaff = await admin.rpc("add_staff_member", {
         p_camp_id: configuredCampId,
@@ -747,6 +989,65 @@ describe
       });
       expect(resetPin.error).toBeNull();
       expect(resetPin.data).toMatchObject({ ok: true });
+
+      const limitedAdmin = await anonymousClient();
+      const limitedLogin = await limitedAdmin.rpc("login_admin", {
+        p_admin_account_id: addedAdmin.data.admin.id,
+        p_pin: "3333",
+      });
+      expect(limitedLogin.error).toBeNull();
+      expect(limitedLogin.data).toMatchObject({ ok: true });
+      const limitedPinChange = await limitedAdmin.rpc("change_admin_pin", {
+        p_current_pin: "3333",
+        p_new_pin: "4444",
+      });
+      expect(limitedPinChange.error).toBeNull();
+      expect(limitedPinChange.data).toMatchObject({ ok: true });
+
+      const crossCampHistory = await limitedAdmin.rpc(
+        "get_transaction_history",
+        { p_camp_id: DEMO_CAMP_ID, p_limit: 50 },
+      );
+      expect(crossCampHistory.error).toBeNull();
+      expect(crossCampHistory.data).toMatchObject({
+        ok: false,
+        error: { code: "ACCESS_DENIED" },
+      });
+
+      const disabledAddedAdmin = await admin.rpc("set_camp_member_active", {
+        p_active: false,
+        p_camp_id: configuredCampId,
+        p_member_id: addedAdmin.data.admin.member_id,
+      });
+      expect(disabledAddedAdmin.error).toBeNull();
+      expect(disabledAddedAdmin.data).toMatchObject({
+        ok: true,
+        member: { active: false },
+      });
+      const disabledAdminAttempt = await limitedAdmin.rpc(
+        "get_admin_camp_snapshot",
+        { p_camp_id: configuredCampId },
+      );
+      expect(disabledAdminAttempt.error).toBeNull();
+      expect(disabledAdminAttempt.data).toMatchObject({
+        ok: false,
+        error: { code: "ACCESS_DENIED" },
+      });
+
+      const creatorMember = initialSnapshot.data.members.find(
+        (member: { admin_account_id: string | null }) =>
+          member.admin_account_id === DEMO_ADMIN_ID,
+      ) as { id: string };
+      const finalAdminAttempt = await admin.rpc("set_camp_member_active", {
+        p_active: false,
+        p_camp_id: configuredCampId,
+        p_member_id: creatorMember.id,
+      });
+      expect(finalAdminAttempt.error).toBeNull();
+      expect(finalAdminAttempt.data).toMatchObject({
+        ok: false,
+        error: { code: "LAST_ADMIN" },
+      });
 
       const rotatedStaffCode = await admin.rpc("rotate_camp_access_code", {
         p_camp_id: configuredCampId,
@@ -930,6 +1231,51 @@ describe
       });
       expect(postCloseAdjustment.error).toBeNull();
       expect(postCloseAdjustment.data).toMatchObject({ ok: true });
+
+      const repeatedClose = await admin.rpc("close_camp", {
+        p_camp_id: configuredCampId,
+        p_reason: "ยืนยันว่าปิดซ้ำไม่ได้",
+      });
+      expect(repeatedClose.error).toBeNull();
+      expect(repeatedClose.data).toMatchObject({
+        ok: false,
+        error: { code: "CAMP_CLOSED" },
+      });
+
+      const closedBudget = await admin.rpc("update_camp_budget", {
+        p_camp_id: configuredCampId,
+        p_reason: "ห้ามแก้งบหลังปิด",
+        p_total_budget: afterBudgetRace.data.camp.total_budget,
+        p_warning_amount: null,
+        p_warning_percent: null,
+      });
+      expect(closedBudget.error).toBeNull();
+      expect(closedBudget.data).toMatchObject({
+        ok: false,
+        error: { code: "CAMP_CLOSED" },
+      });
+
+      const closedRotation = await admin.rpc("rotate_camp_access_code", {
+        p_camp_id: configuredCampId,
+        p_reason: "ห้ามหมุนลิงก์หลังปิด",
+        p_surface: "staff",
+      });
+      expect(closedRotation.error).toBeNull();
+      expect(closedRotation.data).toMatchObject({
+        ok: false,
+        error: { code: "CAMP_CLOSED" },
+      });
+
+      const closedUndo = await staff.rpc("quick_undo", {
+        p_camp_id: configuredCampId,
+        p_client_action_id: crypto.randomUUID(),
+        p_transaction_id: awarded.data.transaction.id,
+      });
+      expect(closedUndo.error).toBeNull();
+      expect(closedUndo.data).toMatchObject({
+        ok: false,
+        error: { code: "CAMP_CLOSED" },
+      });
     });
 
     it("restores the current Admin session safely and revokes it on logout", async () => {

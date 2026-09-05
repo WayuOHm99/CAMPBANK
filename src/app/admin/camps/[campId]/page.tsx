@@ -1,4 +1,5 @@
 import { AdminCampScreen } from "@/components/admin/admin-camp-screen";
+import { MotionPage } from "@/components/shared/motion";
 
 type AdminCampPageProps = {
   params: Promise<{ campId: string }>;
@@ -6,5 +7,9 @@ type AdminCampPageProps = {
 
 export default async function AdminCampPage({ params }: AdminCampPageProps) {
   const { campId } = await params;
-  return <AdminCampScreen campId={campId} />;
+  return (
+    <MotionPage>
+      <AdminCampScreen campId={campId} />
+    </MotionPage>
+  );
 }

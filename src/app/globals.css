@@ -71,7 +71,6 @@
   letter-spacing: -0.022em;
 }
 
-
 :root {
   color-scheme: light;
   font-synthesis: none;
@@ -126,12 +125,13 @@
   --eq-warning-soft: var(--eq-orange-soft);
   --eq-focus: var(--eq-brand-deep);
   --eq-radius-card: var(--radius-card);
-  --eq-shadow-card:
-    0 0 0 1px var(--color-hair),
-    0 1px 2px rgb(16 32 48 / 0.05);
+  --eq-shadow-card: 0 0 0 1px var(--color-hair), 0 1px 2px rgb(16 32 48 / 0.05);
   --eq-motion-fast: 160ms;
   --eq-motion-normal: 240ms;
+  --eq-motion-distance-short: 0.25rem;
+  --eq-motion-distance-medium: 0.75rem;
   --eq-ease-out: var(--ease-eq);
+  --eq-ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
 * {
@@ -173,6 +173,10 @@ button {
   touch-action: manipulation;
 }
 
+[aria-busy="true"] {
+  cursor: progress;
+}
+
 button:not(:disabled):active,
 a:active {
   transform: scale(0.985);
@@ -190,6 +194,29 @@ a:active {
   border-radius: var(--eq-radius-card);
   background: var(--eq-surface);
   box-shadow: var(--eq-shadow-card);
+}
+
+.eq-content-reveal {
+  animation: eq-content-enter var(--eq-motion-normal) var(--eq-ease-out) both;
+}
+
+.eq-loading-indicator {
+  position: relative;
+  overflow: hidden;
+}
+
+.eq-loading-indicator::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.72),
+    transparent
+  );
+  content: "";
+  transform: translateX(-120%);
+  animation: eq-loading-sweep 1.2s var(--eq-ease-standard) infinite;
 }
 
 .eq-action-primary {
@@ -250,6 +277,10 @@ button.eq-score-action-subtract:not(:disabled):active {
   box-shadow: none;
 }
 
+.eq-score-action[aria-busy="true"] {
+  transform: none;
+}
+
 .eq-score-direction-add {
   color: var(--eq-score-add);
 }
@@ -285,6 +316,7 @@ button.eq-score-action-subtract:not(:disabled):active {
   border-left: 3px solid var(--eq-brand-deep);
   border-radius: 0.75rem;
   background: var(--eq-surface);
+  animation: eq-notice-enter var(--eq-motion-normal) var(--eq-ease-out) both;
 }
 
 .eq-notice-attention {
@@ -314,6 +346,191 @@ button.eq-score-action-subtract:not(:disabled):active {
 
 .eq-disclosure-body {
   min-width: 0;
+}
+
+.eq-disclosure[open] > .eq-disclosure-body {
+  animation: eq-disclosure-enter var(--eq-motion-normal) var(--eq-ease-out) both;
+}
+
+.eq-group-card {
+  transition:
+    border-color var(--eq-motion-fast) var(--eq-ease-out),
+    box-shadow var(--eq-motion-fast) var(--eq-ease-out),
+    background-color var(--eq-motion-fast) var(--eq-ease-out);
+}
+
+.eq-group-card[data-motion-feedback="local"] {
+  animation: eq-score-local var(--eq-motion-normal) var(--eq-ease-out) 2
+    alternate;
+}
+
+.eq-group-card[data-motion-feedback="remote"] {
+  animation: eq-score-remote var(--eq-motion-normal) var(--eq-ease-out) 2
+    alternate;
+}
+
+.eq-toast {
+  isolation: isolate;
+  animation: eq-toast-enter var(--eq-motion-normal) var(--eq-ease-out) both;
+}
+
+.eq-toast::after {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: 0.2rem;
+  background: rgb(255 255 255 / 0.75);
+  content: "";
+  transform: scaleX(1);
+  transform-origin: left;
+  animation: eq-undo-window 15s linear both;
+}
+
+.eq-ranking-item {
+  contain: layout paint;
+}
+
+.eq-closed-winner {
+  animation: eq-winner-reveal var(--eq-motion-normal) var(--eq-ease-out) both;
+}
+
+.eq-app-header {
+  view-transition-name: eq-app-header;
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-group(eq-app-header) {
+  z-index: 100;
+  animation: none;
+}
+
+::view-transition-old(eq-app-header) {
+  display: none;
+}
+
+::view-transition-new(eq-app-header) {
+  animation: none;
+}
+
+::view-transition-old(.eq-page-exit) {
+  animation: eq-page-exit var(--eq-motion-fast) ease-in both;
+}
+
+::view-transition-new(.eq-page-enter) {
+  animation: eq-page-enter var(--eq-motion-normal) var(--eq-ease-out) both;
+}
+
+::view-transition-group(.eq-ranking-move) {
+  animation-duration: var(--eq-motion-normal);
+  animation-timing-function: var(--eq-ease-out);
+}
+
+@keyframes eq-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--eq-motion-distance-short));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eq-loading-sweep {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes eq-notice-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes eq-disclosure-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--eq-motion-distance-short) * -1));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eq-score-local {
+  to {
+    border-color: var(--eq-brand-deep);
+    background-color: var(--eq-blue-soft);
+    box-shadow:
+      0 0 0 2px var(--eq-brand-deep),
+      var(--eq-shadow-card);
+  }
+}
+
+@keyframes eq-score-remote {
+  to {
+    border-color: var(--eq-brand-bright);
+    box-shadow:
+      inset 0 0 0 2px var(--eq-brand-bright),
+      var(--eq-shadow-card);
+  }
+}
+
+@keyframes eq-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--eq-motion-distance-medium));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eq-undo-window {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes eq-winner-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes eq-page-exit {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes eq-page-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes eq-dialog-enter {
@@ -354,12 +571,28 @@ button.eq-score-action-subtract:not(:disabled):active {
 }
 
 @media (max-width: 639px) {
+  .eq-dialog[open] {
+    animation-name: eq-dialog-sheet-enter;
+  }
+
   .eq-color-dialog {
     margin: auto 0 0;
     max-height: calc(100dvh - env(safe-area-inset-top) - 0.75rem);
     width: 100%;
     border-end-end-radius: 0;
     border-end-start-radius: 0;
+  }
+}
+
+@keyframes eq-dialog-sheet-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--eq-motion-distance-medium));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -371,5 +604,16 @@ button.eq-score-action-subtract:not(:disabled):active {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .eq-loading-indicator::after,
+  .eq-toast::after {
+    display: none;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation: none !important;
   }
 }

@@ -1,5 +1,10 @@
 import { AdminPortal } from "@/components/admin/admin-portal";
+import { MotionPage } from "@/components/shared/motion";
 
 export default function AdminPage() {
-  return <AdminPortal />;
+  return (
+    <MotionPage>
+      <AdminPortal />
+    </MotionPage>
+  );
 }

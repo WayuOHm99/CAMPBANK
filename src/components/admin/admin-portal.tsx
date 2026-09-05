@@ -227,6 +227,7 @@ export function AdminPortal() {
     return (
       <ScreenState
         backHref="/"
+        busy
         title="กำลังเปิดระบบ Admin"
         message="ตรวจสอบสิทธิ์อย่างปลอดภัย"
       />
@@ -340,7 +341,7 @@ export function AdminPortal() {
   return (
     <main className="min-h-dvh bg-[var(--eq-canvas-soft)] px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] text-[var(--eq-ink)]">
       <div className="mx-auto max-w-6xl">
-        <header className="flex items-start justify-between gap-4 py-3">
+        <header className="eq-app-header flex items-start justify-between gap-4 py-3">
           <div>
             <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
               EQ-BANK ADMIN

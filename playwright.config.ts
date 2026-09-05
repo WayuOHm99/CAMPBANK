@@ -21,12 +21,12 @@ export default defineConfig({
     },
     {
       name: "android-chromium-responsive",
-      testMatch: /(admin-pin-entry|staff-layout)\.spec\.ts/,
+      testMatch: /(admin-pin-entry|motion|staff-layout)\.spec\.ts/,
       use: { ...devices["Pixel 7"] },
     },
     {
       name: "tablet-webkit-responsive",
-      testMatch: /(admin-pin-entry|staff-layout)\.spec\.ts/,
+      testMatch: /(admin-pin-entry|motion|staff-layout)\.spec\.ts/,
       use: { ...devices["iPad Pro 11"] },
     },
   ],

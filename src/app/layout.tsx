@@ -41,7 +41,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html className={anuphan.variable} lang="th">
+    <html className={anuphan.variable} data-scroll-behavior="smooth" lang="th">
       <body>
         {children}
         <PwaRegistration />

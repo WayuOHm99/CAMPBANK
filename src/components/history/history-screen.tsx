@@ -218,6 +218,7 @@ export function HistoryScreen({ campId }: { campId: string }) {
       <ScreenState
         backHref={`/camp/${campId}`}
         backLabel="กลับไปที่ Camp"
+        busy
         title="กำลังโหลดประวัติ"
         message="ดึงรายการล่าสุด 50 รายการ"
       />
@@ -244,7 +245,7 @@ export function HistoryScreen({ campId }: { campId: string }) {
         >
           ← กลับไปที่ Camp
         </Link>
-        <header className="mt-3">
+        <header className="eq-app-header mt-3">
           <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
             EQ-BANK · HISTORY
           </p>

@@ -1,9 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { ColorPickerDialog } from "@/components/shared/color-picker-dialog";
+import { MotionRankingItem } from "@/components/shared/motion";
 import {
   copyText,
   CopyShareActions,
@@ -94,9 +102,11 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
       throw new Error(snapshotResult.data.error.message);
     }
 
-    setSnapshot(snapshotResult.data as AdminCampSnapshot);
-    setColors((colorResult.data ?? []) as ColorPreset[]);
-    setError(undefined);
+    startTransition(() => {
+      setSnapshot(snapshotResult.data as AdminCampSnapshot);
+      setColors((colorResult.data ?? []) as ColorPreset[]);
+      setError(undefined);
+    });
   }, [campId]);
 
   const handleSyncError = useCallback((syncError: unknown) => {
@@ -124,6 +134,7 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
       <ScreenState
         backHref="/admin"
         backLabel="กลับไปค่ายของฉัน"
+        busy
         title="กำลังโหลด Camp"
         message="ดึงข้อมูลและตรวจสอบสิทธิ์"
       />
@@ -132,7 +143,7 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
 
   return (
     <main className="min-h-dvh bg-[var(--eq-canvas-soft)] pb-[calc(3rem+env(safe-area-inset-bottom))] text-[var(--eq-ink)]">
-      <header className="border-b border-[var(--eq-border)] bg-white px-4 pb-4 pt-[calc(0.75rem+env(safe-area-inset-top))]">
+      <header className="eq-app-header border-b border-[var(--eq-border)] bg-white px-4 pb-4 pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <div className="mx-auto max-w-7xl">
           <Link
             className="inline-flex min-h-11 items-center font-bold text-[var(--eq-muted)]"
@@ -1113,30 +1124,32 @@ function ActiveCampDashboard({
         </details>
         <div className="mt-4 grid gap-2" role="list">
           {ranking.map((group, index) => (
-            <div
-              aria-label={`อันดับ ${index + 1} ${getGroupDisplayName(group.color_name, group.custom_name)}`}
-              className={`flex items-center gap-3 rounded-2xl px-4 py-3 ${
-                index === 0
-                  ? "bg-[var(--eq-blue-soft)]"
-                  : "bg-[var(--eq-canvas-soft)]"
-              }`}
-              key={group.id}
-              role="listitem"
-            >
-              <span className="w-7 text-xl font-bold">{index + 1}</span>
-              <span
-                aria-hidden="true"
-                className="h-8 w-2 rounded-full"
-                style={{ backgroundColor: group.color_hex }}
-              />
-              <span className="min-w-0 flex-1 font-bold">
-                {group.color_name} —{" "}
-                {getGroupDisplayName(group.color_name, group.custom_name)}
-              </span>
-              <span className="font-bold tabular-nums">
-                {formatScore(group.current_score)}
-              </span>
-            </div>
+            <MotionRankingItem id={group.id} key={group.id}>
+              <div
+                aria-label={`อันดับ ${index + 1} ${getGroupDisplayName(group.color_name, group.custom_name)}`}
+                className={`eq-ranking-item flex items-center gap-3 rounded-2xl px-4 py-3 ${
+                  index === 0
+                    ? "bg-[var(--eq-blue-soft)]"
+                    : "bg-[var(--eq-canvas-soft)]"
+                }`}
+                data-rank={index + 1}
+                role="listitem"
+              >
+                <span className="w-7 text-xl font-bold">{index + 1}</span>
+                <span
+                  aria-hidden="true"
+                  className="h-8 w-2 rounded-full"
+                  style={{ backgroundColor: group.color_hex }}
+                />
+                <span className="min-w-0 flex-1 font-bold">
+                  {group.color_name} —{" "}
+                  {getGroupDisplayName(group.color_name, group.custom_name)}
+                </span>
+                <span className="font-bold tabular-nums">
+                  {formatScore(group.current_score)}
+                </span>
+              </div>
+            </MotionRankingItem>
           ))}
         </div>
       </section>
@@ -3201,7 +3214,7 @@ function ClosedCampSummary({
   return (
     <section
       aria-label="สรุปค่ายที่ปิดแล้ว"
-      className="rounded-2xl border border-[var(--eq-border)] bg-white p-5 shadow-sm"
+      className="eq-closed-winner rounded-2xl border border-[var(--eq-border)] bg-white p-5 shadow-sm"
     >
       <p className="text-xs font-semibold text-[var(--eq-brand-deep)]">
         ผลสรุปค่าย

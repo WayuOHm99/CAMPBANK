@@ -11,6 +11,7 @@ const localDevOrigins = [
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: [...new Set(localDevOrigins)],
+  devIndicators: false,
   async headers() {
     return [
       {

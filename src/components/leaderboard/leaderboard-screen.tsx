@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 
+import { MotionRankingItem } from "@/components/shared/motion";
 import { ScreenState } from "@/components/shared/screen-state";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { getGroupDisplayName } from "@/lib/groups/get-group-display-name";
@@ -56,6 +57,7 @@ export function LeaderboardScreen({ publicCode }: { publicCode: string }) {
     return (
       <ScreenState
         backHref="/"
+        busy
         title="กำลังเปิด Leaderboard"
         message="ดึงอันดับล่าสุดจากค่าย"
       />
@@ -78,8 +80,10 @@ function LiveLeaderboard({ campId }: { campId: string }) {
     );
     if (rpcError) throw rpcError;
     if (isRpcFailure(data)) throw new Error(data.error.message);
-    setSnapshot(data as LeaderboardSnapshot);
-    setError(undefined);
+    startTransition(() => {
+      setSnapshot(data as LeaderboardSnapshot);
+      setError(undefined);
+    });
   }, [campId]);
 
   const handleError = useCallback((syncError: unknown) => {
@@ -107,6 +111,7 @@ function LiveLeaderboard({ campId }: { campId: string }) {
     return (
       <ScreenState
         backHref="/"
+        busy
         title="กำลังจัดอันดับ"
         message="คำนวณจากคะแนนล่าสุด"
       />
@@ -116,7 +121,7 @@ function LiveLeaderboard({ campId }: { campId: string }) {
   return (
     <main className="min-h-dvh bg-[var(--eq-canvas-soft)] px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] text-[var(--eq-ink)] sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <header className="flex items-start justify-between gap-4 py-4">
+        <header className="eq-app-header flex items-start justify-between gap-4 py-4">
           <div>
             <Link
               className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--eq-brand-deep)]"
@@ -145,59 +150,63 @@ function LiveLeaderboard({ campId }: { campId: string }) {
 
         <section className="mt-4 grid gap-3 md:grid-cols-3">
           {snapshot.ranking.slice(0, 3).map((group, index) => (
-            <article
-              className={`relative overflow-hidden rounded-2xl border bg-white p-5 shadow-sm ${
-                index === 0
-                  ? "border-[var(--eq-border-strong)]"
-                  : "border-[var(--eq-border)]"
-              }`}
-              key={group.id}
-            >
-              <span
-                className={`text-4xl font-bold ${index === 0 ? "text-[var(--eq-brand-deep)]" : "text-[var(--eq-muted)]"}`}
+            <MotionRankingItem id={group.id} key={group.id}>
+              <article
+                className={`eq-ranking-item relative overflow-hidden rounded-2xl border bg-white p-5 shadow-sm ${
+                  index === 0
+                    ? `border-[var(--eq-border-strong)] ${snapshot.camp.status === "closed" ? "eq-closed-winner" : ""}`
+                    : "border-[var(--eq-border)]"
+                }`}
+                data-rank={index + 1}
               >
-                {index + 1}
-              </span>
-              <span
-                aria-hidden="true"
-                className="absolute right-5 top-5 h-12 w-3 rounded-full"
-                style={{ backgroundColor: group.color_hex }}
-              />
-              <p className="mt-5 text-sm font-semibold text-[var(--eq-muted)]">
-                {group.color_name}
-              </p>
-              <h2 className="text-2xl font-bold">
-                {getGroupDisplayName(group.color_name, group.custom_name)}
-              </h2>
-              <p className="mt-5 text-3xl font-bold tabular-nums">
-                {formatScore(group.current_score)}
-              </p>
-            </article>
+                <span
+                  className={`text-4xl font-bold ${index === 0 ? "text-[var(--eq-brand-deep)]" : "text-[var(--eq-muted)]"}`}
+                >
+                  {index + 1}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="absolute right-5 top-5 h-12 w-3 rounded-full"
+                  style={{ backgroundColor: group.color_hex }}
+                />
+                <p className="mt-5 text-sm font-semibold text-[var(--eq-muted)]">
+                  {group.color_name}
+                </p>
+                <h2 className="text-2xl font-bold">
+                  {getGroupDisplayName(group.color_name, group.custom_name)}
+                </h2>
+                <p className="mt-5 text-3xl font-bold tabular-nums">
+                  {formatScore(group.current_score)}
+                </p>
+              </article>
+            </MotionRankingItem>
           ))}
         </section>
 
         <section className="mt-5 overflow-hidden rounded-2xl border border-[var(--eq-border)] bg-white p-3 shadow-sm">
           {snapshot.ranking.slice(3).map((group) => (
-            <div
-              className="flex min-h-14 items-center gap-3 border-b border-[var(--eq-border)] px-3 last:border-0"
-              key={group.id}
-            >
-              <span className="w-7 font-bold text-[var(--eq-muted)]">
-                {group.rank}
-              </span>
-              <span
-                aria-hidden="true"
-                className="h-7 w-2 rounded-full"
-                style={{ backgroundColor: group.color_hex }}
-              />
-              <span className="min-w-0 flex-1 font-semibold">
-                {group.color_name} —{" "}
-                {getGroupDisplayName(group.color_name, group.custom_name)}
-              </span>
-              <span className="font-bold tabular-nums">
-                {formatScore(group.current_score)}
-              </span>
-            </div>
+            <MotionRankingItem id={group.id} key={group.id}>
+              <div
+                className="eq-ranking-item flex min-h-14 items-center gap-3 border-b border-[var(--eq-border)] px-3 last:border-0"
+                data-rank={group.rank}
+              >
+                <span className="w-7 font-bold text-[var(--eq-muted)]">
+                  {group.rank}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="h-7 w-2 rounded-full"
+                  style={{ backgroundColor: group.color_hex }}
+                />
+                <span className="min-w-0 flex-1 font-semibold">
+                  {group.color_name} —{" "}
+                  {getGroupDisplayName(group.color_name, group.custom_name)}
+                </span>
+                <span className="font-bold tabular-nums">
+                  {formatScore(group.current_score)}
+                </span>
+              </div>
+            </MotionRankingItem>
           ))}
         </section>
 
