@@ -1,12 +1,12 @@
 # Admin setup E2E is flaky on local WebKit
 
-Status: needs-triage
+Status: resolved
 
-`tests/e2e/admin-camp-setup.spec.ts` intermittently fails on Windows (mostly `mobile-safari`) after an interaction whose state change does not appear:
+`tests/e2e/admin-camp-setup.spec.ts` intermittently failed locally and in CI (run 36259733117, `--fail-on-flaky-tests`). Both causes were in the test, not the app.
 
-- After clicking "รีเซ็ต PIN" in the Admin management disclosure, the "PIN ชั่วคราวใหม่ 4 หลัก" field never becomes visible (line ~304/308).
-- After filling "เหตุผล" in "ปรับคะแนนโดย Admin", the submitted form still shows an empty reason (line ~405).
+## Answer
 
-Verified pre-existing: with this round's changes stashed, commit `108db57` failed at the reset-PIN step in 3 of 3 local runs. The same commit passed in GitHub Actions (Linux, `--fail-on-flaky-tests`). No console errors or navigations appear in the trace.
+- **Reset PIN form never appeared (line ~308).** The Admin disclosure animates open; the trace showed "element is not stable" and WebKit's tap landed while the button was still moving. The test now waits for the disclosure's animations to finish (`settleAnimations`) before clicking.
+- **Adjustment reason arrived empty (line ~405/419).** The reason `<textarea>` sits inside its `<label>`, so its accessible name includes the typed value. `getByLabel("เหตุผล", { exact: true })` stopped matching once text existed, and a re-resolution could send keystrokes to the previously focused amount field (the failure snapshot showed amount `"500E2"`). The test now targets `#adjustment-amount` / `#adjustment-reason`, asserts both values, and brings the Admin page to the front after Staff-page steps.
 
-Next step: reproduce with a headed WebKit run and check whether a live refresh re-renders `AdminManagement`/`AdjustmentPanel` between the click or fill and React's state update.
+Verified: 10 consecutive isolated runs (6 Chromium, 4 WebKit) passed, then the full E2E suite passed 40/40 with `--fail-on-flaky-tests`.

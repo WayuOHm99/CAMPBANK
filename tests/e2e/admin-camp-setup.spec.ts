@@ -1,7 +1,19 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
 import { E2E_ORIGIN } from "./support/origin";
+
+// Disclosures animate open; WebKit can miss a tap on content that is still
+// moving, so wait for every animation inside the disclosure to settle.
+async function settleAnimations(locator: Locator) {
+  await locator.evaluate((element) =>
+    Promise.all(
+      element
+        .getAnimations({ subtree: true })
+        .map((animation) => animation.finished.catch(() => undefined)),
+    ),
+  );
+}
 
 test("Admin changes a temporary PIN and activates a configured Camp", async ({
   browser,
@@ -300,6 +312,7 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
     has: page.locator("summary", { hasText: /^Admin$/ }),
   });
   await adminManagement.locator("summary").click();
+  await settleAnimations(adminManagement);
   await adminManagement
     .getByRole("button", { name: "รีเซ็ต PIN" })
     .first()
@@ -391,13 +404,19 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   const adjustment = page.locator("details").filter({
     has: page.locator("summary", { hasText: /^ปรับคะแนนโดย Admin$/ }),
   });
+  // The previous steps typed on the Staff page. Bring the Admin page forward
+  // so the browser does not restore stale focus into another field mid-fill.
+  await page.bringToFront();
   await adjustment.getByText("ปรับคะแนนโดย Admin", { exact: true }).click();
-  await adjustment
-    .getByLabel("จำนวนแบบมีเครื่องหมาย เช่น 500 หรือ -500")
-    .fill("500");
-  await adjustment
-    .getByLabel("เหตุผล", { exact: true })
-    .fill("เพิ่มคะแนนจากการตรวจสอบ E2E");
+  await settleAnimations(adjustment);
+  // Both controls sit inside their <label>, so their accessible names grow
+  // with the typed value; an exact label match stops resolving mid-fill.
+  const adjustmentAmount = adjustment.locator("#adjustment-amount");
+  const adjustmentReason = adjustment.locator("#adjustment-reason");
+  await adjustmentAmount.fill("500");
+  await adjustmentReason.fill("เพิ่มคะแนนจากการตรวจสอบ E2E");
+  await expect(adjustmentAmount).toHaveValue("500");
+  await expect(adjustmentReason).toHaveValue("เพิ่มคะแนนจากการตรวจสอบ E2E");
   page.once("dialog", (dialog) => dialog.accept());
   await adjustment
     .getByRole("button", { name: "ตรวจสอบและบันทึกการปรับคะแนน" })
