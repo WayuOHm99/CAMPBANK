@@ -20,6 +20,7 @@ import {
 } from "@/types/domain";
 
 type PortalView = "loading" | "login" | "pin-change" | "camps" | "create";
+type CampStatusFilter = "all" | AdminCampSummary["status"];
 
 type LoginOption = Pick<AdminIdentity, "id" | "display_name">;
 
@@ -40,10 +41,32 @@ export function AdminPortal() {
   const [selectedAdminId, setSelectedAdminId] = useState("");
   const [camps, setCamps] = useState<AdminCampSummary[]>([]);
   const [showArchived, setShowArchived] = useState(false);
+  const [campSearch, setCampSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<CampStatusFilter>("all");
+  const [selectedCampIds, setSelectedCampIds] = useState<string[]>([]);
+  const [bulkPending, setBulkPending] = useState(false);
+  const [bulkMessage, setBulkMessage] = useState<string>();
   const archivedCount = camps.filter((camp) => camp.archived_at).length;
   const visibleCamps = camps.filter(
     (camp) => showArchived || !camp.archived_at,
   );
+  const normalizedCampSearch = campSearch.trim().toLocaleLowerCase("th-TH");
+  const filteredCamps = visibleCamps.filter((camp) => {
+    const matchesStatus =
+      statusFilter === "all" || camp.status === statusFilter;
+    const searchText = [camp.name, camp.code, camp.location_name ?? ""]
+      .join(" ")
+      .toLocaleLowerCase("th-TH");
+    return (
+      matchesStatus &&
+      (!normalizedCampSearch || searchText.includes(normalizedCampSearch))
+    );
+  });
+  const statusCounts = {
+    draft: camps.filter((camp) => camp.status === "draft").length,
+    active: camps.filter((camp) => camp.status === "active").length,
+    closed: camps.filter((camp) => camp.status === "closed").length,
+  };
   const [pin, setPin] = useState("");
   const [currentPin, setCurrentPin] = useState("");
   const [newPin, setNewPin] = useState("");
@@ -68,8 +91,69 @@ export function AdminPortal() {
       must_change_pin: current?.must_change_pin ?? false,
     }));
     setCamps(result.camps);
+    setSelectedCampIds([]);
     setView("camps");
   }, []);
+
+  const selectedCamps = camps.filter((camp) =>
+    selectedCampIds.includes(camp.id),
+  );
+  const canBulkArchive =
+    selectedCamps.length > 0 &&
+    selectedCamps.every(
+      (camp) => camp.status === "closed" && !camp.archived_at,
+    );
+  const canBulkUnarchive =
+    selectedCamps.length > 0 &&
+    selectedCamps.every(
+      (camp) => camp.status === "closed" && Boolean(camp.archived_at),
+    );
+
+  function toggleCampSelection(campId: string) {
+    setSelectedCampIds((current) =>
+      current.includes(campId)
+        ? current.filter((id) => id !== campId)
+        : [...current, campId],
+    );
+  }
+
+  async function bulkArchive(archived: boolean) {
+    if ((!archived && !canBulkUnarchive) || (archived && !canBulkArchive)) {
+      setBulkMessage("เลือกเฉพาะค่าย Closed ที่อยู่สถานะเดียวกัน");
+      return;
+    }
+
+    const action = archived ? "เก็บค่ายที่เลือกเข้าคลัง" : "นำค่ายที่เลือกออกจากคลัง";
+    if (!window.confirm(`ยืนยัน${action}จำนวน ${selectedCamps.length} รายการ?`)) {
+      return;
+    }
+
+    setBulkPending(true);
+    setBulkMessage(undefined);
+    try {
+      const client = await ensureAnonymousSession();
+      for (const camp of selectedCamps) {
+        const { data, error: rpcError } = await client.rpc(
+          "set_camp_archived",
+          { p_archived: archived, p_camp_id: camp.id },
+        );
+        if (rpcError) throw rpcError;
+        if (isRpcFailure(data)) throw new Error(data.error.message);
+      }
+      setBulkMessage(
+        archived
+          ? `เก็บค่ายเข้าคลังแล้ว ${selectedCamps.length} รายการ`
+          : `นำค่ายออกจากคลังแล้ว ${selectedCamps.length} รายการ`,
+      );
+      await loadCamps();
+    } catch (bulkError) {
+      setBulkMessage(
+        bulkError instanceof Error ? bulkError.message : "ทำรายการไม่สำเร็จ",
+      );
+    } finally {
+      setBulkPending(false);
+    }
+  }
 
   const loadLogin = useCallback(async () => {
     const client = await ensureAnonymousSession();
@@ -375,43 +459,147 @@ export function AdminPortal() {
         </button>
 
         <AdminError message={error} />
+        <section
+          aria-label="สรุปและค้นหาค่าย"
+          className="mt-5 grid gap-3 rounded-2xl border border-[var(--eq-border)] bg-white p-4"
+        >
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <CampCount label="Draft" value={statusCounts.draft} />
+            <CampCount label="Active" value={statusCounts.active} />
+            <CampCount label="Closed" value={statusCounts.closed} />
+            <CampCount label="ในคลัง" value={archivedCount} />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem]">
+            <label className="grid gap-1 text-sm font-semibold" htmlFor="camp-search">
+              ค้นหาค่าย
+              <input
+                className="min-h-11 rounded-xl border border-[var(--eq-border)] bg-white px-3 font-normal"
+                id="camp-search"
+                onChange={(event) => setCampSearch(event.target.value)}
+                placeholder="ชื่อค่าย รหัส หรือสถานที่"
+                type="search"
+                value={campSearch}
+              />
+            </label>
+            <label className="grid gap-1 text-sm font-semibold" htmlFor="camp-status-filter">
+              สถานะ
+              <select
+                className="min-h-11 rounded-xl border border-[var(--eq-border)] bg-white px-3 font-normal"
+                id="camp-status-filter"
+                onChange={(event) =>
+                  setStatusFilter(event.target.value as CampStatusFilter)
+                }
+                value={statusFilter}
+              >
+                <option value="all">ทุกสถานะ</option>
+                <option value="draft">Draft</option>
+                <option value="active">Active</option>
+                <option value="closed">Closed</option>
+              </select>
+            </label>
+          </div>
+        </section>
+        {selectedCampIds.length > 0 ? (
+          <section
+            aria-label="จัดการค่ายที่เลือก"
+            className="mt-4 grid gap-3 rounded-2xl border border-[var(--eq-border-strong)] bg-white p-4 sm:flex sm:items-center sm:justify-between"
+          >
+            <div>
+              <p className="font-bold">เลือกแล้ว {selectedCampIds.length} ค่าย</p>
+              {!canBulkArchive && !canBulkUnarchive ? (
+                <p className="mt-1 text-sm text-[var(--eq-muted)]">
+                  เลือกเฉพาะค่าย Closed ที่อยู่สถานะเดียวกันเพื่อจัดการคลัง
+                </p>
+              ) : null}
+            </div>
+            <div className="grid gap-2 sm:flex">
+              <button
+                className="min-h-11 rounded-xl border border-[var(--eq-border)] px-3 text-sm font-bold disabled:opacity-40"
+                disabled={bulkPending || !canBulkArchive}
+                onClick={() => void bulkArchive(true)}
+                type="button"
+              >
+                เก็บเข้าคลัง
+              </button>
+              <button
+                className="min-h-11 rounded-xl border border-[var(--eq-border)] px-3 text-sm font-bold disabled:opacity-40"
+                disabled={bulkPending || !canBulkUnarchive}
+                onClick={() => void bulkArchive(false)}
+                type="button"
+              >
+                นำออกจากคลัง
+              </button>
+              <button
+                className="min-h-11 rounded-xl px-3 text-sm font-bold text-[var(--eq-muted)]"
+                disabled={bulkPending}
+                onClick={() => setSelectedCampIds([])}
+                type="button"
+              >
+                ยกเลิกการเลือก
+              </button>
+            </div>
+          </section>
+        ) : null}
+        {bulkMessage ? (
+          <p aria-live="polite" className="mt-3 text-sm font-bold" role="status">
+            {bulkMessage}
+          </p>
+        ) : null}
         <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {visibleCamps.map((camp) => (
-            <Link
-              className="rounded-2xl border border-[var(--eq-border)] bg-white p-5 shadow-sm transition active:scale-[0.99]"
-              href={`/admin/camps/${camp.id}`}
+          {filteredCamps.map((camp) => (
+            <article
+              className="rounded-2xl border border-[var(--eq-border)] bg-white p-5 shadow-sm"
               key={camp.id}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
-                    {camp.code}
-                  </p>
-                  <h2 className="mt-1 break-words text-xl font-bold">
-                    {camp.name}
-                  </h2>
-                </div>
-                <div className="flex shrink-0 flex-col items-end gap-1">
-                  <StatusBadge axis="camp" status={camp.status} />
-                  {camp.archived_at ? (
-                    <span className="rounded-lg bg-[var(--eq-canvas-soft)] px-2 py-0.5 text-xs font-semibold text-[var(--eq-muted)]">
-                      เก็บเข้าคลังแล้ว
-                    </span>
-                  ) : null}
-                </div>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
+                  {camp.code}
+                </p>
+                {camp.status === "closed" ? (
+                  <label className="flex items-center gap-2 text-xs font-semibold text-[var(--eq-muted)]">
+                    <input
+                      aria-label={`เลือกค่าย ${camp.name}`}
+                      checked={selectedCampIds.includes(camp.id)}
+                      disabled={bulkPending}
+                      onChange={() => toggleCampSelection(camp.id)}
+                      type="checkbox"
+                    />
+                    เลือก
+                  </label>
+                ) : null}
               </div>
-              <p className="mt-3 text-sm text-[var(--eq-muted)]">
-                {formatCampDate(camp.camp_date)}
-                {camp.location_name ? ` · ${camp.location_name}` : ""}
-              </p>
-              <p className="mt-5 text-sm font-bold text-[var(--eq-muted)]">
-                งบคงเหลือ
-              </p>
-              <p className="text-2xl font-bold tabular-nums">
-                {formatScore(camp.remaining_budget)} /{" "}
-                {formatScore(camp.total_budget)}
-              </p>
-            </Link>
+              <Link
+                className="block rounded-xl transition hover:bg-[var(--eq-canvas-soft)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--eq-brand-deep)]"
+                href={`/admin/camps/${camp.id}`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="break-words text-xl font-bold">
+                      {camp.name}
+                    </h2>
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-1">
+                    <StatusBadge axis="camp" status={camp.status} />
+                    {camp.archived_at ? (
+                      <span className="rounded-lg bg-[var(--eq-canvas-soft)] px-2 py-0.5 text-xs font-semibold text-[var(--eq-muted)]">
+                        เก็บเข้าคลังแล้ว
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                <p className="mt-3 text-sm text-[var(--eq-muted)]">
+                  {formatCampDate(camp.camp_date)}
+                  {camp.location_name ? ` · ${camp.location_name}` : ""}
+                </p>
+                <p className="mt-5 text-sm font-bold text-[var(--eq-muted)]">
+                  งบคงเหลือ
+                </p>
+                <p className="text-2xl font-bold tabular-nums">
+                  {formatScore(camp.remaining_budget)} /{" "}
+                  {formatScore(camp.total_budget)}
+                </p>
+              </Link>
+            </article>
           ))}
         </div>
 
@@ -428,13 +616,53 @@ export function AdminPortal() {
           </button>
         ) : null}
 
-        {camps.length === 0 ? (
+        {filteredCamps.length === 0 ? (
           <section className="mt-5 rounded-2xl border border-dashed border-[var(--eq-border)] p-8 text-center text-[var(--eq-muted)]">
-            ยังไม่มี Camp เริ่มสร้าง Camp แรกได้เลย
+            {camps.length === 0 ? (
+              "ยังไม่มี Camp เริ่มสร้าง Camp แรกได้เลย"
+            ) : visibleCamps.length === 0 ? (
+              <>
+                <p>ไม่มีค่ายที่กำลังแสดงอยู่</p>
+                <p className="mt-2 text-sm">
+                  มีค่ายในคลัง {archivedCount} รายการ
+                </p>
+                <button
+                  className="mt-4 min-h-11 rounded-xl border border-[var(--eq-border-strong)] bg-white px-4 font-bold text-[var(--eq-brand-deep)]"
+                  onClick={() => setShowArchived(true)}
+                  type="button"
+                >
+                  แสดงค่ายที่เก็บเข้าคลัง
+                </button>
+              </>
+            ) : (
+              <>
+                <p>ไม่พบค่ายที่ตรงกับตัวกรอง</p>
+                <p className="mt-2 text-sm">ลองเปลี่ยนคำค้นหาหรือสถานะ</p>
+                <button
+                  className="mt-4 min-h-11 rounded-xl border border-[var(--eq-border-strong)] bg-white px-4 font-bold"
+                  onClick={() => {
+                    setCampSearch("");
+                    setStatusFilter("all");
+                  }}
+                  type="button"
+                >
+                  ล้างตัวกรอง
+                </button>
+              </>
+            )}
           </section>
         ) : null}
       </div>
     </main>
+  );
+}
+
+function CampCount({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-xl bg-[var(--eq-canvas-soft)] px-3 py-2">
+      <p className="text-xs font-semibold text-[var(--eq-muted)]">{label}</p>
+      <p className="mt-1 text-xl font-bold tabular-nums">{value}</p>
+    </div>
   );
 }
 

@@ -58,6 +58,9 @@ export function CampManagement({
   }
 
   async function toggleArchive() {
+    const action = camp.archived_at ? "นำค่ายออกจากคลัง" : "เก็บค่ายเข้าคลัง";
+    if (!window.confirm(`ยืนยัน${action}?`)) return;
+
     const result = await call("archive", "set_camp_archived", {
       p_archived: !camp.archived_at,
       p_camp_id: camp.id,
@@ -68,7 +71,15 @@ export function CampManagement({
           ? "เก็บค่ายเข้าคลังแล้ว ค่ายนี้จะไม่แสดงในรายการหลัก"
           : "นำค่ายออกจากคลังแล้ว",
       );
-      await onRefresh();
+      try {
+        await onRefresh();
+      } catch (refreshError) {
+        setMessage(
+          refreshError instanceof Error
+            ? `บันทึกสำเร็จ แต่โหลดข้อมูลล่าสุดไม่สำเร็จ: ${refreshError.message}`
+            : "บันทึกสำเร็จ แต่โหลดข้อมูลล่าสุดไม่สำเร็จ",
+        );
+      }
     }
   }
 

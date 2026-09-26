@@ -96,9 +96,9 @@ function LiveLeaderboard({ campId }: { campId: string }) {
   }, []);
 
   const live = useCampLiveSync({
-    alwaysPoll: true,
     campId,
     onError: handleError,
+    pollIntervalMs: 5_000,
     refresh,
   });
 

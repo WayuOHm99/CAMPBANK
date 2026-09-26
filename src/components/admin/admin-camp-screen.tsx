@@ -1041,6 +1041,10 @@ function ActiveCampDashboard({
   const [dashboardNotice, setDashboardNotice] = useState<string>();
   const [rankingNotice, setRankingNotice] = useState<string>();
   const [showFullRanking, setShowFullRanking] = useState(false);
+  const [adjustmentDraft, setAdjustmentDraft] = useState<AdjustmentDraft>({
+    amount: "",
+    reason: "",
+  });
   const RANKING_PREVIEW = 5;
   const rankingText = createRankingShareText({
     campName: snapshot.camp.name,
@@ -1286,7 +1290,12 @@ function ActiveCampDashboard({
           </div>
         ) : null}
 
-        <AdjustmentPanel onRefresh={onRefresh} snapshot={snapshot} />
+        <AdjustmentPanel
+          draft={adjustmentDraft}
+          onDraftChange={setAdjustmentDraft}
+          onRefresh={onRefresh}
+          snapshot={snapshot}
+        />
       </div>
 
       {snapshot.camp.status === "active" ? (
@@ -1832,27 +1841,34 @@ function NumberField({
   );
 }
 
+type AdjustmentDraft = {
+  amount: string;
+  reason: string;
+};
+
 function AdjustmentPanel({
+  draft,
+  onDraftChange,
   onRefresh,
   snapshot,
 }: {
+  draft: AdjustmentDraft;
+  onDraftChange: (draft: AdjustmentDraft) => void;
   onRefresh: () => Promise<void>;
   snapshot: AdminCampSnapshot;
 }) {
   const [groupId, setGroupId] = useState(snapshot.groups[0]?.id ?? "");
-  const [amount, setAmount] = useState("");
-  const [reason, setReason] = useState("");
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string>();
   const group = snapshot.groups.find((item) => item.id === groupId);
 
   async function adjust() {
-    const signedAmount = Number(amount);
+    const signedAmount = Number(draft.amount);
     if (!group || !Number.isInteger(signedAmount) || signedAmount === 0) {
       setMessage("กรุณาระบุจำนวนที่ไม่เป็น 0");
       return;
     }
-    if (reason.trim().length < 3) {
+    if (draft.reason.trim().length < 3) {
       setMessage("กรุณาระบุเหตุผลอย่างน้อย 3 ตัวอักษร");
       return;
     }
@@ -1876,12 +1892,11 @@ function AdjustmentPanel({
         p_camp_id: snapshot.camp.id,
         p_client_action_id: createClientUuid(),
         p_group_id: group.id,
-        p_reason: reason.trim(),
+        p_reason: draft.reason.trim(),
       });
       if (error) throw error;
       if (isRpcFailure(data)) throw new Error(data.error.message);
-      setAmount("");
-      setReason("");
+      onDraftChange({ amount: "", reason: "" });
       setMessage("บันทึกการปรับคะแนนแล้ว");
       await onRefresh();
     } catch (adjustError) {
@@ -1930,9 +1945,11 @@ function AdjustmentPanel({
             className="min-h-12 rounded-xl border border-[var(--eq-border)] bg-white px-3 text-lg font-bold"
             id="adjustment-amount"
             inputMode="numeric"
-            onChange={(event) => setAmount(event.target.value)}
+            onChange={(event) =>
+              onDraftChange({ ...draft, amount: event.target.value })
+            }
             type="number"
-            value={amount}
+            value={draft.amount}
           />
         </label>
         <label
@@ -1943,8 +1960,10 @@ function AdjustmentPanel({
           <textarea
             className="min-h-20 rounded-xl border border-[var(--eq-border)] bg-white p-3"
             id="adjustment-reason"
-            onChange={(event) => setReason(event.target.value)}
-            value={reason}
+            onChange={(event) =>
+              onDraftChange({ ...draft, reason: event.target.value })
+            }
+            value={draft.reason}
           />
         </label>
         {message ? (

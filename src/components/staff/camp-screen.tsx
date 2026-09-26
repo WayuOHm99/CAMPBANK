@@ -224,9 +224,9 @@ export function CampScreen({ campId }: CampScreenProps) {
     );
   }, []);
   const live = useCampLiveSync({
-    alwaysPoll: true,
     campId,
     onError: handleSyncError,
+    pollIntervalMs: 10_000,
     refresh,
   });
 

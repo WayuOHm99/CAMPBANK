@@ -12,11 +12,13 @@ export function useCampLiveSync({
   alwaysPoll = false,
   campId,
   onError,
+  pollIntervalMs = 0,
   refresh,
 }: {
   alwaysPoll?: boolean;
   campId: string;
   onError: (error: unknown) => void;
+  pollIntervalMs?: number;
   refresh: () => Promise<void>;
 }) {
   const [online, setOnline] = useState(() =>
@@ -141,10 +143,25 @@ export function useCampLiveSync({
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
     const fallback = window.setInterval(() => {
-      if (window.navigator.onLine && (alwaysPoll || !realtimeReady)) {
+      if (
+        window.navigator.onLine &&
+        document.visibilityState === "visible" &&
+        (alwaysPoll || !realtimeReady)
+      ) {
         void sync().catch(() => undefined);
       }
     }, 2_000);
+    const reconciliation = pollIntervalMs
+      ? window.setInterval(() => {
+          if (
+            window.navigator.onLine &&
+            document.visibilityState === "visible" &&
+            realtimeReady
+          ) {
+            void sync().catch(() => undefined);
+          }
+        }, pollIntervalMs)
+      : undefined;
     void connect();
 
     return () => {
@@ -152,13 +169,14 @@ export function useCampLiveSync({
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
       window.clearInterval(fallback);
+      if (reconciliation) window.clearInterval(reconciliation);
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
       if (channel) {
         const subscribedChannel = channel;
         void ensureAnonymousSession().then((client) => client.removeChannel(subscribedChannel));
       }
     };
-  }, [alwaysPoll, campId, sync]);
+  }, [alwaysPoll, campId, pollIntervalMs, sync]);
 
   return {
     canWrite: online && synced,
