@@ -306,8 +306,8 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   await expect(resetPin).toHaveAttribute("maxlength", "4");
   await adminManagement.getByRole("button", { name: "ยกเลิก" }).click();
 
-  const staffLink = page.getByRole("link", { name: "เปิดลิงก์ Staff" });
-  await expect(staffLink).toHaveAttribute("href", /\/join\/ST-[A-Z2-9]{12}/);
+  const staffLink = page.getByRole("link", { name: "เปิดลิงก์ Staff E2E" });
+  await expect(staffLink).toHaveAttribute("href", /\/join\/[a-f0-9]{48}/);
   const staffPath = await staffLink.getAttribute("href");
   expect(staffPath).toBeTruthy();
 

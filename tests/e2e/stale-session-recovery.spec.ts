@@ -28,7 +28,7 @@ test("Staff selection replaces a stale anonymous access session", async ({
     });
   });
 
-  await page.goto("/join/DEMO-STAFF-2026");
+  await page.goto("/join/TEST-30000000-0000-4000-8000-000000000001");
   await page.getByRole("button", { name: "Staff A" }).click();
 
   await expect(

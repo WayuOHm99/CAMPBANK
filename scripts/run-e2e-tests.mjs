@@ -76,6 +76,7 @@ if (typeof anonKey !== "string" || !anonKey) {
 run(playwrightCli, ["test", ...process.argv.slice(2)], {
   env: {
     ...process.env,
+    EQCAMP_ACCESS_ENABLED: "true",
     NEXT_PUBLIC_SUPABASE_URL: apiUrl,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: anonKey,
   },

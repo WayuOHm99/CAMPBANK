@@ -11,10 +11,10 @@ test("Staff joins the Demo Camp and awards +500", async ({ page }) => {
       value: undefined,
     });
   });
-  await page.goto("/join/DEMO-STAFF-2026");
+  await page.goto("/join/TEST-30000000-0000-4000-8000-000000000001");
 
   await expect(
-    page.getByRole("heading", { name: "เลือกชื่อ Staff" }),
+    page.getByRole("heading", { name: "เข้าใช้งาน Staff" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Staff A" }).click();
 
@@ -23,7 +23,7 @@ test("Staff joins the Demo Camp and awards +500", async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "กลับหน้าเลือก Staff" }),
-  ).toHaveAttribute("href", "/join/DEMO-STAFF-2026");
+  ).toHaveAttribute("href", "/join/TEST-30000000-0000-4000-8000-000000000001");
 
   const activity = page.getByLabel("กิจกรรม");
   await activity.selectOption({ label: "เต้น" });

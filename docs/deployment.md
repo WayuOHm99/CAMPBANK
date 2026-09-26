@@ -1,6 +1,14 @@
 # Online deployment readiness
 
-Use the existing Next.js app on Vercel with a separate hosted Supabase project for each of staging and production. This document does not mean those projects have been created or deployed.
+Live website: https://campbank-fawn.vercel.app (Vercel production deployment `dpl_HeAeaycjgdYig99K2v8S8safknNe`). This deployment was uploaded from the local working tree; include the pending deployment/gate changes in Git before relying on subsequent Git-triggered deployments.
+
+The production project is `oh-m-it-zx/campbank` on Vercel, connected to `WayuOHm99/CAMPBANK` on GitHub. Its database is Supabase `CAMPBANK` (`hhbbabvlmgoufyppvatc`) in Singapore under `WayuOHm99`. All 14 repository migrations have been applied. No Demo seed was applied online.
+
+On 2026-09-26 the user explicitly authorized opening the existing name + four-digit PIN login and enabling Anonymous Sign-ins. Production now sets `EQCAMP_ACCESS_ENABLED=true`. The first Admin, `แพนด้า`, was created with the owner's hidden-input PIN; only its bcrypt hash was transferred to the cloud, and the temporary local hash file was removed. Bootstrap was audited. No Service Role key was placed on Vercel.
+
+Verification: production build, lint, typecheck and 36 unit tests passed. All 24 integration tests passed on disposable Local Supabase, including individual invitation use, rejection of mismatched identities, invitation listing authorization, rotation revocation, scoring concurrency, cross-Camp isolation and closure races. The live Admin page shows the correct account. All 15 SQL assertions passed. Four desktop Chromium browser workflows passed: Admin login/PIN change/Camp creation and activation, masked PIN entry, Staff scoring, and two Staff sessions receiving Realtime updates and Undo. Screenshot comparisons were skipped; mobile/physical-device pilot verification remains outstanding. The owner must complete the first live PIN login personally.
+
+Use separate hosted Supabase projects for staging and production when access is launched. Preview credentials are intentionally not configured against the production database.
 
 ## Verification before release
 
@@ -11,6 +19,8 @@ Linux CI deliberately skips screenshot comparisons because the committed image b
 The integration and E2E runners reset Local Supabase data. Run them only against a disposable local project. The E2E runner supplies local URL/key directly to the browser server, overriding any hosted URL in `.env.local`.
 
 ## Hosted database
+
+The following steps describe provisioning future environments. Production Auth and first Admin setup have already been completed; do not repeat bootstrap.
 
 1. Select the intended staging project first; check its Postgres major version against `supabase/config.toml` (currently 17).
 2. Authenticate the Supabase CLI, link that project, and inspect `supabase db push --dry-run` before applying `supabase db push`.
@@ -36,7 +46,7 @@ Use Preview with staging data first. Select the release branch and domain only a
 
 - Anonymous Auth abuse protection: implement and test CAPTCHA token acquisition in the browser before enabling CAPTCHA in hosted Auth. Account for devices sharing one Wi-Fi/IP.
 - Admin account lockout and recovery: review exposure before opening the Admin page publicly. Changing to Google or Passkeys changes ADR-0004 and needs an agreed access model.
-- Staff links currently allow choosing any active Staff identity in that Camp. Decide whether the trusted-team model is sufficient or replace it with revocable individual invitations.
+- The user selected individual revocable Staff invitations. Their migration and UI are present. Integration tests now use individual invitations and verify rotation/revocation. Local Demo invitations use deterministic test-only values; never seed production.
 - Retain periodic permission/visibility checks until replacement invalidation is tested. Do not remove polling merely because score Realtime works.
 - Confirm provider plan, backup retention, a successful restore rehearsal, error alerting and ownership. Do not put PINs, private join links, tokens or request bodies in telemetry.
 

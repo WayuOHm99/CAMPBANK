@@ -17,7 +17,7 @@ test("Staff Group view starts in responsive Auto mode on every page open", async
       },
     });
   });
-  await page.goto("/join/DEMO-STAFF-2026");
+  await page.goto("/join/TEST-30000000-0000-4000-8000-000000000001");
   await page.getByRole("button", { name: "Staff A" }).click();
   await expect(
     page.getByRole("heading", { name: "EQCAMP Demo" }),
@@ -129,7 +129,7 @@ test("Staff Group view starts in responsive Auto mode on every page open", async
 test("Staff can switch Group layouts without changing configured order", async ({
   page,
 }) => {
-  await page.goto("/join/DEMO-STAFF-2026");
+  await page.goto("/join/TEST-30000000-0000-4000-8000-000000000002");
   await page.getByRole("button", { name: "Staff B" }).click();
 
   const controls = page.getByRole("group", {

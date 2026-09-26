@@ -161,3 +161,6 @@ insert into public.activity_rounds (
   ('51000000-0000-4000-8000-000000000001', '50000000-0000-4000-8000-000000000001', 'รอบ 1', 1),
   ('51000000-0000-4000-8000-000000000002', '50000000-0000-4000-8000-000000000001', 'รอบ 2', 2),
   ('51000000-0000-4000-8000-000000000003', '50000000-0000-4000-8000-000000000001', 'รอบ 3', 3);
+
+-- Deterministic individual invitations for disposable local tests only.
+update private.staff_invitations set code = 'TEST-' || member_id::text;

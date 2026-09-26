@@ -1,0 +1,14 @@
+/.env*
+/.scratch/
+/.cursor/
+/.github/
+/docs/
+/supabase/
+/tests/
+/test-results/
+/playwright-report/
+/output/
+/logo/
+/pain point-image/
+/.stitch/
+*.tsbuildinfo

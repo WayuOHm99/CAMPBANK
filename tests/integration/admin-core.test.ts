@@ -573,10 +573,6 @@ describe
         p_camp_id: configuredCampId,
       });
       expect(initialSnapshot.error).toBeNull();
-      const camp = initialSnapshot.data.camp as {
-        staff_join_code: string;
-        total_budget: number;
-      };
       const group = initialSnapshot.data.groups[0] as {
         id: string;
         custom_name: string;
@@ -604,10 +600,37 @@ describe
         },
       });
 
+      const invites = await admin.rpc("get_staff_invitations", {
+        p_camp_id: configuredCampId,
+      });
+      expect(invites.error).toBeNull();
+      expect(invites.data.ok).toBe(true);
+      const invitation = invites.data.invitations.find(
+        (item: { member_id: string; code: string }) =>
+          item.member_id === staffMember.id,
+      );
+      expect(invitation).toBeDefined();
       let staff = await anonymousClient();
+      const deniedInvites = await staff.rpc("get_staff_invitations", {
+        p_camp_id: configuredCampId,
+      });
+      expect(deniedInvites.error).toBeNull();
+      expect(deniedInvites.data).toMatchObject({
+        ok: false,
+        error: { code: "ACCESS_DENIED" },
+      });
+      const impersonation = await staff.rpc("join_staff_camp", {
+        p_member_id: DEMO_ADMIN_ID,
+        p_staff_join_code: invitation.code,
+      });
+      expect(impersonation.error).toBeNull();
+      expect(impersonation.data).toMatchObject({
+        ok: false,
+        error: { code: "INVALID_JOIN_LINK" },
+      });
       const joined = await staff.rpc("join_staff_camp", {
         p_member_id: staffMember.id,
-        p_staff_join_code: camp.staff_join_code,
+        p_staff_join_code: invitation.code,
       });
       expect(joined.error).toBeNull();
       expect(joined.data).toMatchObject({ ok: true });
@@ -1049,17 +1072,26 @@ describe
         error: { code: "LAST_ADMIN" },
       });
 
-      const rotatedStaffCode = await admin.rpc("rotate_camp_access_code", {
+      const rotatedStaffCode = await admin.rpc("rotate_staff_invitation", {
         p_camp_id: configuredCampId,
         p_reason: "ทดสอบยกเลิกลิงก์เดิม",
-        p_surface: "staff",
+        p_member_id: staffMember.id,
       });
       expect(rotatedStaffCode.error).toBeNull();
       expect(rotatedStaffCode.data).toMatchObject({
         ok: true,
-        surface: "staff",
+        member_id: staffMember.id,
       });
-      expect(rotatedStaffCode.data.code).toMatch(/^ST-[A-Z2-9]{12}$/);
+      expect(rotatedStaffCode.data.code).toMatch(/^[a-f0-9]{48}$/);
+      const oldLink = await staff.rpc("join_staff_camp", {
+        p_member_id: staffMember.id,
+        p_staff_join_code: invitation.code,
+      });
+      expect(oldLink.error).toBeNull();
+      expect(oldLink.data).toMatchObject({
+        ok: false,
+        error: { code: "INVALID_JOIN_LINK" },
+      });
 
       const revokedAttempt = await staff.rpc("apply_score_transaction", {
         p_activity_id: null,
@@ -1161,12 +1193,23 @@ describe
           "score_buttons_changed",
           "admin_added",
           "admin_pin_reset",
-          "camp_access_code_rotated",
+          "staff_invitation_rotated",
           "public_result_limit_changed",
           "staff_group_name_changed",
         ]),
       );
 
+      // Give the scoring request enough budget so this race tests closure,
+      // rather than the exhausted budget from the earlier budget race.
+      const closureBudget = await admin.rpc("update_camp_budget", {
+        p_camp_id: configuredCampId,
+        p_reason: "Prepare closure race",
+        p_total_budget: 100_000,
+        p_warning_amount: null,
+        p_warning_percent: null,
+      });
+      expect(closureBudget.error).toBeNull();
+      expect(closureBudget.data).toMatchObject({ ok: true });
       const [closed, staleScore] = await Promise.all([
         admin.rpc("close_camp", {
           p_camp_id: configuredCampId,
@@ -1255,15 +1298,15 @@ describe
         error: { code: "CAMP_CLOSED" },
       });
 
-      const closedRotation = await admin.rpc("rotate_camp_access_code", {
+      const closedRotation = await admin.rpc("rotate_staff_invitation", {
         p_camp_id: configuredCampId,
         p_reason: "ห้ามหมุนลิงก์หลังปิด",
-        p_surface: "staff",
+        p_member_id: staffMember.id,
       });
       expect(closedRotation.error).toBeNull();
       expect(closedRotation.data).toMatchObject({
         ok: false,
-        error: { code: "CAMP_CLOSED" },
+        error: { code: "CAMP_NOT_ACTIVE" },
       });
 
       const closedUndo = await staff.rpc("quick_undo", {

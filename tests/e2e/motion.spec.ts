@@ -58,8 +58,8 @@ test("Score feedback distinguishes local and remote updates without blocking ano
   const staffB = await contextB.newPage();
 
   await Promise.all([
-    staffA.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
-    staffB.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
+    staffA.goto(`${E2E_ORIGIN}/join/TEST-30000000-0000-4000-8000-000000000001`),
+    staffB.goto(`${E2E_ORIGIN}/join/TEST-30000000-0000-4000-8000-000000000002`),
   ]);
   await staffA.getByRole("button", { name: "Staff A" }).click();
   await expect(

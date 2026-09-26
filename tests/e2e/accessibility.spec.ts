@@ -58,7 +58,7 @@ test("Home, Admin entry, and Staff controls have names and 44px touch targets", 
   ).toBeVisible();
   await expectAccessibleInteractiveElements(page);
 
-  await page.goto("/join/DEMO-STAFF-2026");
+  await page.goto("/join/TEST-30000000-0000-4000-8000-000000000003");
   await page.getByRole("button", { name: "Staff C" }).click();
   await expect(
     page.getByRole("heading", { name: "EQCAMP Demo" }),

@@ -74,7 +74,7 @@ function localCredentials() {
 }
 
 async function joinStaff(
-  joinCode: string,
+  _joinCode: string,
   memberId: string,
 ): Promise<SupabaseClient> {
   const { key, url } = localCredentials();
@@ -97,7 +97,7 @@ async function joinStaff(
 
   const { data, error } = await client.rpc("join_staff_camp", {
     p_member_id: memberId,
-    p_staff_join_code: joinCode,
+    p_staff_join_code: `TEST-${memberId}`,
   });
 
   expect(error).toBeNull();

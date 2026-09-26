@@ -10,7 +10,7 @@ test("offline disables Score actions and reconnect restores authoritative state"
   context,
   page,
 }) => {
-  await page.goto("/join/DEMO-STAFF-2026");
+  await page.goto("/join/TEST-30000000-0000-4000-8000-000000000003");
   await page.getByRole("button", { name: "Staff C" }).click();
   await expect(
     page.getByRole("heading", { name: "EQCAMP Demo" }),
@@ -42,8 +42,8 @@ test("Realtime failure falls back to authoritative two-second refreshes", async 
   const actorContext = await browser.newContext();
   const actorPage = await actorContext.newPage();
   await Promise.all([
-    page.goto("/join/DEMO-STAFF-2026"),
-    actorPage.goto(`${E2E_ORIGIN}/join/DEMO-STAFF-2026`),
+    page.goto("/join/TEST-30000000-0000-4000-8000-000000000002"),
+    actorPage.goto(`${E2E_ORIGIN}/join/TEST-30000000-0000-4000-8000-000000000001`),
   ]);
   await page.getByRole("button", { name: "Staff B" }).click();
   await actorPage.getByRole("button", { name: "Staff A" }).click();
