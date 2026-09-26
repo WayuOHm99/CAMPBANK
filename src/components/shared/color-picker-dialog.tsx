@@ -1,12 +1,39 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import { findNearColors } from "@/lib/colors/color-distance";
 
 export type ColorOption = {
   key: string;
   name_th: string;
   hex: string;
+  name_en?: string;
+  family?: string;
 };
+
+/** A color already used by another Group, for near-color warnings. */
+export type TakenColor = {
+  key: string;
+  hex: string;
+  label: string;
+};
+
+const COLOR_FAMILIES = [
+  ["red", "แดง"],
+  ["orange", "ส้ม"],
+  ["yellow", "เหลือง"],
+  ["green", "เขียว"],
+  ["cyan", "เขียวอมฟ้า"],
+  ["blue", "ฟ้า/น้ำเงิน"],
+  ["purple", "ม่วง"],
+  ["pink", "ชมพู"],
+  ["brown", "น้ำตาล"],
+  ["neutral", "ขาว/เทา/ดำ"],
+] as const;
+
+// Search appears only once the library outgrows a single glance.
+const SEARCH_THRESHOLD = 20;
 
 type ColorPickerDialogProps = {
   colors: ColorOption[];
@@ -14,6 +41,7 @@ type ColorPickerDialogProps = {
   groupLabel: string;
   id: string;
   onChange: (key: string) => void;
+  takenColors?: TakenColor[];
   value: string;
 };
 
@@ -23,6 +51,7 @@ export function ColorPickerDialog({
   groupLabel,
   id,
   onChange,
+  takenColors = [],
   value,
 }: ColorPickerDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -30,7 +59,27 @@ export function ColorPickerDialog({
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [announcement, setAnnouncement] = useState("");
   const [openState, setOpenState] = useState(false);
+  const [query, setQuery] = useState("");
+  const [family, setFamily] = useState("");
   const selected = colors.find((color) => color.key === value);
+  const searchable = colors.length > SEARCH_THRESHOLD;
+  const families = COLOR_FAMILIES.filter(([key]) =>
+    colors.some((color) => color.family === key),
+  );
+  const visibleColors = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase("th");
+    return colors.filter(
+      (color) =>
+        (!family || color.family === family) &&
+        (!needle ||
+          `${color.name_th} ${color.name_en ?? ""} ${color.key} ${color.hex}`
+            .toLocaleLowerCase("th")
+            .includes(needle)),
+    );
+  }, [colors, family, query]);
+  const nearLabel = (color: ColorOption) =>
+    findNearColors(color, takenColors)[0]?.label;
+  const selectedNear = selected ? nearLabel(selected) : undefined;
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -51,10 +100,12 @@ export function ColorPickerDialog({
     window.requestAnimationFrame(() => {
       const selectedIndex = Math.max(
         0,
-        colors.findIndex((color) => color.key === value),
+        visibleColors.findIndex((color) => color.key === value),
       );
-      const firstEnabled = colors.findIndex((color) => !disabledBy[color.key]);
-      const preferred = disabledBy[colors[selectedIndex]?.key]
+      const firstEnabled = visibleColors.findIndex(
+        (color) => !disabledBy[color.key],
+      );
+      const preferred = disabledBy[visibleColors[selectedIndex]?.key]
         ? firstEnabled
         : selectedIndex;
       optionRefs.current[preferred]?.focus();
@@ -63,12 +114,15 @@ export function ColorPickerDialog({
 
   function choose(color: ColorOption) {
     onChange(color.key);
-    setAnnouncement(`เลือกสี${color.name_th}ให้${groupLabel}แล้ว`);
+    const near = nearLabel(color);
+    setAnnouncement(
+      `เลือกสี${color.name_th}ให้${groupLabel}แล้ว${near ? ` สีนี้ใกล้กับ${near}` : ""}`,
+    );
     close();
   }
 
   function moveFocus(currentIndex: number, key: string) {
-    const enabled = colors
+    const enabled = visibleColors
       .map((color, index) => ({ color, index }))
       .filter(({ color }) => !disabledBy[color.key]);
     if (!enabled.length) return;
@@ -106,6 +160,11 @@ export function ColorPickerDialog({
         </span>
         <span aria-hidden="true">⌄</span>
       </button>
+      {selectedNear ? (
+        <span className="text-xs font-semibold text-[var(--eq-orange-dark)]">
+          สีนี้ใกล้กับ{selectedNear} อาจแยกด้วยตาได้ยาก
+        </span>
+      ) : null}
       <span aria-live="polite" className="sr-only">
         {announcement}
       </span>
@@ -140,13 +199,56 @@ export function ColorPickerDialog({
           </button>
         </div>
         <div className="eq-scroll max-h-[min(38rem,calc(100dvh-7rem))] overflow-y-auto overscroll-contain p-4 sm:p-5">
+          {searchable ? (
+            <div className="mb-3 grid gap-2">
+              <label className="sr-only" htmlFor={`${id}-search`}>
+                ค้นหาสี
+              </label>
+              <input
+                autoComplete="off"
+                className="min-h-12 rounded-xl border border-[var(--eq-border-strong)] bg-white px-3 text-base"
+                id={`${id}-search`}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="ค้นหาสี เช่น ฟ้า, pink, #FF"
+                type="search"
+                value={query}
+              />
+              <div
+                aria-label="หมวดสี"
+                className="flex gap-2 overflow-x-auto pb-1"
+                role="group"
+              >
+                {[["", "ทั้งหมด"] as const, ...families].map(([key, label]) => (
+                  <button
+                    aria-pressed={family === key}
+                    className={`min-h-11 shrink-0 rounded-full border px-3 text-sm font-semibold ${
+                      family === key
+                        ? "border-[var(--eq-brand-deep)] bg-[var(--eq-blue-soft)]"
+                        : "border-[var(--eq-border)] bg-white"
+                    }`}
+                    key={key || "all"}
+                    onClick={() => setFamily(key)}
+                    type="button"
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {visibleColors.length === 0 ? (
+            <p className="py-6 text-center text-sm text-[var(--eq-muted)]">
+              ไม่พบสีที่ตรงกับ “{query.trim()}”
+            </p>
+          ) : null}
           <div
             aria-label={`สีสำหรับ${groupLabel}`}
             className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4"
             role="radiogroup"
           >
-            {colors.map((color, index) => {
+            {visibleColors.map((color, index) => {
               const unavailable = disabledBy[color.key];
+              const near = unavailable ? undefined : nearLabel(color);
               const checked = color.key === value;
               return (
                 <button
@@ -192,9 +294,11 @@ export function ColorPickerDialog({
                   <span className="mt-0.5 block text-[0.68rem] font-bold text-[var(--eq-muted)]">
                     {unavailable
                       ? unavailable
-                      : checked
-                        ? "เลือกแล้ว"
-                        : "เลือกสีนี้"}
+                      : near
+                        ? `ใกล้กับ${near}`
+                        : checked
+                          ? "เลือกแล้ว"
+                          : "เลือกสีนี้"}
                   </span>
                 </button>
               );

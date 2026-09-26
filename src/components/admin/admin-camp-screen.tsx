@@ -12,6 +12,8 @@ import {
 } from "react";
 
 import { ColorPickerDialog } from "@/components/shared/color-picker-dialog";
+import { pickDistinctColors } from "@/lib/colors/color-distance";
+import { MAX_GROUPS_PER_CAMP } from "@/lib/groups/limits";
 import { MotionRankingItem } from "@/components/shared/motion";
 import {
   copyText,
@@ -54,6 +56,8 @@ type ColorPreset = {
   hex: string;
   text_color: string;
   sort_order: number;
+  name_en?: string;
+  family?: string;
 };
 
 type DraftGroup = {
@@ -89,7 +93,7 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
       client.rpc("get_admin_camp_snapshot", { p_camp_id: campId }),
       client
         .from("color_presets")
-        .select("key,name_th,hex,text_color,sort_order")
+        .select("*")
         .order("sort_order"),
     ]);
 
@@ -382,6 +386,7 @@ function DraftSetupWizard({
     );
   }, [campId, groups, staffNames, step]);
 
+  const maxGroups = Math.min(MAX_GROUPS_PER_CAMP, colors.length);
   const duplicateColor = useMemo(() => {
     const selectedColors = groups
       .map((group) => group.color_key)
@@ -400,8 +405,8 @@ function DraftSetupWizard({
   const readinessItems = [
     {
       actionLabel: "แก้ไขจำนวนกลุ่ม",
-      label: "จำนวนกลุ่มอยู่ระหว่าง 1–20 กลุ่ม",
-      ready: groups.length >= 1 && groups.length <= 20,
+      label: `จำนวนกลุ่มอยู่ระหว่าง 1–${maxGroups} กลุ่ม`,
+      ready: groups.length >= 1 && groups.length <= maxGroups,
       step: 1,
     },
     {
@@ -439,7 +444,7 @@ function DraftSetupWizard({
   const setupReady = readinessItems.every((item) => item.ready);
 
   function changeGroupCount(requestedCount: number) {
-    const maximum = Math.min(20, colors.length);
+    const maximum = maxGroups;
     const nextCount = Math.min(
       maximum,
       Math.max(0, Math.trunc(requestedCount)),
@@ -482,26 +487,29 @@ function DraftSetupWizard({
   }
 
   function fillUnusedColors() {
-    const assignedColors = new Set<string>();
-    setGroups((current) =>
-      current.map((group) => {
-        if (
-          group.color_key &&
+    setGroups((current) => {
+      const kept = new Set<string>();
+      const keepsColor = current.map((group) => {
+        const valid =
+          Boolean(group.color_key) &&
           colors.some((color) => color.key === group.color_key) &&
-          !assignedColors.has(group.color_key)
-        ) {
-          assignedColors.add(group.color_key);
-          return group;
-        }
-
-        const nextColor = colors.find(
-          (color) => !assignedColors.has(color.key),
-        );
-        if (!nextColor) return { ...group, color_key: "" };
-        assignedColors.add(nextColor.key);
-        return { ...group, color_key: nextColor.key };
-      }),
-    );
+          !kept.has(group.color_key);
+        if (valid) kept.add(group.color_key);
+        return valid;
+      });
+      // Pick the most distinct remaining colors, not simply the next in list.
+      const fresh = pickDistinctColors(
+        colors,
+        colors.filter((color) => kept.has(color.key)),
+        keepsColor.filter((keeps) => !keeps).length,
+      );
+      let nextFresh = 0;
+      return current.map((group, index) =>
+        keepsColor[index]
+          ? group
+          : { ...group, color_key: fresh[nextFresh++]?.key ?? "" },
+      );
+    });
     setError(undefined);
   }
 
@@ -521,7 +529,8 @@ function DraftSetupWizard({
   }
 
   function validate() {
-    if (groups.length < 1 || groups.length > 20) return "ต้องมี 1–20 กลุ่ม";
+    if (groups.length < 1 || groups.length > maxGroups)
+      return `ต้องมี 1–${maxGroups} กลุ่ม`;
     if (duplicateColor || groups.some((group) => !group.color_key)) {
       return "แต่ละกลุ่มต้องใช้สีไม่ซ้ำกัน";
     }
@@ -626,7 +635,7 @@ function DraftSetupWizard({
                   aria-describedby="group-count-status"
                   className="min-h-14 rounded-2xl border border-[var(--eq-border-strong)] bg-white px-3 text-center text-3xl font-bold tabular-nums"
                   inputMode="numeric"
-                  max={Math.min(20, colors.length)}
+                  max={maxGroups}
                   min={1}
                   onChange={(event) => {
                     const rawValue = event.target.value;
@@ -658,7 +667,7 @@ function DraftSetupWizard({
               </button>
               <button
                 className="min-h-12 rounded-xl eq-action-primary bg-[var(--eq-brand-deep)] px-3 font-semibold text-white disabled:opacity-40"
-                disabled={groups.length >= Math.min(20, colors.length)}
+                disabled={groups.length >= maxGroups}
                 onClick={() => changeGroupCount(groups.length + 1)}
                 type="button"
               >
@@ -667,7 +676,7 @@ function DraftSetupWizard({
             </div>
           </div>
           <p className="text-sm leading-6 text-[var(--eq-muted)]">
-            ขั้นตอนนี้กำหนดเฉพาะจำนวน 1–20 กลุ่ม สีและชื่อจะกำหนดในขั้นตอนถัดไป
+            ขั้นตอนนี้กำหนดเฉพาะจำนวน 1–{maxGroups} กลุ่ม สีและชื่อจะกำหนดในขั้นตอนถัดไป
           </p>
         </div>
       ) : null}
@@ -727,6 +736,20 @@ function DraftSetupWizard({
                   onChange={(colorKey) =>
                     updateGroup(index, { color_key: colorKey })
                   }
+                  takenColors={groups.flatMap((candidate, candidateIndex) => {
+                    const color = colors.find(
+                      (item) => item.key === candidate.color_key,
+                    );
+                    return candidateIndex !== index && color
+                      ? [
+                          {
+                            key: color.key,
+                            hex: color.hex,
+                            label: `กลุ่ม ${candidateIndex + 1}`,
+                          },
+                        ]
+                      : [];
+                  })}
                   value={group.color_key}
                 />
               </div>
@@ -2447,6 +2470,13 @@ function GroupIdentityRow({
           groupLabel={getGroupDisplayName(group.color_name, group.custom_name)}
           id={`active-group-color-${group.id}`}
           onChange={setColorKey}
+          takenColors={snapshot.groups
+            .filter((item) => item.id !== group.id)
+            .map((item) => ({
+              key: item.color_key,
+              hex: item.color_hex,
+              label: getGroupDisplayName(item.color_name, item.custom_name),
+            }))}
           value={colorKey}
         />
       </div>

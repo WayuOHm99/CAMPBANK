@@ -242,6 +242,13 @@ export function CampScreen({ campId }: CampScreenProps) {
     const query = search.trim().toLocaleLowerCase("th");
     if (!query) return snapshot.groups;
 
+    // A bare number jumps to that Group number, not to every number containing it.
+    if (/^\d+$/.test(query)) {
+      return snapshot.groups.filter(
+        (group) => group.sort_order === Number(query),
+      );
+    }
+
     return snapshot.groups.filter((group) =>
       `${group.color_name} ${getGroupDisplayName(group.color_name, group.custom_name)}`
         .toLocaleLowerCase("th")
@@ -838,7 +845,10 @@ export function CampScreen({ campId }: CampScreenProps) {
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="px-4 pt-4 sm:px-5 sm:pt-5">
                       <p className="text-xs font-semibold text-[var(--eq-muted)] sm:text-sm">
-                        {group.color_name}
+                        <span className="tabular-nums">
+                          กลุ่ม {group.sort_order}
+                        </span>{" "}
+                        · {group.color_name}
                       </p>
                       <div className="mt-0.5 flex min-w-0 items-center gap-2">
                         <h2 className="min-w-0 flex-1 break-words text-lg font-bold sm:text-2xl">

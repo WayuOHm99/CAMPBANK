@@ -291,7 +291,7 @@ describe
       });
     });
 
-    it("accepts 1–20 manually supplied Groups and allows activation before a Group Name is chosen", async () => {
+    it("accepts 1–30 manually supplied Groups and allows activation before a Group Name is chosen", async () => {
       const client = await anonymousClient();
       expect(await login(client, "6543")).toMatchObject({ ok: true });
 
@@ -326,7 +326,7 @@ describe
 
       const tooMany = await client.rpc("save_draft_setup", {
         p_camp_id: campId,
-        p_groups: Array.from({ length: 21 }, (_, index) => ({
+        p_groups: Array.from({ length: 31 }, (_, index) => ({
           color_key: "yellow",
           custom_name: "",
           sort_order: index + 1,
@@ -338,6 +338,24 @@ describe
         ok: false,
         error: { code: "INVALID_GROUP_COUNT" },
       });
+
+      const presets = await client
+        .from("color_presets")
+        .select("key")
+        .order("sort_order");
+      expect(presets.error).toBeNull();
+      expect(presets.data?.length).toBeGreaterThanOrEqual(30);
+      const thirty = await client.rpc("save_draft_setup", {
+        p_camp_id: campId,
+        p_groups: presets.data!.slice(0, 30).map((preset, index) => ({
+          color_key: preset.key,
+          custom_name: "",
+          sort_order: index + 1,
+        })),
+        p_staff_names: ["Flexible Staff"],
+      });
+      expect(thirty.error).toBeNull();
+      expect(thirty.data).toMatchObject({ ok: true, group_count: 30 });
 
       const configured = await client.rpc("save_draft_setup", {
         p_camp_id: campId,

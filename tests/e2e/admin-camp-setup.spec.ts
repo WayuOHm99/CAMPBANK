@@ -7,7 +7,8 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   browser,
   page,
 }) => {
-  test.setTimeout(60_000);
+  // This long flow exceeded 60s on Linux WebKit in CI (run 36255362442).
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await page.goto("/admin");
 
   await expect(
@@ -76,7 +77,7 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   const groupCountInput = page.getByLabel("กรอกจำนวนกลุ่ม");
   await expect(groupCountInput).toHaveAttribute("inputmode", "numeric");
   await expect(groupCountInput).toHaveAttribute("min", "1");
-  await expect(groupCountInput).toHaveAttribute("max", "20");
+  await expect(groupCountInput).toHaveAttribute("max", "30");
   await groupCountInput.fill("12");
   await expect(page.getByText("12 กลุ่ม", { exact: true })).toBeVisible();
   await groupCountInput.fill("8");
