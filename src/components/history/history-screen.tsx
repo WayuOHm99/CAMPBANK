@@ -387,7 +387,7 @@ export function HistoryScreen({ campId }: { campId: string }) {
               <div className="flex items-start gap-3">
                 <span
                   aria-hidden="true"
-                  className="mt-1 h-9 w-2 rounded-full"
+                  className="mt-1 h-9 w-2 rounded-full eq-swatch"
                   style={{ backgroundColor: item.group_color_hex_snapshot }}
                 />
                 <div className="min-w-0 flex-1">

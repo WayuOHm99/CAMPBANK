@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CopyShareActions } from "@/components/shared/copy-share-actions";
+import {
+  copyText,
+  CopyShareActions,
+} from "@/components/shared/copy-share-actions";
+import { LinkQrCode } from "@/components/shared/link-qr-code";
 import { ensureAnonymousSession } from "@/lib/supabase/client";
 import { isRpcFailure } from "@/types/domain";
 
@@ -22,6 +26,21 @@ export function StaffInvitations({
   const [selected, setSelected] = useState<string>();
   const [reason, setReason] = useState("");
   const [pending, setPending] = useState(false);
+
+  async function copyAllLinks() {
+    const lines = invitations.map(
+      (invite) =>
+        `${invite.display_name}: ${new URL(`/join/${invite.code}`, window.location.origin)}`,
+    );
+    try {
+      await copyText([`ลิงก์ Staff ค่าย ${campName}`, ...lines].join("\n"));
+      setError("");
+      setMessage("คัดลอกลิงก์ทุกคนแล้ว ส่งเป็นข้อความส่วนตัวให้แต่ละคน");
+    } catch {
+      setError("คัดลอกไม่สำเร็จ ใช้ปุ่มคัดลอกของแต่ละคนแทน");
+    }
+  }
+
   const refresh = useCallback(async () => {
     const client = await ensureAnonymousSession();
     const { data, error } = await client.rpc("get_staff_invitations", {
@@ -97,7 +116,17 @@ export function StaffInvitations({
       <p className="mt-2 text-sm text-[var(--eq-muted)]">
         ส่งให้เจ้าของชื่อเท่านั้น
         ผู้ที่มีลิงก์เข้าใช้งานในชื่อนั้นได้โดยไม่ต้องสมัครบัญชี
+        หน้างานให้ Staff สแกน QR code จากจอนี้ได้เลย
       </p>
+      {invitations.length > 1 ? (
+        <button
+          className="mt-3 min-h-11 w-full rounded-xl border border-[var(--eq-border-strong)] bg-[var(--eq-blue-soft)] px-4 text-sm font-bold text-[var(--eq-brand-deep)]"
+          onClick={() => void copyAllLinks()}
+          type="button"
+        >
+          คัดลอกลิงก์ทุกคน ({invitations.length} คน)
+        </button>
+      ) : null}
       <div className="mt-4 grid gap-4">
         {invitations.map((invite) => (
           <div
@@ -110,6 +139,17 @@ export function StaffInvitations({
               label={`ลิงก์ ${invite.display_name}`}
               path={`/join/${invite.code}`}
             />
+            <details className="eq-disclosure mt-2 rounded-xl bg-[var(--eq-canvas-soft)] px-3">
+              <summary className="min-h-11 cursor-pointer py-2.5 text-sm font-bold text-[var(--eq-brand-deep)]">
+                แสดง QR code ของ {invite.display_name}
+              </summary>
+              <div className="pb-3">
+                <LinkQrCode
+                  label={invite.display_name}
+                  path={`/join/${invite.code}`}
+                />
+              </div>
+            </details>
             <button
               type="button"
               disabled={pending}

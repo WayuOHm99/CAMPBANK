@@ -12,7 +12,7 @@ Run `bash scripts/pilot-rehearsal.sh` from Git Bash, WSL, macOS or Linux to reco
 
 Record each session separately, including model, OS/browser version, Staff identity and evidence reference. If sessions share a physical device, identify that explicitly.
 
-1. Open `/join/DEMO-STAFF-2026`, select Staff, and verify the Camp, activity/round, Budget and connection status are readable.
+1. Open a Staff member's individual invitation link from the Admin "ลิงก์" section (local Demo Staff A: `/join/TEST-30000000-0000-4000-8000-000000000001`), and verify the Camp, activity/round, Budget and connection status are readable.
 2. Award +500 to a Group. Confirm exactly one History entry, Group +500 and Budget -500. A second Staff session must receive the authoritative total and a distinct update cue.
 3. Submit a second valid action while feedback is visible. Confirm each action appears exactly once. Undo the latest action within 15 seconds and confirm a linked opposite entry with the original retained. After 15 seconds, confirm Undo is unavailable/rejected.
 4. Switch Group layouts, scroll the rail, rename a Group and inspect History. Only the selected editor opens; the page must not scroll horizontally outside the rail.

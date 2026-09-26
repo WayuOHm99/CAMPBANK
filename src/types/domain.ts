@@ -127,11 +127,13 @@ export type AdminCampSummary = {
   remaining_budget: number;
   leaderboard_visible: boolean;
   updated_at: string;
+  archived_at?: string | null;
 };
 
 export type AdminCampSnapshot = {
   ok: true;
   camp: Omit<AdminCampSummary, "updated_at"> & {
+    archived_at: string | null;
     warning_amount: number | null;
     warning_percent: number | null;
     staff_join_code: string | null;

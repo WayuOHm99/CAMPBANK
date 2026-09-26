@@ -556,7 +556,7 @@ export function CampScreen({ campId }: CampScreenProps) {
     return (
       <ScreenState
         backHref={joinCode ? `/join/${joinCode}` : "/"}
-        backLabel={joinCode ? "กลับหน้าเลือก Staff" : "กลับหน้าแรก"}
+        backLabel={joinCode ? "กลับหน้าลิงก์เชิญ" : "กลับหน้าแรก"}
         title="เปิดข้อมูลค่ายไม่ได้"
         message={error}
         tone="danger"
@@ -568,7 +568,7 @@ export function CampScreen({ campId }: CampScreenProps) {
     return (
       <ScreenState
         backHref={joinCode ? `/join/${joinCode}` : "/"}
-        backLabel={joinCode ? "กลับหน้าเลือก Staff" : "กลับหน้าแรก"}
+        backLabel={joinCode ? "กลับหน้าลิงก์เชิญ" : "กลับหน้าแรก"}
         busy
         title="กำลังโหลดคะแนน"
         message="ดึงข้อมูลล่าสุดจากค่าย"
@@ -637,47 +637,36 @@ export function CampScreen({ campId }: CampScreenProps) {
       </header>
 
       <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
-        <section
-          aria-label="ทางลัดและงบค่าย"
-          className="mb-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-stretch"
-        >
+        <section aria-label="ทางลัดและงบค่าย" className="mb-3">
           <div
-            className={`rounded-2xl border bg-white px-4 py-3 ${
+            className={`flex items-center justify-between gap-3 rounded-2xl border bg-white px-4 py-2.5 ${
               snapshot.camp.warning_active
                 ? "border-[var(--eq-orange-dark)]"
                 : "border-[var(--eq-border)]"
             }`}
           >
-            <p
-              className={`text-xs font-semibold ${
-                snapshot.camp.warning_active
-                  ? "text-[var(--eq-orange-dark)]"
-                  : "text-[var(--eq-muted)]"
-              }`}
-            >
-              งบคงเหลือ
-            </p>
-            <p className="mt-0.5 text-2xl font-bold">
-              {formatScore(snapshot.camp.remaining_budget)} /{" "}
-              {formatScore(snapshot.camp.total_budget)}
-            </p>
-          </div>
-          <nav className="flex flex-wrap items-center gap-x-5 rounded-2xl border border-[var(--eq-border)] bg-white px-3">
+            <div className="min-w-0">
+              <p
+                className={`text-xs font-semibold ${
+                  snapshot.camp.warning_active
+                    ? "text-[var(--eq-orange-dark)]"
+                    : "text-[var(--eq-muted)]"
+                }`}
+              >
+                งบคงเหลือ
+              </p>
+              <p className="text-xl font-bold tabular-nums">
+                {formatScore(snapshot.camp.remaining_budget)} /{" "}
+                {formatScore(snapshot.camp.total_budget)}
+              </p>
+            </div>
             <Link
-              className="inline-flex min-h-11 items-center text-sm font-bold text-[var(--eq-brand-deep)]"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-xl px-2 text-sm font-bold text-[var(--eq-brand-deep)]"
               href={`/camp/${campId}/history`}
             >
               ดูประวัติ →
             </Link>
-            {joinCode ? (
-              <Link
-                className="inline-flex min-h-11 items-center text-sm font-bold text-[var(--eq-brand-deep)]"
-                href={`/join/${joinCode}`}
-              >
-                ← กลับหน้าเลือก Staff
-              </Link>
-            ) : null}
-          </nav>
+          </div>
         </section>
 
         {snapshot.camp.status === "closed" ? (
@@ -718,15 +707,12 @@ export function CampScreen({ campId }: CampScreenProps) {
 
         <div className="grid gap-4 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
           <div className="grid gap-4">
-            <section className="eq-card grid grid-cols-2 gap-3 p-4">
-              <label
-                className="col-span-2 text-sm font-semibold"
-                htmlFor="activity"
-              >
+            <section className="eq-card grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-2 px-4 py-3">
+              <label className="text-sm font-semibold" htmlFor="activity">
                 กิจกรรม
               </label>
               <select
-                className="col-span-2 min-h-12 rounded-xl border border-[var(--eq-border)] bg-white px-3 font-semibold"
+                className="min-h-11 rounded-xl border border-[var(--eq-border)] bg-white px-3 font-semibold"
                 id="activity"
                 onChange={(event) => saveActivity(event.target.value)}
                 value={activityId}
@@ -741,14 +727,11 @@ export function CampScreen({ campId }: CampScreenProps) {
 
               {selectedActivity?.rounds.length ? (
                 <>
-                  <label
-                    className="col-span-2 text-sm font-semibold"
-                    htmlFor="round"
-                  >
+                  <label className="text-sm font-semibold" htmlFor="round">
                     รอบ
                   </label>
                   <select
-                    className="col-span-2 min-h-12 rounded-xl border border-[var(--eq-border)] bg-white px-3 font-semibold"
+                    className="min-h-11 rounded-xl border border-[var(--eq-border)] bg-white px-3 font-semibold"
                     id="round"
                     onChange={(event) =>
                       saveActivity(activityId, event.target.value)
@@ -766,47 +749,49 @@ export function CampScreen({ campId }: CampScreenProps) {
               ) : null}
             </section>
 
-            <label className="block" htmlFor="group-search">
-              <span className="sr-only">ค้นหากลุ่ม</span>
-              <input
-                className="min-h-12 w-full rounded-2xl border border-[var(--eq-border)] bg-white px-4 font-semibold placeholder:text-[var(--eq-muted)]"
-                id="group-search"
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="ค้นหาสีหรือชื่อกลุ่ม"
-                type="search"
-                value={search}
-              />
-            </label>
+            <div className="flex flex-wrap items-stretch gap-2">
+              <label className="block min-w-32 flex-1" htmlFor="group-search">
+                <span className="sr-only">ค้นหากลุ่ม</span>
+                <input
+                  className="min-h-12 w-full rounded-2xl border border-[var(--eq-border)] bg-white px-4 font-semibold placeholder:text-[var(--eq-muted)]"
+                  id="group-search"
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="ค้นหาเลข สี หรือชื่อกลุ่ม"
+                  type="search"
+                  value={search}
+                />
+              </label>
 
-            <fieldset
-              aria-label="รูปแบบการแสดงกลุ่ม"
-              className="rounded-2xl border border-[var(--eq-border)] bg-white p-2"
-            >
-              <legend className="sr-only">รูปแบบการแสดงกลุ่ม</legend>
-              <div className="grid grid-cols-4 gap-2">
-                {GROUP_LAYOUTS.map((layout) => {
-                  const selected = groupLayout === layout.id;
+              <fieldset
+                aria-label="รูปแบบการแสดงกลุ่ม"
+                className="shrink-0 rounded-2xl border border-[var(--eq-border)] bg-white p-1"
+              >
+                <legend className="sr-only">รูปแบบการแสดงกลุ่ม</legend>
+                <div className="grid grid-cols-4 gap-1">
+                  {GROUP_LAYOUTS.map((layout) => {
+                    const selected = groupLayout === layout.id;
 
-                  return (
-                    <button
-                      aria-label={layout.label}
-                      aria-pressed={selected}
-                      className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl transition active:scale-[0.98] ${
-                        selected
-                          ? "eq-action-primary bg-[var(--eq-brand-deep)] text-white "
-                          : "bg-[var(--eq-canvas-soft)] text-[var(--eq-muted)]"
-                      }`}
-                      key={layout.id}
-                      onClick={() => setGroupLayout(layout.id)}
-                      title={layout.label}
-                      type="button"
-                    >
-                      <GroupLayoutIcon layout={layout.id} />
-                    </button>
-                  );
-                })}
-              </div>
-            </fieldset>
+                    return (
+                      <button
+                        aria-label={layout.label}
+                        aria-pressed={selected}
+                        className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl transition active:scale-[0.98] ${
+                          selected
+                            ? "eq-action-primary bg-[var(--eq-brand-deep)] text-white "
+                            : "bg-[var(--eq-canvas-soft)] text-[var(--eq-muted)]"
+                        }`}
+                        key={layout.id}
+                        onClick={() => setGroupLayout(layout.id)}
+                        title={layout.label}
+                        type="button"
+                      >
+                        <GroupLayoutIcon layout={layout.id} />
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+            </div>
           </div>
 
           <div
@@ -839,7 +824,7 @@ export function CampScreen({ campId }: CampScreenProps) {
                   ) : null}
                   <span
                     aria-hidden="true"
-                    className="w-1 shrink-0 self-stretch"
+                    className="w-1 shrink-0 self-stretch eq-swatch"
                     style={{ backgroundColor: group.color_hex }}
                   />
                   <div className="flex min-w-0 flex-1 flex-col">

@@ -39,6 +39,11 @@ export function AdminPortal() {
   const [options, setOptions] = useState<LoginOption[]>([]);
   const [selectedAdminId, setSelectedAdminId] = useState("");
   const [camps, setCamps] = useState<AdminCampSummary[]>([]);
+  const [showArchived, setShowArchived] = useState(false);
+  const archivedCount = camps.filter((camp) => camp.archived_at).length;
+  const visibleCamps = camps.filter(
+    (camp) => showArchived || !camp.archived_at,
+  );
   const [pin, setPin] = useState("");
   const [currentPin, setCurrentPin] = useState("");
   const [newPin, setNewPin] = useState("");
@@ -371,20 +376,29 @@ export function AdminPortal() {
 
         <AdminError message={error} />
         <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {camps.map((camp) => (
+          {visibleCamps.map((camp) => (
             <Link
               className="rounded-2xl border border-[var(--eq-border)] bg-white p-5 shadow-sm transition active:scale-[0.99]"
               href={`/admin/camps/${camp.id}`}
               key={camp.id}
             >
               <div className="flex items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
                     {camp.code}
                   </p>
-                  <h2 className="mt-1 text-xl font-bold">{camp.name}</h2>
+                  <h2 className="mt-1 break-words text-xl font-bold">
+                    {camp.name}
+                  </h2>
                 </div>
-                <StatusBadge axis="camp" status={camp.status} />
+                <div className="flex shrink-0 flex-col items-end gap-1">
+                  <StatusBadge axis="camp" status={camp.status} />
+                  {camp.archived_at ? (
+                    <span className="rounded-lg bg-[var(--eq-canvas-soft)] px-2 py-0.5 text-xs font-semibold text-[var(--eq-muted)]">
+                      เก็บเข้าคลังแล้ว
+                    </span>
+                  ) : null}
+                </div>
               </div>
               <p className="mt-3 text-sm text-[var(--eq-muted)]">
                 {formatCampDate(camp.camp_date)}
@@ -400,6 +414,19 @@ export function AdminPortal() {
             </Link>
           ))}
         </div>
+
+        {archivedCount > 0 ? (
+          <button
+            aria-pressed={showArchived}
+            className="mt-4 min-h-11 rounded-xl border border-[var(--eq-border)] bg-white px-4 text-sm font-semibold"
+            onClick={() => setShowArchived((current) => !current)}
+            type="button"
+          >
+            {showArchived
+              ? "ซ่อนค่ายที่เก็บเข้าคลัง"
+              : `แสดงค่ายที่เก็บเข้าคลัง (${archivedCount})`}
+          </button>
+        ) : null}
 
         {camps.length === 0 ? (
           <section className="mt-5 rounded-2xl border border-dashed border-[var(--eq-border)] p-8 text-center text-[var(--eq-muted)]">
@@ -557,7 +584,12 @@ function CreateCampWizard({
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
-  const [campDate, setCampDate] = useState("");
+  // Default to today in Bangkok time so most Admins only confirm the date.
+  const [campDate, setCampDate] = useState(() =>
+    new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Bangkok" }).format(
+      new Date(),
+    ),
+  );
   const [budget, setBudget] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>();

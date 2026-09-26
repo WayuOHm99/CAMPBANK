@@ -50,9 +50,10 @@ export function colorDistance(first: string, second: string): number {
 }
 
 /**
- * Chooses `count` colors from `available`, each time taking the color whose
- * nearest already-assigned color is farthest away. Ties keep list order, so
- * the result is deterministic for a given preset order.
+ * Chooses `count` colors from `available`. Colors are taken in list order
+ * (the familiar presets come first) while skipping any color closer than
+ * `NEAR_COLOR_DISTANCE` to one already chosen. Once no such color remains,
+ * the one farthest from every chosen color is taken instead.
  */
 export function pickDistinctColors<T extends DistanceColor>(
   available: readonly T[],
@@ -62,24 +63,24 @@ export function pickDistinctColors<T extends DistanceColor>(
   const taken = new Set(assigned.map((color) => color.key));
   const chosenHexes = assigned.map((color) => color.hex);
   const picked: T[] = [];
+  const nearestChosen = (hex: string) =>
+    chosenHexes.length
+      ? Math.min(...chosenHexes.map((chosen) => colorDistance(chosen, hex)))
+      : Number.POSITIVE_INFINITY;
 
   while (picked.length < count) {
-    let best: T | undefined;
-    let bestDistance = -1;
-    for (const candidate of available) {
-      if (taken.has(candidate.key)) continue;
-      const nearest = chosenHexes.length
-        ? Math.min(...chosenHexes.map((hex) => colorDistance(hex, candidate.hex)))
-        : Number.POSITIVE_INFINITY;
-      if (nearest > bestDistance) {
-        best = candidate;
-        bestDistance = nearest;
-      }
-    }
-    if (!best) break;
-    picked.push(best);
-    taken.add(best.key);
-    chosenHexes.push(best.hex);
+    const candidates = available.filter((color) => !taken.has(color.key));
+    if (!candidates.length) break;
+    const next =
+      candidates.find(
+        (color) => nearestChosen(color.hex) >= NEAR_COLOR_DISTANCE,
+      ) ??
+      candidates.reduce((best, color) =>
+        nearestChosen(color.hex) > nearestChosen(best.hex) ? color : best,
+      );
+    picked.push(next);
+    taken.add(next.key);
+    chosenHexes.push(next.hex);
   }
 
   return picked;

@@ -21,9 +21,7 @@ test("Staff joins the Demo Camp and awards +500", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "EQCAMP Demo" }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "กลับหน้าเลือก Staff" }),
-  ).toHaveAttribute("href", "/join/TEST-30000000-0000-4000-8000-000000000001");
+  await expect(page.getByRole("link", { name: "ดูประวัติ →" })).toBeVisible();
 
   const activity = page.getByLabel("กิจกรรม");
   await activity.selectOption({ label: "เต้น" });

@@ -158,9 +158,9 @@ export default function HomePage() {
             {process.env.NODE_ENV === "development" ? (
               <Link
                 className="flex min-h-14 items-center justify-between gap-3 rounded-xl border border-[var(--eq-border-strong)] bg-white px-5 py-4 font-semibold text-[var(--eq-brand-deep)] hover:bg-[var(--eq-blue-soft)]"
-                href="/join/DEMO-STAFF-2026"
+                href="/join/TEST-30000000-0000-4000-8000-000000000001"
               >
-                <span>เปิด EQCAMP Demo</span>
+                <span>เปิด EQCAMP Demo (Staff A)</span>
                 <span aria-hidden="true">→</span>
               </Link>
             ) : null}

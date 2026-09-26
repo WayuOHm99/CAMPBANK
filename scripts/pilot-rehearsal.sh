@@ -215,7 +215,7 @@ capture PILOT_REVISION "Record the tested git commit from git rev-parse HEAD:"
 capture PILOT_DATE "Record the local date and tester name or initials:"
 
 stage "Five real iPhone/Safari sessions"
-open_url "$PILOT_BASE_URL/join/DEMO-STAFF-2026"
+open_url "$PILOT_BASE_URL/join/TEST-30000000-0000-4000-8000-000000000001"
 say "Run the Safari checklist in docs/pilot-rehearsal.md using at least five actual sessions."
 step "Record device model, OS/Safari version, session identity, observed results and evidence location."
 step "Cover scoring, second action, Undo, History, Admin, live updates, offline/reconnect and Close."

@@ -81,7 +81,7 @@ export function StatusBadge(props: StatusBadgeProps) {
   return (
     <span
       aria-label={`${prefix}: ${label}`}
-      className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-[var(--eq-border)] bg-white px-2.5 py-1 text-xs font-semibold text-[var(--eq-ink)]"
+      className="inline-flex min-h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-[var(--eq-border)] bg-white px-2.5 py-1 text-xs font-semibold text-[var(--eq-ink)]"
     >
       <StatusIcon status={props.status} />
       <span>{label}</span>

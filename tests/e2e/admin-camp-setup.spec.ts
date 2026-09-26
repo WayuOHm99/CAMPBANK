@@ -186,7 +186,7 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   const adminShortcuts = page.getByRole("navigation", {
     name: "ทางลัดจัดการค่าย",
   });
-  await expect(adminShortcuts.getByRole("link")).toHaveCount(7);
+  await expect(adminShortcuts.getByRole("link")).toHaveCount(8);
   await expect(
     adminShortcuts.getByRole("link", { name: "กลุ่มและคน" }),
   ).toHaveAttribute("href", "#camp-groups-people");
@@ -198,6 +198,10 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
     ),
   ).toBe(true);
   const adminRanking = page.getByRole("region", { name: "อันดับทั้งหมด" });
+  await expect(adminRanking.getByRole("listitem")).toHaveCount(5);
+  await adminRanking
+    .getByRole("button", { name: "ดูอันดับทั้งหมด (8 กลุ่ม)" })
+    .click();
   await expect(adminRanking.getByRole("listitem")).toHaveCount(8);
   await expect(adminRanking).toContainText(
     "หากคะแนนเท่ากัน กลุ่มที่ได้คะแนนระดับนั้นก่อนจะอยู่สูงกว่า",
@@ -353,8 +357,8 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
     staffPage.getByRole("heading", { name: "EQCAMP E2E" }),
   ).toBeVisible();
   await expect(
-    staffPage.getByRole("link", { name: "กลับหน้าเลือก Staff" }),
-  ).toHaveAttribute("href", staffPath!);
+    staffPage.getByRole("link", { name: "ดูประวัติ →" }),
+  ).toBeVisible();
   const yellowGroup = staffPage.getByRole("listitem", {
     name: "เหลือง — Banana",
   });

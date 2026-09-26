@@ -166,7 +166,7 @@ function LiveLeaderboard({ campId }: { campId: string }) {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="absolute right-5 top-5 h-12 w-3 rounded-full"
+                  className="absolute right-5 top-5 h-12 w-3 rounded-full eq-swatch"
                   style={{ backgroundColor: group.color_hex }}
                 />
                 <p className="mt-5 text-sm font-semibold text-[var(--eq-muted)]">
@@ -195,7 +195,7 @@ function LiveLeaderboard({ campId }: { campId: string }) {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="h-7 w-2 rounded-full"
+                  className="h-7 w-2 rounded-full eq-swatch"
                   style={{ backgroundColor: group.color_hex }}
                 />
                 <span className="min-w-0 flex-1 font-semibold">

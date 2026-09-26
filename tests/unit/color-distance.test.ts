@@ -42,11 +42,14 @@ describe("colorDistance", () => {
 describe("pickDistinctColors", () => {
   const presets = [yellow, green, lime, blue, red, orange, black];
 
-  it("starts from list order and then maximizes the nearest distance", () => {
-    const picked = pickDistinctColors(presets, [], 3).map((color) => color.key);
-    expect(picked[0]).toBe("yellow");
-    expect(picked).not.toContain("lime");
-    expect(new Set(picked).size).toBe(3);
+  it("keeps familiar list order but skips colors near an earlier pick", () => {
+    const picked = pickDistinctColors(presets, [], 6).map((color) => color.key);
+    expect(picked).toEqual(["yellow", "green", "blue", "red", "orange", "black"]);
+  });
+
+  it("falls back to the most distant color once only near colors remain", () => {
+    expect(pickDistinctColors([lime, blue], [green], 1)).toEqual([blue]);
+    expect(pickDistinctColors([lime], [green], 1)).toEqual([lime]);
   });
 
   it("avoids colors near ones that are already assigned", () => {

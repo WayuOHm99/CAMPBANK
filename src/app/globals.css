@@ -334,6 +334,11 @@ button.eq-score-action-subtract:not(:disabled):active {
   animation: eq-backdrop-enter var(--eq-motion-normal) ease-out both;
 }
 
+/* Keeps white and pale Group colors visible on white surfaces. */
+.eq-swatch {
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 18%);
+}
+
 .eq-disclosure {
   align-self: start;
   min-width: 0;

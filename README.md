@@ -47,7 +47,7 @@ npm run dev
 
 - เครื่องนี้: `http://localhost:3000`
 - มือถือหรือแท็บเล็ตใน Wi-Fi เดียวกัน: ใช้ Network URL ที่ Next.js แสดง
-- Demo Staff: `http://localhost:3000/join/DEMO-STAFF-2026`
+- Demo Staff A: `http://localhost:3000/join/TEST-30000000-0000-4000-8000-000000000001` (Staff แต่ละคนมีลิงก์ของตัวเอง ดูได้ในหน้า Admin ส่วน "ลิงก์")
 - Admin: `http://localhost:3000/admin`
 
 หน้าเว็บปรับตามมือถือ, iPhone, Android, iPad, แท็บเล็ต และคอมพิวเตอร์บน browser สมัยใหม่ ถ้าเปลี่ยน Wi-Fi หรือสลับมาใช้ Hotspot ให้หยุดแล้วรัน `npm run dev` ใหม่ จากนั้นใช้ Network URL ใหม่ที่แสดง เพราะ IP ของเครื่องอาจเปลี่ยนได้

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CampManagement } from "@/components/admin/camp-management";
 import { StaffInvitations } from "@/components/admin/staff-invitations";
 import {
   startTransition,
@@ -29,7 +30,10 @@ import { ScreenState } from "@/components/shared/screen-state";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { downloadCsv } from "@/lib/csv/create-csv-download";
 import { createClientUuid } from "@/lib/ids/create-client-uuid";
-import { getGroupDisplayName } from "@/lib/groups/get-group-display-name";
+import {
+  getGroupDisplayName,
+  getGroupLabel,
+} from "@/lib/groups/get-group-display-name";
 import { createRankingShareText } from "@/lib/leaderboard/create-ranking-share-text";
 import { formatScore } from "@/lib/score/format-score";
 import {
@@ -83,7 +87,18 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
   const [snapshot, setSnapshot] = useState<AdminCampSnapshot>();
   const [colors, setColors] = useState<ColorPreset[]>([]);
   const [error, setError] = useState<string>();
+  const [justActivated, setJustActivated] = useState(false);
   const latestRefreshId = useRef(0);
+  const previousStatus = useRef<string>(undefined);
+  const campStatus = snapshot?.camp.status;
+  useEffect(() => {
+    // Activation swaps the wizard for the dashboard; greet the Admin at the top.
+    if (previousStatus.current === "draft" && campStatus === "active") {
+      setJustActivated(true);
+      window.scrollTo({ top: 0 });
+    }
+    previousStatus.current = campStatus;
+  }, [campStatus]);
 
   const refresh = useCallback(async () => {
     const refreshId = latestRefreshId.current + 1;
@@ -184,6 +199,18 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
           </p>
         ) : null}
 
+        {justActivated ? (
+          <p
+            className="mb-4 rounded-2xl border border-[var(--eq-green-dark)] bg-white px-4 py-3 font-bold"
+            role="status"
+          >
+            เปิด Camp แล้ว ส่งลิงก์ให้ Staff แต่ละคนได้ที่{" "}
+            <a className="text-[var(--eq-brand-deep)] underline" href="#camp-links">
+              ส่วนลิงก์
+            </a>
+          </p>
+        ) : null}
+
         {snapshot.camp.status !== "closed" ? (
           <CampDetailsSettings
             key={`${snapshot.camp.name}:${snapshot.camp.location_name}:${snapshot.camp.camp_date}`}
@@ -206,6 +233,8 @@ export function AdminCampScreen({ campId }: AdminCampScreenProps) {
             snapshot={snapshot}
           />
         )}
+
+        <CampManagement onRefresh={refresh} snapshot={snapshot} />
       </div>
     </main>
   );
@@ -373,6 +402,14 @@ function DraftSetupWizard({
 }) {
   const [initial] = useState(() => readSavedDraft(campId, snapshot));
   const [step, setStep] = useState(initial.step);
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const shownStep = useRef(initial.step);
+  useEffect(() => {
+    // A long step leaves the Admin at the page bottom; start each step at its title.
+    if (shownStep.current === step) return;
+    shownStep.current = step;
+    stepHeadingRef.current?.scrollIntoView({ block: "start" });
+  }, [step]);
   const [groups, setGroups] = useState(initial.groups);
   const [staffNames, setStaffNames] = useState(initial.staffNames);
   const [pending, setPending] = useState(false);
@@ -608,7 +645,9 @@ function DraftSetupWizard({
           <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
             ตั้งค่า Camp
           </p>
-          <h2 className="mt-1 text-2xl font-bold">ขั้นตอน {step} จาก 4</h2>
+          <h2 className="mt-1 scroll-mt-4 text-2xl font-bold" ref={stepHeadingRef}>
+            ขั้นตอน {step} จาก 4
+          </h2>
           <p className="mt-1 text-sm font-bold text-[var(--eq-muted)]">
             {DRAFT_STEP_TITLES[step - 1]}
           </p>
@@ -709,14 +748,14 @@ function DraftSetupWizard({
           </div>
           {groups.map((group, index) => (
             <fieldset
-              className="rounded-2xl bg-[var(--eq-canvas-soft)] p-4"
+              className="rounded-2xl bg-[var(--eq-canvas-soft)] px-3 pb-3 pt-1"
               key={index}
             >
               <legend className="px-1 text-sm font-bold">
                 กลุ่ม {index + 1}
               </legend>
-              <div className="mt-2 grid gap-1 text-xs font-bold">
-                <span>สี</span>
+              <div className="mt-1 grid gap-1 text-xs font-bold">
+                <span className="sr-only">สี</span>
                 <ColorPickerDialog
                   colors={colors}
                   disabledBy={Object.fromEntries(
@@ -754,18 +793,18 @@ function DraftSetupWizard({
                 />
               </div>
               <label
-                className="mt-3 grid gap-1 text-xs font-bold"
+                className="mt-2 grid gap-1 text-xs font-bold"
                 htmlFor={`group-name-${index}`}
               >
-                ชื่อกลุ่ม (ไม่บังคับ)
+                <span className="sr-only">ชื่อกลุ่ม (ไม่บังคับ)</span>
                 <input
-                  className="min-h-12 rounded-xl border border-[var(--eq-border)] bg-white px-3 text-base font-bold"
+                  className="min-h-11 rounded-xl border border-[var(--eq-border)] bg-white px-3 text-base font-bold"
                   id={`group-name-${index}`}
                   maxLength={80}
                   onChange={(event) =>
                     updateGroup(index, { custom_name: event.target.value })
                   }
-                  placeholder="เว้นไว้ก่อนได้ เช่น Banana"
+                  placeholder="ชื่อกลุ่ม (ไม่บังคับ) เช่น Banana"
                   value={group.custom_name}
                 />
               </label>
@@ -890,11 +929,8 @@ function DraftSetupWizard({
                     className="rounded-full bg-white px-3 py-2 text-sm font-bold"
                     key={group.sort_order}
                   >
-                    {color?.name_th} —{" "}
-                    {getGroupDisplayName(
-                      color?.name_th ?? "ไม่ระบุ",
-                      group.custom_name,
-                    )}
+                    {group.sort_order}.{" "}
+                    {getGroupLabel(color?.name_th ?? "ไม่ระบุ", group.custom_name)}
                   </span>
                 );
               })}
@@ -933,7 +969,7 @@ function DraftSetupWizard({
         </p>
       ) : null}
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      <div className="sticky bottom-0 z-10 mt-6 grid grid-cols-2 gap-3 border-t border-[var(--eq-border)] bg-white/95 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur">
         {step === 1 ? (
           <Link
             className="grid min-h-12 place-items-center rounded-xl border border-[var(--eq-border)] bg-white px-4 font-semibold"
@@ -1004,6 +1040,8 @@ function ActiveCampDashboard({
   const ranking = rankGroups(snapshot.groups);
   const [dashboardNotice, setDashboardNotice] = useState<string>();
   const [rankingNotice, setRankingNotice] = useState<string>();
+  const [showFullRanking, setShowFullRanking] = useState(false);
+  const RANKING_PREVIEW = 5;
   const rankingText = createRankingShareText({
     campName: snapshot.camp.name,
     closed: snapshot.camp.status === "closed",
@@ -1030,6 +1068,7 @@ function ActiveCampDashboard({
     ...(snapshot.camp.status === "active"
       ? [{ href: "#camp-close", label: "ปิดค่าย" }]
       : []),
+    { href: "#camp-management", label: "จัดการค่าย" },
   ];
 
   return (
@@ -1147,7 +1186,10 @@ function ActiveCampDashboard({
           />
         </details>
         <div className="mt-4 grid gap-2" role="list">
-          {ranking.map((group, index) => (
+          {(showFullRanking
+            ? ranking
+            : ranking.slice(0, RANKING_PREVIEW)
+          ).map((group, index) => (
             <MotionRankingItem id={group.id} key={group.id}>
               <div
                 aria-label={`อันดับ ${index + 1} ${getGroupDisplayName(group.color_name, group.custom_name)}`}
@@ -1162,12 +1204,11 @@ function ActiveCampDashboard({
                 <span className="w-7 text-xl font-bold">{index + 1}</span>
                 <span
                   aria-hidden="true"
-                  className="h-8 w-2 rounded-full"
+                  className="h-8 w-2 rounded-full eq-swatch"
                   style={{ backgroundColor: group.color_hex }}
                 />
                 <span className="min-w-0 flex-1 font-bold">
-                  {group.color_name} —{" "}
-                  {getGroupDisplayName(group.color_name, group.custom_name)}
+                  {getGroupLabel(group.color_name, group.custom_name)}
                 </span>
                 <span className="font-bold tabular-nums">
                   {formatScore(group.current_score)}
@@ -1176,6 +1217,18 @@ function ActiveCampDashboard({
             </MotionRankingItem>
           ))}
         </div>
+        {ranking.length > RANKING_PREVIEW ? (
+          <button
+            aria-expanded={showFullRanking}
+            className="mt-3 min-h-11 w-full rounded-xl border border-[var(--eq-border-strong)] bg-white px-4 text-sm font-bold text-[var(--eq-brand-deep)]"
+            onClick={() => setShowFullRanking((current) => !current)}
+            type="button"
+          >
+            {showFullRanking
+              ? "แสดงเฉพาะ 5 อันดับแรก"
+              : `ดูอันดับทั้งหมด (${ranking.length} กลุ่ม)`}
+          </button>
+        ) : null}
       </section>
 
       <div className="scroll-mt-24 grid gap-5" id="camp-links">
@@ -1272,7 +1325,7 @@ function ActiveCampDashboard({
           <article className="rounded-2xl bg-white p-4" key={group.id}>
             <span
               aria-hidden="true"
-              className="block h-2 w-10 rounded-full"
+              className="block h-2 w-10 rounded-full eq-swatch"
               style={{ backgroundColor: group.color_hex }}
             />
             <p className="mt-3 text-xs font-bold text-[var(--eq-muted)]">

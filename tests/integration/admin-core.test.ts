@@ -1339,6 +1339,118 @@ describe
       });
     });
 
+    it("archives Closed Camps, duplicates setup, and deletes only confirmed Drafts", async () => {
+      const admin = await anonymousClient();
+      expect(await login(admin, "6543")).toMatchObject({ ok: true });
+
+      const activeArchive = await admin.rpc("set_camp_archived", {
+        p_archived: true,
+        p_camp_id: DEMO_CAMP_ID,
+      });
+      expect(activeArchive.error).toBeNull();
+      expect(activeArchive.data).toMatchObject({
+        ok: false,
+        error: { code: "CAMP_NOT_CLOSED" },
+      });
+
+      const archived = await admin.rpc("set_camp_archived", {
+        p_archived: true,
+        p_camp_id: configuredCampId,
+      });
+      expect(archived.error).toBeNull();
+      expect(archived.data.ok).toBe(true);
+      expect(archived.data.archived_at).toEqual(expect.any(String));
+      const listed = await admin.rpc("get_admin_camps");
+      expect(
+        listed.data.camps.find(
+          (camp: { id: string }) => camp.id === configuredCampId,
+        ).archived_at,
+      ).toEqual(expect.any(String));
+      const restored = await admin.rpc("set_camp_archived", {
+        p_archived: false,
+        p_camp_id: configuredCampId,
+      });
+      expect(restored.data).toMatchObject({ ok: true, archived_at: null });
+
+      const source = await admin.rpc("get_admin_camp_snapshot", {
+        p_camp_id: configuredCampId,
+      });
+      const duplicated = await admin.rpc("duplicate_camp", {
+        p_camp_id: configuredCampId,
+        p_name: "สำเนาค่ายทดสอบ",
+      });
+      expect(duplicated.error).toBeNull();
+      expect(duplicated.data).toMatchObject({
+        ok: true,
+        camp: { name: "สำเนาค่ายทดสอบ", status: "draft" },
+      });
+      const copyId = duplicated.data.camp.id as string;
+      const copy = await admin.rpc("get_admin_camp_snapshot", {
+        p_camp_id: copyId,
+      });
+      type Row = { active: boolean; role?: string };
+      const activeGroups = (rows: Row[]) => rows.filter((row) => row.active);
+      const staffNames = (rows: Array<Row & { display_name: string }>) =>
+        rows
+          .filter((row) => row.role === "staff" && row.active)
+          .map((row) => row.display_name);
+      expect(copy.data.groups).toHaveLength(
+        activeGroups(source.data.groups).length,
+      );
+      expect(
+        copy.data.groups.every(
+          (group: { current_score: number }) => group.current_score === 0,
+        ),
+      ).toBe(true);
+      expect(staffNames(copy.data.members)).toEqual(
+        staffNames(source.data.members),
+      );
+      expect(copy.data.score_buttons).toHaveLength(
+        source.data.score_buttons.length,
+      );
+      expect(copy.data.activities).toHaveLength(source.data.activities.length);
+
+      const outsider = await anonymousClient();
+      const denied = await outsider.rpc("delete_draft_camp", {
+        p_camp_id: copyId,
+        p_confirm_name: "สำเนาค่ายทดสอบ",
+      });
+      expect(denied.data).toMatchObject({
+        ok: false,
+        error: { code: "ACCESS_DENIED" },
+      });
+
+      const mismatch = await admin.rpc("delete_draft_camp", {
+        p_camp_id: copyId,
+        p_confirm_name: "ชื่อผิด",
+      });
+      expect(mismatch.data).toMatchObject({
+        ok: false,
+        error: { code: "CONFIRM_NAME_MISMATCH" },
+      });
+      const activeDelete = await admin.rpc("delete_draft_camp", {
+        p_camp_id: DEMO_CAMP_ID,
+        p_confirm_name: "EQCAMP Demo",
+      });
+      expect(activeDelete.data).toMatchObject({
+        ok: false,
+        error: { code: "CAMP_NOT_DRAFT" },
+      });
+
+      const deleted = await admin.rpc("delete_draft_camp", {
+        p_camp_id: copyId,
+        p_confirm_name: "สำเนาค่ายทดสอบ",
+      });
+      expect(deleted.error).toBeNull();
+      expect(deleted.data).toEqual({ ok: true, deleted_camp_id: copyId });
+      const afterDelete = await admin.rpc("get_admin_camps");
+      expect(
+        afterDelete.data.camps.some(
+          (camp: { id: string }) => camp.id === copyId,
+        ),
+      ).toBe(false);
+    });
+
     it("restores the current Admin session safely and revokes it on logout", async () => {
       const client = await anonymousClient();
       expect(await login(client, "6543")).toMatchObject({ ok: true });
