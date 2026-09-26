@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { StaffInvitations } from "@/components/admin/staff-invitations";
 import {
   startTransition,
   useCallback,
@@ -1155,23 +1156,16 @@ function ActiveCampDashboard({
       </section>
 
       <div className="scroll-mt-24 grid gap-5" id="camp-links">
-        {snapshot.camp.staff_join_code ? (
-          <section className="rounded-2xl border border-[var(--eq-border)] bg-white p-5 shadow-sm">
-            <p className="text-xs font-bold text-[var(--eq-brand-deep)]">
-              ลิงก์สำหรับ Staff
-            </p>
-            <p className="mt-1 text-sm leading-6 text-[var(--eq-orange-dark)]">
-              ผู้ที่มีลิงก์นี้สามารถเลือกชื่อ Staff ได้
-              โปรดส่งเฉพาะผู้เกี่ยวข้อง
-            </p>
-            <div className="mt-3">
-              <CopyShareActions
-                campName={snapshot.camp.name}
-                label="ลิงก์ Staff"
-                path={`/join/${snapshot.camp.staff_join_code}`}
-              />
-            </div>
-          </section>
+        {snapshot.camp.status === "active" ? (
+          <StaffInvitations
+            campId={snapshot.camp.id}
+            campName={snapshot.camp.name}
+            membersVersion={snapshot.members
+              .map((member) =>
+                [member.id, member.active, member.display_name].join(":"),
+              )
+              .join("|")}
+          />
         ) : null}
 
         <LeaderboardControl onRefresh={onRefresh} snapshot={snapshot} />
@@ -2297,23 +2291,6 @@ function AccessLinkSettings({
       <div className="eq-disclosure-body mt-4 grid gap-3">
         <div className="rounded-xl bg-[var(--eq-canvas-soft)] p-3">
           <p className="text-xs font-bold text-[var(--eq-muted)]">
-            ลิงก์ส่วนตัวสำหรับ Staff
-          </p>
-          <p className="mt-1 text-xs leading-5 text-[var(--eq-orange-dark)]">
-            ผู้ที่มีลิงก์นี้สามารถเลือกชื่อ Staff ได้ โปรดส่งเฉพาะผู้เกี่ยวข้อง
-          </p>
-          {snapshot.camp.staff_join_code ? (
-            <div className="mt-2">
-              <CopyShareActions
-                campName={snapshot.camp.name}
-                label="ลิงก์ Staff"
-                path={`/join/${snapshot.camp.staff_join_code}`}
-              />
-            </div>
-          ) : null}
-        </div>
-        <div className="rounded-xl bg-[var(--eq-canvas-soft)] p-3">
-          <p className="text-xs font-bold text-[var(--eq-muted)]">
             ลิงก์สาธารณะ
           </p>
           {snapshot.camp.public_leaderboard_code ? (
@@ -2336,14 +2313,6 @@ function AccessLinkSettings({
           />
         </label>
         <div className="grid grid-cols-2 gap-2">
-          <button
-            className="min-h-11 rounded-xl border border-[var(--eq-border)] text-sm font-bold text-[var(--eq-ink)]"
-            disabled={Boolean(pending)}
-            onClick={() => void rotate("staff")}
-            type="button"
-          >
-            {pending === "staff" ? "กำลังสร้าง…" : "สร้างลิงก์ Staff ใหม่"}
-          </button>
           <button
             className="min-h-11 rounded-xl border border-[var(--eq-border)] text-sm font-bold text-[var(--eq-ink)]"
             disabled={Boolean(pending)}

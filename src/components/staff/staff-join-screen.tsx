@@ -173,9 +173,9 @@ export function StaffJoinScreen({ campCode }: StaffJoinScreenProps) {
             ← กลับหน้าแรก
           </Link>
           <BrandLockup className="mt-3 max-w-md" compact />
-          <h1 className="mt-3 text-3xl font-bold">เลือกชื่อ Staff</h1>
+          <h1 className="mt-3 text-3xl font-bold">เข้าใช้งาน Staff</h1>
           <p className="mt-2 text-[var(--eq-muted)]">
-            {options.camp.name}
+            {options.camp.name} — ลิงก์นี้สำหรับชื่อที่แสดงเท่านั้น
             {options.camp.location_name
               ? ` · ${options.camp.location_name}`
               : ""}
@@ -206,7 +206,11 @@ export function StaffJoinScreen({ campCode }: StaffJoinScreenProps) {
               >
                 <span>{staff.display_name}</span>
                 <span className="text-sm font-bold text-[var(--eq-muted)]">
-                  {pending ? "กำลังเข้า…" : remembered ? "ล่าสุด" : "เลือก"}
+                  {pending
+                    ? "กำลังเข้า…"
+                    : remembered
+                      ? "เข้าใช้งานอีกครั้ง"
+                      : "เข้าใช้งาน"}
                 </span>
               </button>
             );

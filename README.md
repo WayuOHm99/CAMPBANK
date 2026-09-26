@@ -132,4 +132,6 @@ npm run db:stop
 
 ## Production boundary
 
+ขั้นตอนเตรียมระบบออนไลน์และ CI อยู่ใน [คู่มือ Deploy](docs/deployment.md) ข้อมูลสีที่ระบบต้องใช้ติดตั้งผ่าน migrations แล้ว โดยไม่ต้องนำ Demo seed ขึ้นระบบจริง
+
 โปรเจกต์เตรียมไว้สำหรับ Supabase และ Vercel แต่การ Push, Merge, เชื่อม Production database หรือ Deploy Production ต้องได้รับอนุมัติแยกต่างหาก ไม่มีคำสั่งใดใน README นี้ทำ Production deployment

@@ -64,4 +64,19 @@ if (
 }
 
 run(supabaseCli, ["db", "reset"]);
-run(playwrightCli, ["test", ...process.argv.slice(2)]);
+const currentStatus = localStatus();
+const anonKey =
+  currentStatus.ANON_KEY ??
+  currentStatus.anon_key ??
+  currentStatus.PUBLISHABLE_KEY ??
+  currentStatus.publishable_key;
+if (typeof anonKey !== "string" || !anonKey) {
+  throw new Error("Local Supabase status is missing the public API key");
+}
+run(playwrightCli, ["test", ...process.argv.slice(2)], {
+  env: {
+    ...process.env,
+    NEXT_PUBLIC_SUPABASE_URL: apiUrl,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: anonKey,
+  },
+});
