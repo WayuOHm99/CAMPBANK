@@ -11,12 +11,25 @@ async function loginAdmin(page: import("@playwright/test").Page) {
     .or(campsHeading)
     .waitFor({ state: "visible", timeout: 10_000 });
   if (await loginHeading.isVisible()) {
-    await page.getByLabel("PIN", { exact: true }).fill("1234");
+    const loginError = page.getByText("ชื่อหรือ PIN ไม่ถูกต้อง", {
+      exact: true,
+    });
+    await page.getByLabel("PIN", { exact: true }).fill("6543");
     await page.getByRole("button", { name: "เข้าสู่ระบบ" }).click();
     await page
       .getByRole("heading", { name: "ตั้ง PIN ใหม่" })
       .or(campsHeading)
+      .or(loginError)
       .waitFor({ state: "visible", timeout: 10_000 });
+
+    if (await loginError.isVisible()) {
+      await page.getByLabel("PIN", { exact: true }).fill("1234");
+      await page.getByRole("button", { name: "เข้าสู่ระบบ" }).click();
+      await page
+        .getByRole("heading", { name: "ตั้ง PIN ใหม่" })
+        .or(campsHeading)
+        .waitFor({ state: "visible", timeout: 10_000 });
+    }
   }
 
   const changePinHeading = page.getByRole("heading", { name: "ตั้ง PIN ใหม่" });
