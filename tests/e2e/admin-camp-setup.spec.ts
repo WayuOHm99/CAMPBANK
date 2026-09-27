@@ -407,6 +407,9 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   // The previous steps typed on the Staff page. Bring the Admin page forward
   // so the browser does not restore stale focus into another field mid-fill.
   await page.bringToFront();
+  await expect(page.locator("#adjustment-group")).toContainText(
+    "กลุ่มสีเหลือง",
+  );
   await adjustment.getByText("ปรับคะแนนโดย Admin", { exact: true }).click();
   await settleAnimations(adjustment);
   // Both controls sit inside their <label>, so their accessible names grow
@@ -414,9 +417,10 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   const adjustmentAmount = adjustment.locator("#adjustment-amount");
   const adjustmentReason = adjustment.locator("#adjustment-reason");
   await adjustmentAmount.fill("500");
-  await adjustmentReason.fill("เพิ่มคะแนนจากการตรวจสอบ E2E");
   await expect(adjustmentAmount).toHaveValue("500");
+  await adjustmentReason.fill("เพิ่มคะแนนจากการตรวจสอบ E2E");
   await expect(adjustmentReason).toHaveValue("เพิ่มคะแนนจากการตรวจสอบ E2E");
+  await expect(adjustmentAmount).toHaveValue("500");
   page.once("dialog", (dialog) => dialog.accept());
   await adjustment
     .getByRole("button", { name: "ตรวจสอบและบันทึกการปรับคะแนน" })

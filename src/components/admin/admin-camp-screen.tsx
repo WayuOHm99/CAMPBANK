@@ -4,6 +4,8 @@ import Link from "next/link";
 import { CampManagement } from "@/components/admin/camp-management";
 import { StaffInvitations } from "@/components/admin/staff-invitations";
 import {
+  type Dispatch,
+  type SetStateAction,
   startTransition,
   useCallback,
   useEffect,
@@ -1853,7 +1855,7 @@ function AdjustmentPanel({
   snapshot,
 }: {
   draft: AdjustmentDraft;
-  onDraftChange: (draft: AdjustmentDraft) => void;
+  onDraftChange: Dispatch<SetStateAction<AdjustmentDraft>>;
   onRefresh: () => Promise<void>;
   snapshot: AdminCampSnapshot;
 }) {
@@ -1945,9 +1947,10 @@ function AdjustmentPanel({
             className="min-h-12 rounded-xl border border-[var(--eq-border)] bg-white px-3 text-lg font-bold"
             id="adjustment-amount"
             inputMode="numeric"
-            onChange={(event) =>
-              onDraftChange({ ...draft, amount: event.target.value })
-            }
+            onChange={(event) => {
+              const amount = event.target.value;
+              onDraftChange((current) => ({ ...current, amount }));
+            }}
             type="number"
             value={draft.amount}
           />
@@ -1960,9 +1963,10 @@ function AdjustmentPanel({
           <textarea
             className="min-h-20 rounded-xl border border-[var(--eq-border)] bg-white p-3"
             id="adjustment-reason"
-            onChange={(event) =>
-              onDraftChange({ ...draft, reason: event.target.value })
-            }
+            onChange={(event) => {
+              const reason = event.target.value;
+              onDraftChange((current) => ({ ...current, reason }));
+            }}
             value={draft.reason}
           />
         </label>
