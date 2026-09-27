@@ -11,6 +11,7 @@
 /.playwright-cli/
 /playwright-report/
 /test-results/
+/.scratch/monitoring-audit/ci-failures*/
 
 # Local environments and secrets
 .env
