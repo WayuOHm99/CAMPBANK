@@ -36,9 +36,12 @@ Connect the repository to Vercel using its Next.js preset and Node.js 24. Use `n
 ```text
 NEXT_PUBLIC_SUPABASE_URL=https://<target-project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable-or-legacy-anon-key>
+NEXT_PUBLIC_SENTRY_DSN=<Sentry project DSN, optional for error monitoring>
 ```
 
 Never put a Service Role or secret key in either browser variable. The app does not need that privileged key on Vercel. Next.js bundles public variables at build time: changing them requires a new build. Never promote a Preview built against staging as production without rebuilding for the production database.
+
+If error monitoring is enabled, set `NEXT_PUBLIC_SENTRY_DSN` for Production and redeploy. The Sentry SDK sends standard exception type and stack frame filenames/line numbers while removing URLs, query parameters, request/user data, breadcrumbs, and exception messages. Performance tracing, session replay, log/metric collection, and source-map upload are disabled. Keep this setting out of Preview unless that environment has a separate monitoring plan.
 
 Use Preview with staging data first. Select the release branch and domain only after required checks and the pilot pass. Database migrations are a separate release step; Vercel Git deployment does not apply them. Deploy backward-compatible migrations before dependent web changes. A web rollback does not undo database migrations or restore lost data.
 

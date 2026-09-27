@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs/config";
 import { networkInterfaces } from "node:os";
 
 const localDevOrigins = [
@@ -32,4 +33,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  telemetry: false,
+  sourcemaps: { disable: true },
+  release: { create: false },
+  buildTimeInstrumentation: false,
+  routeManifestInjection: false,
+  suppressOnRouterTransitionStartWarning: true,
+});

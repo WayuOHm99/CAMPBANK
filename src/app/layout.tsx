@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Anuphan } from "next/font/google";
 import type { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { PwaRegistration } from "@/components/shared/pwa-registration";
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {children}
         <PwaRegistration />
+        <SpeedInsights />
       </body>
     </html>
   );
