@@ -424,9 +424,12 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   await expect(page.getByText("บันทึกการปรับคะแนนแล้ว")).toBeVisible();
 
   await page.getByRole("link", { name: "ประวัติ", exact: true }).click();
+  await expect(page).toHaveURL(/\/camp\/[^/]+\/history$/, {
+    timeout: 15_000,
+  });
   await expect(
     page.getByRole("heading", { name: "ประวัติคะแนน" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 15_000 });
   expect(
     await page.evaluate(
       () =>
