@@ -42,6 +42,11 @@ const nextConfig: NextConfig = {
           { key: "Content-Security-Policy", value: contentSecurityPolicy },
           { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
           {
+            key: "Access-Control-Allow-Origin",
+            value: "https://campbank-fawn.vercel.app",
+          },
+          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+          {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
