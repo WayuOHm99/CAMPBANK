@@ -1,6 +1,22 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 import { E2E_ORIGIN } from "./support/origin";
+
+async function expectNoHorizontalOverflow(page: Page) {
+  await expect
+    .poll(
+      () =>
+        page.evaluate(
+          () =>
+            document.documentElement.scrollWidth <=
+            document.documentElement.clientWidth,
+        ),
+      {
+        message: "the page should not overflow horizontally",
+      },
+    )
+    .toBe(true);
+}
 
 test("motion end states remain usable and contained with reduced motion", async ({
   page,
@@ -22,13 +38,7 @@ test("motion end states remain usable and contained with reduced motion", async 
     };
   });
   expect(motionTokens).toEqual({ fast: 160, normal: 240 });
-  expect(
-    await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth <=
-        document.documentElement.clientWidth,
-    ),
-  ).toBe(true);
+  await expectNoHorizontalOverflow(page);
 
   await expect(page.locator("main")).toHaveScreenshot(
     "home-reduced-motion-end-state.png",
@@ -39,13 +49,7 @@ test("motion end states remain usable and contained with reduced motion", async 
   await expect(
     page.getByRole("heading", { name: "เข้าสู่ระบบ Admin" }),
   ).toBeVisible();
-  expect(
-    await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth <=
-        document.documentElement.clientWidth,
-    ),
-  ).toBe(true);
+  await expectNoHorizontalOverflow(page);
 });
 
 test("Score feedback distinguishes local and remote updates without blocking another action", async ({
