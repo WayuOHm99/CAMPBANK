@@ -1,6 +1,6 @@
 # Physical-device Pilot rehearsal
 
-Status: **PENDING — remaining human release gate**. Automated WebKit/Chromium runs are browser emulation, not evidence of physical-device smoothness. No physical run has been recorded as of 2026-09-05.
+Status: **CLOSED BY OWNER — owner-reported pass**. On 2026-09-27, the owner confirmed in this Codex conversation that testing was completed on a lower-powered physical Android device, a physical iPhone/iPad, and at least five Safari sessions, with acceptable results. The owner then explicitly directed closure with the available record. Device models, OS/browser versions, session-by-session observations, tested commit, test date, and evidence locations were not supplied. This records the owner's attestation and closure decision; it is not an independently observed device test or proof that the current commit was tested. Automated WebKit/Chromium runs are browser emulation, not evidence of physical-device smoothness.
 
 ## Prepare
 
@@ -34,15 +34,15 @@ Use at least one lower-powered Android device and one iPhone/iPad. Record model 
 
 | Evidence                            | Recorded result |
 | ----------------------------------- | --------------- |
-| Tested commit, date, tester         | Pending         |
-| Safari session 1                    | Pending         |
-| Safari session 2                    | Pending         |
-| Safari session 3                    | Pending         |
-| Safari session 4                    | Pending         |
-| Safari session 5                    | Pending         |
-| Lower-powered Android motion        | Pending         |
-| iPhone/iPad motion                  | Pending         |
-| Failures, fixes and retest evidence | Pending         |
-| Owner release decision              | Pending         |
+| Tested commit, date, tester         | Owner confirmed completion on 2026-09-27; actual test date, tester, and tested commit not supplied |
+| Safari session 1                    | Owner reports five sessions completed; per-session detail not supplied |
+| Safari session 2                    | Owner reports five sessions completed; per-session detail not supplied |
+| Safari session 3                    | Owner reports five sessions completed; per-session detail not supplied |
+| Safari session 4                    | Owner reports five sessions completed; per-session detail not supplied |
+| Safari session 5                    | Owner reports five sessions completed; per-session detail not supplied |
+| Lower-powered Android motion        | Owner reports an acceptable physical-device result; model, browser, and evidence not supplied |
+| iPhone/iPad motion                  | Owner reports an acceptable physical-device result; model, browser, and evidence not supplied |
+| Failures, fixes and retest evidence | No per-session failure or retest record supplied |
+| Owner release decision              | Close the Pilot gate based on owner-reported pass, accepting that the missing details remain unverified |
 
-Release remains pending until these required observations pass. Ticket 16 explicitly allows this documented remaining gate; ticket 18 requires physical verification before release. Preserve the issue files while ticket 18 remains unfinished.
+The owner's attestation addresses the device classes and Safari session count. The gate is closed by the owner with the evidence limitations above explicitly retained. The exact tested revision and per-device/session observations cannot be verified from this record; any later release that needs revision-specific device proof should repeat and document the rehearsal.

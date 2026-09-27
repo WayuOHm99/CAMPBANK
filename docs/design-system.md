@@ -254,5 +254,6 @@ Safari before release.
 Verify Home, Admin login, Staff Join, Staff scoring, Admin setup/dashboard,
 History, and Public Leaderboard at 320, 390, 834, and 1440 CSS pixels. Required
 quality gates are formatting, lint, typecheck, unit, authenticated integration,
-responsive Playwright E2E, concurrency, and production build. A physical-device
-rehearsal remains the human Pilot gate.
+responsive Playwright E2E, concurrency, and production build. The physical-device
+rehearsal was closed on the owner's attestation; its evidence limitations are
+recorded in `docs/pilot-rehearsal.md`.
