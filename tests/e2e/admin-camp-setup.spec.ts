@@ -120,6 +120,18 @@ test("Admin changes a temporary PIN and activates a configured Camp", async ({
   await expect(page.getByText("เลือกสีแล้ว 0 จาก 8 กลุ่ม")).toBeVisible();
   await expect(page.getByRole("button", { name: "ต่อไป" })).toBeDisabled();
 
+  // Group 3 starts under the sticky Back/Next bar on iPhone. Focus must bring
+  // it clear; otherwise a tap scrolls it mid-animation and WebKit drops the
+  // click (run 36329979836: the colour dialog for Group 3 never opened).
+  await groupColors.nth(2).focus();
+  await expect
+    .poll(async () => {
+      const control = await groupColors.nth(2).boundingBox();
+      const bar = await page.locator(".eq-sticky-actions").boundingBox();
+      return Boolean(control && bar && control.y + control.height <= bar.y);
+    })
+    .toBe(true);
+
   const colorNames = [
     "เหลือง",
     "น้ำเงิน",
