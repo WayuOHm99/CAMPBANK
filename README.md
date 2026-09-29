@@ -1,5 +1,73 @@
-# EQCAMP Web App V1
+<div align="center">
 
+<img src="logo/logo-eqcamp.jpg" alt="EQCAMP" width="120">
+
+# EQ-BANK · ระบบคะแนนกิจกรรมค่าย
+
+**ให้คะแนนเร็ว ตรวจสอบย้อนหลังได้**<br>
+เว็บแอปภาษาไทยแบบ Mobile-first ที่ทีมงานหลายคนกดคะแนนพร้อมกันจากมือถือได้ โดยไม่มีคะแนนหาย
+
+[**🌐 เปิดเว็บจริง**](https://campbank-fawn.vercel.app) · [คู่มือ Deploy](docs/deployment.md) · [บันทึกการตัดสินใจ (ADR)](docs/adr/) · [Design system](docs/design-system.md)
+
+[![Quality](https://github.com/WayuOHm99/CAMPBANK/actions/workflows/quality.yml/badge.svg)](https://github.com/WayuOHm99/CAMPBANK/actions/workflows/quality.yml)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3FCF8E?style=flat-square&logo=supabase&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Playwright](https://img.shields.io/badge/E2E-Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)
+
+</div>
+
+<p align="center">
+  <img src="docs/screenshots/home-desktop.png" alt="หน้าแรกบนคอมพิวเตอร์" width="68%">
+  &nbsp;
+  <img src="docs/screenshots/home-mobile.png" alt="หน้าแรกบนมือถือ" width="24%">
+</p>
+
+---
+
+## 📌 โปรเจกต์นี้แก้ปัญหาอะไร
+
+ค่ายกิจกรรมมักให้คะแนนกลุ่มด้วยกระดาษหรือไฟล์ Excel ที่แชร์กัน เมื่อทีมงานหลายคนให้คะแนนพร้อมกัน คะแนนจะทับกัน หาย หรือตรวจย้อนไม่ได้ว่าใครให้เท่าไร
+
+EQ-BANK ใช้แนวคิด **"ธนาคารคะแนน"** คือ 1 หน่วยเงินกิจกรรมจำลอง = 1 คะแนน แต่ละค่ายมีงบประมาณ ทุกการให้คะแนนเป็นรายการที่บันทึกถาวร และแก้ไขด้วยการสร้างรายการใหม่เท่านั้น
+
+> ไม่ใช่ระบบเงินจริง และไม่มีการชำระเงิน
+
+## ✨ ความสามารถหลัก
+
+| | |
+| --- | --- |
+| 👥 **ทีมงานให้คะแนนพร้อมกันได้** | 5–10 คนกดพร้อมกัน ฐานข้อมูลเรียงลำดับให้เอง ไม่มีคะแนนหาย |
+| 📊 **งบและอันดับอัปเดตสด** | ทุกเครื่องเห็นตรงกันภายใน 1–2 วินาทีผ่าน Supabase Realtime |
+| 🛡️ **ทุกรายการแก้ไม่ได้** | การแก้ไขและ Undo สร้างรายการใหม่ ย้อนดูได้ว่าใครทำอะไรเมื่อไร |
+| 🔗 **Staff เข้าด้วยลิงก์** | ทีมงานแต่ละคนมีลิงก์ของตัวเอง ไม่ต้องจำรหัสผ่าน |
+| 🏆 **หน้าอันดับแยกสำหรับโชว์** | ลิงก์ Leaderboard แยกจากลิงก์ทีมงาน เปิดขึ้นจอได้โดยไม่ต้องให้สิทธิ์ให้คะแนน |
+| 🔐 **ผู้ดูแลเข้าด้วย PIN** | PIN ถูก hash ในฐานข้อมูล บังคับเปลี่ยนตอนเข้าครั้งแรก และบันทึก Audit |
+| 📱 **ติดตั้งเป็นแอปได้ (PWA)** | ใช้ได้บน iPhone, Android, iPad และคอมพิวเตอร์ |
+
+## 🏗️ จุดที่น่าสนใจเชิงวิศวกรรม
+
+- **ฐานข้อมูลเป็นผู้ตัดสิน** คะแนน งบ สิทธิ์ และอันดับถูกคำนวณใน PostgreSQL ผ่าน atomic RPC และ Row Level Security ไม่ใช่ในเบราว์เซอร์
+- **เขียนคะแนนทีละรายการต่อค่าย** (serialize per camp) พร้อม idempotency กันกดซ้ำ ดู [ADR-0005](docs/adr/0005-serialize-score-writes-per-camp.md)
+- **ทดสอบการกดพร้อมกันจริง** Integration test ยิง 2, 5 และ 10 sessions พร้อมกัน รวมถึงกรณีข้ามค่าย, Undo และการปิดค่ายระหว่างกด
+- **E2E บนเบราว์เซอร์จริง** Mobile Safari (WebKit) และ Desktop Chromium ครบทุก flow หลัก
+- **CI ครบทุกชั้น** audit, lint, typecheck, unit, pgTAP, integration, E2E และ build
+- **ทุกการตัดสินใจมีเหตุผลบันทึกไว้** มี ADR 12 ฉบับใน [`docs/adr`](docs/adr/)
+
+## 🧰 เทคโนโลยี
+
+| ส่วน | เลือกใช้ |
+| --- | --- |
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4 |
+| Backend / Database | Supabase: PostgreSQL, RLS, RPC, Realtime, Anonymous auth |
+| Validation | Zod |
+| Testing | Vitest, Testing Library, pgTAP, Playwright |
+| Monitoring | Sentry, Vercel Speed Insights |
+| Hosting | Vercel + Supabase |
+
+---
+
+# 👩‍💻 สำหรับนักพัฒนา
 เว็บแอปภาษาไทยแบบ Mobile-first สำหรับให้คะแนนกิจกรรมค่าย โดย `1 หน่วยเงินกิจกรรมจำลอง = 1 คะแนน` ระบบใช้ PostgreSQL เป็นผู้ตัดสินคะแนน งบ สิทธิ์ ประวัติ และอันดับ ไม่ใช่ระบบเงินจริงและไม่มี Payment
 
 ## Requirements
