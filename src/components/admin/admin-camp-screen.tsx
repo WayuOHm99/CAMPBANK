@@ -971,7 +971,7 @@ function DraftSetupWizard({
         </p>
       ) : null}
 
-      <div className="sticky bottom-0 z-10 mt-6 grid grid-cols-2 gap-3 border-t border-[var(--eq-border)] bg-white/95 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur">
+      <div className="eq-sticky-actions sticky bottom-0 z-10 mt-6 grid grid-cols-2 gap-3 border-t border-[var(--eq-border)] bg-white/95 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur">
         {step === 1 ? (
           <Link
             className="grid min-h-12 place-items-center rounded-xl border border-[var(--eq-border)] bg-white px-4 font-semibold"
